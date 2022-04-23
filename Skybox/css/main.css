@@ -1,0 +1,8 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: #bdc3c7;
+  }
+canvas{
+    display: block;
+}
