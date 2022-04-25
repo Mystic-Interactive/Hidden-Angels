@@ -153,7 +153,7 @@ export default class Guy extends THREE.Group {
         this.camera.quaternion.copy(this.body.quaternion)
         this.camera.rotation.x
         this.camera.translateY(1)
-        this.camera.translateZ(10)
+        this.camera.translateZ(0)
     }
 
     dispose() {

@@ -1,4 +1,5 @@
 import Guy from './guy.js'
+import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 var j = 0;
 
@@ -24,7 +25,7 @@ class Ground extends THREE.Group{
         map: baseColor,
         normalMap: normalColor,
         displacementMap: heightColor,
-        displacementScale: 0.07,
+        displacementScale: 0.2,
         roughnessMap: roughnessColor,
         aoMap: aoColor,
       })
@@ -81,13 +82,16 @@ var init = function(){
   loader.load('../res/meshes/House.glb', function(gltf){
     cube = gltf.scene
     cube.position.set(5,-1,-4);
-    cube.scale.set(1, 1, 1);
+    cube.scale.set(0.5, 0.5, 0.5);
     scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
     console.log(error);
   });
+
+  const skybox = sky()
+  scene.add(skybox)
 
   const guy = new Guy(scene, world, camera)
 
@@ -121,6 +125,13 @@ var init = function(){
     render();
     requestAnimationFrame(GameLoop);
   };
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    camera.aspect = window.innerWidth/window.innerHeight;
+
+    camera.updateProjectionMatrix();
+  })
 
   GameLoop()
 };
