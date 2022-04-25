@@ -15,7 +15,7 @@ How to set up Three.js
 2. Add the necessary files
   ->Create a src folder with html file in it
   ->Add a sub js folder that will have all your JS files
-  ->Add the script to the html file to show that it points to the right JS file and include that it is type module. For example: <script src = ".js/CannonJS.js" type="module"></script>
+  ->Add the script to the html file to show that it points to the right JS file and include that it is type module. For example: <script src = "./js/CannonJS.js" type="module"></script>
   ->Add the following code to the html to take away the borders
     -> <style>
         body{
@@ -61,3 +61,7 @@ How to set up Three.js
 
        animate();
 
+4. Compile on save
+  ->To compile on save run the following code
+    -> parcel ./src/htmlfile.html
+    -> This will then build the html together and then give you a url to it each time you save. To open this url just ctrl + click the link
