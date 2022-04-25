@@ -12,13 +12,24 @@ class Ground extends THREE.Group{
   }
   
   define(){
-    const groundGeo = new THREE.PlaneGeometry(30, 30);
-    /*const groundMat = new THREE.MeshBasicMaterial({
-      color: 0xfc0f03,
-      side: THREE.DoubleSide,
-      wireframe: true
-    })*/
-    const groundMat = new THREE.MeshNormalMaterial()
+    const textLoader = new THREE.TextureLoader();
+    let baseColor = textLoader.load("./textures/forrest_ground_01_diff_1k.jpg");
+    let normalColor = textLoader.load("./textures/forrest_ground_01_disp_1k.jpg");
+    let heightColor = textLoader.load("./textures/forrest_ground_01_nor_gl_1k.jpg");
+    let roughnessColor = textLoader.load("./textures/forrest_ground_01_rough_1k.jpg");
+    let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(5, 5, 512, 512), 
+      new THREE.MeshStandardMaterial({
+        map: baseColor,
+        normalMap: normalColor,
+        displacementMap: heightColor,
+        displacementScale: 0.07,
+        roughnessMap: roughnessColor,
+        aoMap: aoColor,
+      })
+    );
+  ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
 
     this.body = new CANNON.Body({
       shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
@@ -29,8 +40,7 @@ class Ground extends THREE.Group{
     this.body.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 
     this.body.position.y = -1
-
-    this.add(new THREE.Mesh(groundGeo, groundMat))
+    
     this.scene.add(this)
     this.world.addBody(this.body)
 
