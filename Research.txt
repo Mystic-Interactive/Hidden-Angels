@@ -65,3 +65,19 @@ How to set up Three.js
   ->To compile on save run the following code
     -> parcel ./src/htmlfile.html
     -> This will then build the html together and then give you a url to it each time you save. To open this url just ctrl + click the link
+    
+    
+  
+ How to install CannonJS
+ 
+ 1. Set up
+  ->Install it by runnin the following code
+    -> npm install cannon-es
+  ->Import the library by running the following code
+    -> import * as CANNON from 'cannon-es';
+    
+ 
+ 
+ CannonJS extra notes
+ 
+ 1. The CANNON.Box dimensions must be half of the THREEjs mesh's dimensions such that the physics system can work accurately
