@@ -19,7 +19,7 @@ class Ground extends THREE.Group{
     let roughnessColor = textLoader.load("./textures/forrest_ground_01_rough_1k.jpg");
     let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(5, 5, 512, 512), 
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 512, 512), 
       new THREE.MeshStandardMaterial({
         map: baseColor,
         normalMap: normalColor,
@@ -29,8 +29,8 @@ class Ground extends THREE.Group{
         aoMap: aoColor,
       })
     );
-  ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
-
+    ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
+    this.add(ground)
     this.body = new CANNON.Body({
       shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
       type: CANNON.Body.STATIC,
@@ -81,7 +81,7 @@ var init = function(){
   loader.load('../res/meshes/House.glb', function(gltf){
     cube = gltf.scene
     cube.position.set(5,-1,-4);
-    cube.scale.set(0.1, 0.1, 0.1);
+    cube.scale.set(1, 1, 1);
     scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -107,7 +107,7 @@ var init = function(){
     world.step(timestep)
     j++;
     if (cube != null){
-      cube.rotation.y = 0.005*j;
+      //cube.rotation.y = 0.005*j;
     }
   };
 

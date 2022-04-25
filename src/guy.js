@@ -144,8 +144,8 @@ export default class Guy extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.velocity.x = -this.transition_state * Math.sin(this.rotation.y)
-        this.body.velocity.z = -this.transition_state * Math.cos(this.rotation.y)
+        this.body.velocity.x = - 10 * this.transition_state * Math.sin(this.rotation.y)
+        this.body.velocity.z = - 10 * this.transition_state * Math.cos(this.rotation.y)
         this.position.copy(this.body.position)
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
@@ -153,7 +153,7 @@ export default class Guy extends THREE.Group {
         this.camera.quaternion.copy(this.body.quaternion)
         this.camera.rotation.x
         this.camera.translateY(1)
-        this.camera.translateZ(4.5)
+        this.camera.translateZ(10)
     }
 
     dispose() {
