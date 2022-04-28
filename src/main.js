@@ -72,9 +72,10 @@ var init = function(){
     0.1, // near clipping plane
     1000 // far clipping plane
   );
+  
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight,);
-
+  
   document.body.appendChild(renderer.domElement);
 
   var cube;
@@ -129,7 +130,6 @@ var init = function(){
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
-
     camera.updateProjectionMatrix();
   })
 

@@ -34,7 +34,7 @@ export default class Guy extends THREE.Group {
 
     addControls(){
         document.addEventListener('keydown', (event)=>{
-            if(event.code == 'ArrowUp'){
+            if(event.code == 'KeyW'){
                 if (event.ctrlKey == false){
                     this.animation_state = 1
                 }else {
@@ -42,26 +42,26 @@ export default class Guy extends THREE.Group {
                 } 
             }
 
-            if(event.code == 'ArrowDown'){
+            if(event.code == 'KeyS'){
                 this.animation_state = -1
             }
 
-            if(event.code == 'ArrowLeft'){
+            if(event.code == 'KeyA'){
                 this.rotDir = 1
             }           
             
-            if (event.code == 'ArrowRight'){
+            if (event.code == 'KeyD'){
                 this.rotDir = -1
             }
         })
 
         document.addEventListener('keyup', (event)=>{
             console.log(event)
-            if(event.code == 'ArrowUp' || event.code == 'ArrowDown'){
+            if(event.code == 'KeyW' || event.code == 'KeyS'){
                 this.animation_state = 0
             }
 
-            if(event.code == 'ArrowLeft' || event.code == 'ArrowRight'){
+            if(event.code == 'KeyA' || event.code == 'KeyD'){
                 this.rotDir = 0
             }
         })
@@ -153,7 +153,7 @@ export default class Guy extends THREE.Group {
         this.camera.quaternion.copy(this.body.quaternion)
         this.camera.rotation.x
         this.camera.translateY(1)
-        this.camera.translateZ(0)
+        this.camera.translateZ(5)
     }
 
     dispose() {
