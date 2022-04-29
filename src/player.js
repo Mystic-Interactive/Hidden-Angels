@@ -1,13 +1,13 @@
 var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
 
-export default class Guy extends THREE.Group {
-    constructor(scene, world, camera) {
+export default class Player extends THREE.Group {
+    constructor(scene, world, camera, init_pos) {
         super()
         this.scene = scene
         this.world = world
         this.camera = camera
-        console.log(world)
+        this.init_pos = init_pos
         this.init()
     }
 
@@ -72,7 +72,7 @@ export default class Guy extends THREE.Group {
         this.add(model);
 
         this.updateMaterials(this.gltf.scene);
-        var skeleton = new THREE.SkeletonHelper( model );
+        /*var skeleton = new THREE.SkeletonHelper( model );
         skeleton.visible = true;
         this.scene.add( skeleton );
         
@@ -80,22 +80,18 @@ export default class Guy extends THREE.Group {
 
         this.mixer = new THREE.AnimationMixer( model );
 
-        //Getting the animations from the mesh
-        this.crouchAction       = this.mixer.clipAction( this.animations[ 0 ] )
-        this.crouchWalkAction   = this.mixer.clipAction( this.animations[ 1 ] )
-        this.idleAction         = this.mixer.clipAction( this.animations[ 2 ] )
-        this.jumpAction         = this.mixer.clipAction( this.animations[ 3 ] )
-        this.walkAction         = this.mixer.clipAction( this.animations[ 4 ] )        
-        this.standUpAction      = this.mixer.clipAction( this.animations[ 5 ] )
+        this.idleAction = this.mixer.clipAction( this.animations[ 0 ] );
+        this.walkAction = this.mixer.clipAction( this.animations[ 3 ] );
+        this.runAction = this.mixer.clipAction( this.animations[ 1 ] );
 
-        this.actions = [ this.idleAction, this.walkAction];
+        this.actions = [ this.idleAction, this.walkAction, this.runAction ];
 
         this.playAllAnimations()
-        this.addControls()
+        this.addControls()*/
 
         this.body = new CANNON.Body({
             shape : new CANNON.Sphere(2),
-            position : new CANNON.Vec3(0, 1, 0),
+            position : this.init_pos,
             mass : 1
         })
 
@@ -129,7 +125,7 @@ export default class Guy extends THREE.Group {
     }
 
     update = () =>{
-        this.transition_state += (this.animation_state - this.transition_state)/100
+        /*this.transition_state += (this.animation_state - this.transition_state)/100
         this.rot_scale += (this.rotDir - this.rot_scale) / 100
         try{
             this.determineAnimationWeights()
@@ -138,7 +134,7 @@ export default class Guy extends THREE.Group {
             this.updateTransform()
         } catch {
             console.log('not yet loaded')
-        }
+        }*/
     }
 
     updateMaterials(model) {
@@ -153,11 +149,11 @@ export default class Guy extends THREE.Group {
         this.position.copy(this.body.position)
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
-        this.camera.position.copy(this.body.position)
+        //this.camera.position.copy(this.body.position)
         this.camera.quaternion.copy(this.body.quaternion)
         this.camera.rotation.x
-        this.camera.translateY(0)
-        this.camera.translateZ(4)
+        this.camera.translateY(1)
+        this.camera.translateZ(1)
     }
 
     dispose() {
