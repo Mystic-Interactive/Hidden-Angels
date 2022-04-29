@@ -72,12 +72,7 @@ export default class Guy extends THREE.Group {
         this.add(model);
 
         this.updateMaterials(this.gltf.scene);
-        var skeleton = new THREE.SkeletonHelper( model );
-        skeleton.visible = true;
-        this.scene.add( skeleton );
-        
         this.animations = this.gltf.animations;
-
         this.mixer = new THREE.AnimationMixer( model );
 
         this.idleAction = this.mixer.clipAction( this.animations[ 0 ] );
@@ -160,4 +155,115 @@ export default class Guy extends THREE.Group {
         // Dispose everything that was created in this class - GLTF model, materials etc.
     }
 }
+
+
+class KeyBoardHandler{ //handles user's keyboard inputs - used to pass movements to character
+ constructor(){
+  this.moveForward = false;
+  this.moveBackward = false;
+  this.moveLeft = false;
+  this.moveRight = false;
+  document.addEventListener('keydown', (event)=>{
+    if(event.code == 'KeyW'){
+       this.moveForward = true;   
+    }
+
+    if(event.code == 'KeyS'){
+        this.moveBackward = true;
+    }
+
+    if(event.code == 'KeyA'){
+        this.moveRight = true;
+    }           
+    
+    if (event.code == 'KeyD'){
+        this.moveLeft = true;
+    }
+ })
+  document.addEventListener('keyup', (event)=>{
+    if(event.code == 'KeyW'){
+       this.moveForward = false;   
+    }
+
+    if(event.code == 'KeyS'){
+        this.moveBackward = false;
+    }
+
+    if(event.code == 'KeyA'){
+        this.moveRight = false;
+    }           
+    
+    if (event.code == 'KeyD'){
+        this.moveLeft = false;
+    }
+ })
+}
+  getForward(){
+      return this.moveForward;
+  }
+   getBackward(){
+      return this.moveBackward;
+  }
+   getLeft(){
+      return this.moveLeft;
+  }
+   getRight(){
+      return this.moveRight;
+  }
+ 
+}
+class MouseHandler{ //handle's user's mouse movements - for firstperson camera movement
+ constructor(){
+    this.current = {
+    x : 0,
+    y : 0, 
+    deltaX : 0,
+    deltaY : 0
+    };
+    this.previous = null;
+    document.addEventListener('mousemove', (event)=>{
+        this.current.x = event.pageX  - window.innerWidth/2;
+        this.current.y = event.pageY - window.innerHeight/2;
+
+        if(this.previous == null){
+            this.previous.x = this.current.x;
+            this.previous.y = this.current.y;
+        }
+
+        this.current.deltaX = this.current.x - this.previous.x;
+        this.current.deltaY = this.current.y - this.previous.y;
+
+     })
+ }
+ update(){
+    this.previous.x = this.current.x;
+    this.previous.y = this.current.y;
+ }
+ getChanges(){
+     var delta_x = this.deltaX;
+     var delta_y = this.deltaY;
+     changes  = {deltax : delta_x,deltay:delta_y};
+     return changes;
+ }
+
+}
+
+class FirstPersonCamera{ //handles the mousemovements and moves/rotates the camera accordingly
+ constructor(camera){
+     this.camera = camera;
+     this.movements = new MouseHandler();
+
+ }
+
+ updateCamera(){ //make camera look at new difference in deltas
+    //convert x,y deltas into spherical coordinates phi and theta
+    //convert phi and theta into a rotation
+    //rotate camera using rotation
+    //matrix for ,three.js object 3d api,
+ }
+
+
+}
+
+
   
