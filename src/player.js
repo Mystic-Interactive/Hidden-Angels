@@ -2,12 +2,12 @@ var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
 
 export default class Player extends THREE.Group {
-    constructor(scene, world, camera, init_pos) {
+    constructor(scene, world, camera) {
         super()
         this.scene = scene
         this.world = world
         this.camera = camera
-        this.init_pos = init_pos
+        console.log(world)
         this.init()
     }
 
@@ -34,7 +34,7 @@ export default class Player extends THREE.Group {
 
     addControls(){
         document.addEventListener('keydown', (event)=>{
-            if(event.code == 'ArrowUp'){
+            if(event.key == 'w'){
                 if (event.ctrlKey == false){
                     this.animation_state = 1
                 }else {
@@ -42,26 +42,26 @@ export default class Player extends THREE.Group {
                 } 
             }
 
-            if(event.code == 'ArrowDown'){
+            if(event.key == 's'){
                 this.animation_state = -1
             }
 
-            if(event.code == 'ArrowLeft'){
+            if(event.key == 'a'){
                 this.rotDir = 1
             }           
             
-            if (event.code == 'ArrowRight'){
+            if (event.key == 'd'){
                 this.rotDir = -1
             }
         })
 
         document.addEventListener('keyup', (event)=>{
             console.log(event)
-            if(event.code == 'ArrowUp' || event.code == 'ArrowDown'){
+            if(event.key == 'w' || event.key == 's'){
                 this.animation_state = 0
             }
 
-            if(event.code == 'ArrowLeft' || event.code == 'ArrowRight'){
+            if(event.key == 'a' || event.key == 'd'){
                 this.rotDir = 0
             }
         })
@@ -72,7 +72,7 @@ export default class Player extends THREE.Group {
         this.add(model);
 
         this.updateMaterials(this.gltf.scene);
-        /*var skeleton = new THREE.SkeletonHelper( model );
+        var skeleton = new THREE.SkeletonHelper( model );
         skeleton.visible = true;
         this.scene.add( skeleton );
         
@@ -80,21 +80,25 @@ export default class Player extends THREE.Group {
 
         this.mixer = new THREE.AnimationMixer( model );
 
-        this.idleAction = this.mixer.clipAction( this.animations[ 0 ] );
-        this.walkAction = this.mixer.clipAction( this.animations[ 3 ] );
-        this.runAction = this.mixer.clipAction( this.animations[ 1 ] );
+        //Getting the animations from the mesh
+        this.crouchAction       = this.mixer.clipAction( this.animations[ 0 ] )
+        this.crouchWalkAction   = this.mixer.clipAction( this.animations[ 1 ] )
+        this.idleAction         = this.mixer.clipAction( this.animations[ 2 ] )
+        this.jumpAction         = this.mixer.clipAction( this.animations[ 3 ] )
+        this.walkAction         = this.mixer.clipAction( this.animations[ 4 ] )        
+        this.standUpAction      = this.mixer.clipAction( this.animations[ 5 ] )
 
-        this.actions = [ this.idleAction, this.walkAction, this.runAction ];
+        this.actions = [ this.idleAction, this.walkAction];
 
         this.playAllAnimations()
-        this.addControls()*/
+        this.addControls()
 
         this.body = new CANNON.Body({
             shape : new CANNON.Sphere(2),
-            position : this.init_pos,
-            mass : 1
+            position : new CANNON.Vec3(0, 1, 0),
+            mass : 1,
         })
-
+        this.body.linearDamping = 0.999
         this.scene.add(this)
         this.world.addBody(this.body)
     }
@@ -125,8 +129,8 @@ export default class Player extends THREE.Group {
     }
 
     update = () =>{
-        /*this.transition_state += (this.animation_state - this.transition_state)/100
-        this.rot_scale += (this.rotDir - this.rot_scale) / 100
+        this.transition_state += (this.animation_state - this.transition_state)/10
+        this.rot_scale += (this.rotDir - this.rot_scale) / 10
         try{
             this.determineAnimationWeights()
             this.mixer.update(1/100)
@@ -134,7 +138,7 @@ export default class Player extends THREE.Group {
             this.updateTransform()
         } catch {
             console.log('not yet loaded')
-        }*/
+        }
     }
 
     updateMaterials(model) {
@@ -144,20 +148,36 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.velocity.x = - 10 * this.transition_state * Math.sin(this.rotation.y)
-        this.body.velocity.z = - 10 * this.transition_state * Math.cos(this.rotation.y)
+        this.body.force.x = 15 * this.transition_state * Math.sin(this.rotation.y)
+        this.body.force.z = 15 * this.transition_state * Math.cos(this.rotation.y)
         this.position.copy(this.body.position)
+        this.position.y -= .5
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
-        //this.camera.position.copy(this.body.position)
-        this.camera.quaternion.copy(this.body.quaternion)
-        this.camera.rotation.x
-        this.camera.translateY(1)
-        this.camera.translateZ(1)
+        this.camera.position.copy(this.body.position)
+        this.camera.quaternion.copy(this.quaternion)
+        this.camera.rotation.y += Math.PI
+        this.camera.translateY(0)
+        this.camera.translateZ(4)
     }
 
     dispose() {
         // Dispose everything that was created in this class - GLTF model, materials etc.
+    }
+}
+
+class TranstionManager{
+    /**
+     * @param {[]} actions 
+     * @param {[]} paths : possible transition paths
+     */
+    constructor( object, actions, paths ){
+        this.actions = actions
+        this.paths = paths
+    }
+
+    transitionTo(name){
+        
     }
 }
   

@@ -1,4 +1,4 @@
-import Guy from './guy.js'
+import Guy from './player.js'
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
@@ -61,6 +61,9 @@ class Ground extends THREE.Group{
 
 
 var init = function(){
+  var stats = new Stats()
+  stats.showPanel()
+  document.body.appendChild( stats.dom )
 
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -9.81, 0)
@@ -84,7 +87,7 @@ var init = function(){
     cube = gltf.scene
     cube.position.set(5,-1,-4);
     cube.scale.set(0.5, 0.5, 0.5);
-    //scene.add(cube);
+    scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -93,7 +96,6 @@ var init = function(){
 
   const skybox = sky()
   scene.add(skybox)
-  camera.position.set(0, 0, 5)
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Guy(scene, world, camera, initial_position)
 
@@ -113,7 +115,11 @@ var init = function(){
   var delta = 0
   var time = new Date().getTime()
 
+
+
+
   var update = function(){//game logic
+    stats.begin()
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
@@ -124,6 +130,7 @@ var init = function(){
     if (cube != null){
       //cube.rotation.y = 0.005*j;
     }
+    stats.end()
   };
 
   var render = function(){//draw scene
@@ -135,6 +142,7 @@ var init = function(){
     update();
     render();
     requestAnimationFrame(GameLoop);
+    
   };
 
   window.addEventListener('resize', () => {
