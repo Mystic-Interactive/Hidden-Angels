@@ -128,13 +128,14 @@ export default class Player extends THREE.Group {
         }
     }
 
-    update = () =>{
-        this.transition_state += (this.animation_state - this.transition_state)/10
-        this.rot_scale += (this.rotDir - this.rot_scale) / 10
+    update = (delta) =>{
+        if(delta == 0) return
         try{
+            this.transition_state += (this.animation_state - this.transition_state) / (delta/2)
+            this.rot_scale += (this.rotDir - this.rot_scale) / (delta)
             this.determineAnimationWeights()
-            this.mixer.update(1/100)
-            this.rotation.y+=(0.01 * this.rot_scale)
+            this.mixer.update(delta/2000)
+            this.rotation.y+=(delta/100 * this.rot_scale)
             this.updateTransform()
         } catch {
             console.log('not yet loaded')
@@ -165,19 +166,3 @@ export default class Player extends THREE.Group {
         // Dispose everything that was created in this class - GLTF model, materials etc.
     }
 }
-
-class TranstionManager{
-    /**
-     * @param {[]} actions 
-     * @param {[]} paths : possible transition paths
-     */
-    constructor( object, actions, paths ){
-        this.actions = actions
-        this.paths = paths
-    }
-
-    transitionTo(name){
-        
-    }
-}
-  

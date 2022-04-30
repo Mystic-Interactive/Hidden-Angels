@@ -59,11 +59,10 @@ class Ground extends THREE.Group{
   }
 }
 
-
 var init = function(){
-  var stats = new Stats()
-  stats.showPanel()
-  document.body.appendChild( stats.dom )
+  //var stats = new Stats()
+  //stats.showPanel(5)
+  //document.body.appendChild( stats.dom )
 
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -9.81, 0)
@@ -119,7 +118,7 @@ var init = function(){
 
 
   var update = function(){//game logic
-    stats.begin()
+    //stats.begin()
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
@@ -130,7 +129,7 @@ var init = function(){
     if (cube != null){
       //cube.rotation.y = 0.005*j;
     }
-    stats.end()
+    //stats.end()
   };
 
   var render = function(){//draw scene
