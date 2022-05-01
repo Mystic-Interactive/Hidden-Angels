@@ -86,7 +86,7 @@ var init = function(){
     cube = gltf.scene
     cube.position.set(5,-1,-4);
     cube.scale.set(0.5, 0.5, 0.5);
-    scene.add(cube);
+    //scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {

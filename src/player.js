@@ -1,5 +1,6 @@
 var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
+import AnimationManager from "./animationManager.js"
 
 export default class Player extends THREE.Group {
     constructor(scene, world, camera) {
@@ -7,7 +8,6 @@ export default class Player extends THREE.Group {
         this.scene = scene
         this.world = world
         this.camera = camera
-        console.log(world)
         this.init()
     }
 
@@ -18,51 +18,65 @@ export default class Player extends THREE.Group {
             this.gltf = gltf
             this.define()
         })
-        this.animation_state = 0
-        this.transition_state = 0
-        this.rotDir = 0
-        this.rot_scale = 0
-    }
-    
-    playAllAnimations(){
-        this.actions.forEach(action => {
-            action.play()
-            action.setEffectiveWeight(4)
-            action.loop = true
-        });
+
+        this.max_velocity = 25
+        //(backward = -1)
+        //(forward  =  1)
+        this.direction = 0 
+        this.velocity_ratio = 0 //[0 , 1]
+
+        //(left rotation  = -1)
+        //(right rotation = 1)
+        this.rotation_direction = 0
+        this.rotation_ratio = 0 //[0, 1]
+
+        this.play_direction = 1
+        this.desired_action = "idle"
     }
 
     addControls(){
         document.addEventListener('keydown', (event)=>{
             if(event.key == 'w'){
+                this.direction = 1
+                this.play_direction = 1
+                this.desired_action = "walk"
                 if (event.ctrlKey == false){
-                    this.animation_state = 1
+                    
+                    this.velocity_ratio = 1
                 }else {
-                    this.animation_state = 2
+                    this.velocity_ratio = 2
                 } 
             }
 
             if(event.key == 's'){
-                this.animation_state = -1
+                this.desired_action = "walk"
+                this.direction = -1
+                this.play_direction = -1
+                this.velocity_ratio = -1
             }
 
             if(event.key == 'a'){
-                this.rotDir = 1
+                this.rotation_direction = 1
             }           
             
             if (event.key == 'd'){
-                this.rotDir = -1
+                this.rotation_direction = -1
+            }
+
+            if (event.key == ' '){
+                this.desired_action = 'jump'
             }
         })
 
         document.addEventListener('keyup', (event)=>{
             console.log(event)
             if(event.key == 'w' || event.key == 's'){
-                this.animation_state = 0
+                this.desired_action = "idle"
+                this.direction = 0
             }
 
             if(event.key == 'a' || event.key == 'd'){
-                this.rotDir = 0
+                this.rotation_direction = 0
             }
         })
     }
@@ -70,27 +84,29 @@ export default class Player extends THREE.Group {
     define(){
         var model = this.gltf.scene
         this.add(model);
+        this.model = model
 
         this.updateMaterials(this.gltf.scene);
         var skeleton = new THREE.SkeletonHelper( model );
         skeleton.visible = true;
         this.scene.add( skeleton );
         
-        this.animations = this.gltf.animations;
+        const animations = this.gltf.animations;
 
-        this.mixer = new THREE.AnimationMixer( model );
+        const mixer = new THREE.AnimationMixer( model );
 
         //Getting the animations from the mesh
-        this.crouchAction       = this.mixer.clipAction( this.animations[ 0 ] )
-        this.crouchWalkAction   = this.mixer.clipAction( this.animations[ 1 ] )
-        this.idleAction         = this.mixer.clipAction( this.animations[ 2 ] )
-        this.jumpAction         = this.mixer.clipAction( this.animations[ 3 ] )
-        this.walkAction         = this.mixer.clipAction( this.animations[ 4 ] )        
-        this.standUpAction      = this.mixer.clipAction( this.animations[ 5 ] )
+        const actions = [
+            {name : "crouch",     action : mixer.clipAction( animations[ 0 ] )},
+            {name : "walk",       action : mixer.clipAction( animations[ 1 ] )},
+            {name : "idle",       action : mixer.clipAction( animations[ 2 ] )},
+            {name : "jump",       action : mixer.clipAction( animations[ 3 ] )},
+            {name : "walk",       action : mixer.clipAction( animations[ 4 ] )},        
+            //{name : "standUp",    action : mixer.clipAction( animations[ 5 ] )},
+        ]
 
-        this.actions = [ this.idleAction, this.walkAction];
-
-        this.playAllAnimations()
+        this.animation_manager = new AnimationManager(model, mixer, actions, [])
+        
         this.addControls()
 
         this.body = new CANNON.Body({
@@ -103,42 +119,18 @@ export default class Player extends THREE.Group {
         this.world.addBody(this.body)
     }
 
-
-    setWeight(action, weight){
-        action.enabled = true;
-        if (this.transition_state > 0){
-            action.setEffectiveTimeScale(1);
-        } else action.setEffectiveTimeScale(-1)
-        
-        action.setEffectiveWeight(weight);
-    }
-
-    determineAnimationWeights(){
-        for (const index in this.actions) {
-
-            var diff = Math.abs(Math.abs(this.transition_state) - index)
-           const action = this.actions[index]
-            
-
-            if(diff < 1){
-                this.setWeight(action, 1 - diff)
-            }else{
-                this.setWeight(action, 0)
-            }
-        }
-    }
-
     update = (delta) =>{
         if(delta == 0) return
+            //interpolation functions (logorithmic)
+            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta/2)
+            this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
-            this.transition_state += (this.animation_state - this.transition_state) / (delta/2)
-            this.rot_scale += (this.rotDir - this.rot_scale) / (delta)
-            this.determineAnimationWeights()
-            this.mixer.update(delta/2000)
-            this.rotation.y+=(delta/100 * this.rot_scale)
+            this.rotation.y+=(delta/100 * this.rotation_ratio)
+            this.animation_manager.update(delta, this.desired_action, this.play_direction)
             this.updateTransform()
+            this.updateMaterials(this.model)
         } catch {
-            console.log('not yet loaded')
+            console.error('not yet loaded')
         }
     }
 
@@ -149,8 +141,8 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.force.x = 15 * this.transition_state * Math.sin(this.rotation.y)
-        this.body.force.z = 15 * this.transition_state * Math.cos(this.rotation.y)
+        this.body.force.x = this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
+        this.body.force.z = this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
