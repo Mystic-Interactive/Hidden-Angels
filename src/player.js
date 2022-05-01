@@ -77,7 +77,7 @@ export default class Player extends THREE.Group {
 
             if(event.key == 'a' || event.key == 'd'){
                 this.rotation_direction = 0
-            }
+            }w
         })
     }
 

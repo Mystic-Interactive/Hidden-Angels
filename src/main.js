@@ -1,7 +1,8 @@
-import Guy from './player.js'
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
+import { FirstPersonCamera, Guy } from './guy.js';
+
 var j = 0;
 
 
@@ -75,9 +76,10 @@ var init = function(){
     0.1, // near clipping plane
     1000 // far clipping plane
   );
+  
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight,);
-
+  
   document.body.appendChild(renderer.domElement);
 
   var cube;
@@ -96,11 +98,8 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
   const initial_position = new CANNON.Vec3(0, 0, 5)
-  const guy = new Guy(scene, world, camera, initial_position)
-
-  //CANNON.applyForce(new CANNON.Vec3(0,1,1), guy.body)
-  //const player = new Player(scene, world, camera)
-
+  const guy = new Guy(scene, world, camera)
+  const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   scene.add(light);
 
@@ -126,6 +125,7 @@ var init = function(){
     g.update()
     world.step(timestep)
     j++;
+    fpCamera.update();
     if (cube != null){
       //cube.rotation.y = 0.005*j;
     }
@@ -147,7 +147,6 @@ var init = function(){
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
-
     camera.updateProjectionMatrix();
   })
 
