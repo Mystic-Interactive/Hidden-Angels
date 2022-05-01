@@ -1,12 +1,13 @@
 var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
 
-export default class Guy extends THREE.Group {
+export  class Guy extends THREE.Group {
     constructor(scene, world, camera) {
         super()
         this.scene = scene
         this.world = world
         this.camera = camera
+        this.movements = new KeyBoardHandler();
         console.log(world)
         this.init()
     }
@@ -66,7 +67,10 @@ export default class Guy extends THREE.Group {
             }
         })
     }
+    updateMovements(){
 
+
+    }
     define(){
         var model = this.gltf.scene
         this.add(model);
@@ -145,10 +149,8 @@ export default class Guy extends THREE.Group {
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
-        this.camera.quaternion.copy(this.body.quaternion)
-        this.camera.rotation.x
         this.camera.translateY(1)
-        this.camera.translateZ(5)
+        this.camera.translateZ(4)
     }
 
     dispose() {
@@ -216,52 +218,62 @@ class MouseHandler{ //handle's user's mouse movements - for firstperson camera m
  constructor(){
     this.current = {
     x : 0,
-    y : 0, 
-    deltaX : 0,
-    deltaY : 0
+    y : 0
     };
-    this.previous = null;
+    this.previous = {x : null, y: null};
     document.addEventListener('mousemove', (event)=>{
         this.current.x = event.pageX  - window.innerWidth/2;
         this.current.y = event.pageY - window.innerHeight/2;
-
-        if(this.previous == null){
+        if(this.previous.x == null){
             this.previous.x = this.current.x;
             this.previous.y = this.current.y;
         }
-
-        this.current.deltaX = this.current.x - this.previous.x;
-        this.current.deltaY = this.current.y - this.previous.y;
-
      })
  }
  update(){
     this.previous.x = this.current.x;
     this.previous.y = this.current.y;
  }
- getChanges(){
-     var delta_x = this.deltaX;
-     var delta_y = this.deltaY;
-     changes  = {deltax : delta_x,deltay:delta_y};
-     return changes;
- }
 
 }
 
-class FirstPersonCamera{ //handles the mousemovements and moves/rotates the camera accordingly
+export class FirstPersonCamera{ //handles the mousemovements and rotates the camera accordingly
  constructor(camera){
      this.camera = camera;
      this.movements = new MouseHandler();
-
+     this.r = 0;
+     this.theta = 0;
+     this.rotation = new THREE.Quaternion(); 
+    
  }
 
- updateCamera(){ //make camera look at new difference in deltas
-    //convert x,y deltas into spherical coordinates phi and theta
-    //convert phi and theta into a rotation
-    //rotate camera using rotation
-    //matrix for ,three.js object 3d api,
- }
+ updateRotation(){//make rotation matrix to make camera look at new difference in x and y values
+ //convert x,y deltas into spherical coordinates phi and theta
+ const deltaX = (this.movements.current.x - this.movements.previous.x)/window.innerWidth;
+ const deltaY = (this.movements.current.y - this.movements.previous.y)/window.innerHeight;
 
+ this.r = this.r -deltaX * 5;
+ this.theta =  Math.min(Math.max(this.theta +  -deltaY*5, -Math.PI/3), Math.PI/3);
+ //convert r and theta into a rotation
+ const qx = new THREE.Quaternion();
+ qx.setFromAxisAngle(new THREE.Vector3(0,1,0),this.r);
+ const qz = new THREE.Quaternion();
+ qz.setFromAxisAngle(new THREE.Vector3(1,0,0),this.theta);
+
+ const q = new THREE.Quaternion();
+ q.multiply(qx);
+ q.multiply(qz);
+ this.rotation.copy(q);
+ 
+}
+ updateCamera(){ //rotate camera using rotation
+   this.camera.quaternion.copy(this.rotation);
+ }
+ update(){
+     this.updateRotation();
+     this.updateCamera();
+     this.movements.update();
+ }
 
 }
 

@@ -1,6 +1,7 @@
-import Guy from './guy.js'
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
+import { FirstPersonCamera,Guy } from './guy.js';
+
 var j = 0;
 
 
@@ -95,7 +96,7 @@ var init = function(){
   scene.add(skybox)
 
   const guy = new Guy(scene, world, camera)
-
+  const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   scene.add(light);
 
@@ -111,6 +112,7 @@ var init = function(){
     g.update()
     world.step(timestep)
     j++;
+    fpCamera.update();
     if (cube != null){
       //cube.rotation.y = 0.005*j;
     }
