@@ -1,5 +1,7 @@
-import Guy from './guy.js'
+import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
+import { FirstPersonCamera,Guy } from './guy.js';
+
 var j = 0;
 
 
@@ -19,18 +21,18 @@ class Ground extends THREE.Group{
     let roughnessColor = textLoader.load("./textures/forrest_ground_01_rough_1k.jpg");
     let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(5, 5, 512, 512), 
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 512, 512), 
       new THREE.MeshStandardMaterial({
         map: baseColor,
         normalMap: normalColor,
         displacementMap: heightColor,
-        displacementScale: 0.07,
+        displacementScale: 0.2,
         roughnessMap: roughnessColor,
         aoMap: aoColor,
       })
     );
-  ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
-
+    ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
+    this.add(ground)
     this.body = new CANNON.Body({
       shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
       type: CANNON.Body.STATIC,
@@ -71,9 +73,10 @@ var init = function(){
     0.1, // near clipping plane
     1000 // far clipping plane
   );
+  
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight,);
-
+  
   document.body.appendChild(renderer.domElement);
 
   var cube;
@@ -81,7 +84,7 @@ var init = function(){
   loader.load('../res/meshes/House.glb', function(gltf){
     cube = gltf.scene
     cube.position.set(5,-1,-4);
-    cube.scale.set(0.1, 0.1, 0.1);
+    cube.scale.set(0.5, 0.5, 0.5);
     scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -89,8 +92,11 @@ var init = function(){
     console.log(error);
   });
 
-  const guy = new Guy(scene, world, camera)
+  const skybox = sky()
+  scene.add(skybox)
 
+  const guy = new Guy(scene, world, camera)
+  const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   scene.add(light);
 
@@ -106,8 +112,9 @@ var init = function(){
     g.update()
     world.step(timestep)
     j++;
+    fpCamera.update();
     if (cube != null){
-      cube.rotation.y = 0.005*j;
+      //cube.rotation.y = 0.005*j;
     }
   };
 
@@ -121,6 +128,12 @@ var init = function(){
     render();
     requestAnimationFrame(GameLoop);
   };
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+  })
 
   GameLoop()
 };
