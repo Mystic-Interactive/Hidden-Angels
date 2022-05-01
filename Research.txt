@@ -1,0 +1,83 @@
+How to set up Three.js
+
+1. Set up a bundler
+  ->run 
+    -> npm init -y
+  ->run the following to install nvm
+    -> curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash 
+  ->check if nvm was installed by running teh following. If it was not close the terminal and go to step above
+    -> nvm -v
+  ->run the following to switch to the correct version of node
+    -> nvm install node
+  ->run the following to install parcel
+    -> npm install parcel --save-dev
+    
+2. Add the necessary files
+  ->Create a src folder with html file in it
+  ->Add a sub js folder that will have all your JS files
+  ->Add the script to the html file to show that it points to the right JS file and include that it is type module. For example: <script src = "./js/CannonJS.js" type="module"></script>
+  ->Add the following code to the html to take away the borders
+    -> <style>
+        body{
+            margin: 0
+        }
+    </style>
+
+3. Basic Three.js setup
+  ->To install three.js run the following
+    -> npm install three
+  ->To use Three.js functions import them with the following line
+    -> import * as THREE from 'three';
+  ->The following will be basic setup code for three.js
+    -> import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+
+       const renderer = new THREE.WebGLRenderer();
+
+       renderer.setSize(window.innerWidth,window.innerHeight);
+
+       document.body.appendChild(renderer.domElement);
+
+       const scene = new THREE.Scene();
+
+       const camera = new THREE.PerspectiveCamera(
+           75,
+           window.innerWidth/window.innerHeight,
+           0.1,
+           1000
+       );
+
+       const orbit = new OrbitControls(camera, renderer.domElement);
+
+       const axesHelper = new THREE.AxesHelper(5);
+       scene.add(axesHelper);
+
+       camera.position.set(0,2,5);
+       orbit.update();
+
+       function animate(){
+           renderer.render(scene,camera);
+           requestAnimationFrame(animate); 
+       }
+
+       animate();
+
+4. Compile on save
+  ->To compile on save run the following code
+    -> parcel ./src/htmlfile.html
+    -> This will then build the html together and then give you a url to it each time you save. To open this url just ctrl + click the link
+    
+    
+  
+ How to install CannonJS
+ 
+ 1. Set up
+  ->Install it by runnin the following code
+    -> npm install cannon-es
+  ->Import the library by running the following code
+    -> import * as CANNON from 'cannon-es';
+    
+ 
+ 
+ CannonJS extra notes
+ 
+ 1. The CANNON.Box dimensions must be half of the THREEjs mesh's dimensions such that the physics system can work accurately
