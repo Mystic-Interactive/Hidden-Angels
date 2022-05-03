@@ -85,6 +85,7 @@ export default class Player extends THREE.Group {
         var model = this.gltf.scene
         this.add(model);
         this.model = model
+        this.model.rotateY(Math.PI)
 
         this.updateMaterials(this.gltf.scene);
         var skeleton = new THREE.SkeletonHelper( model );
@@ -125,7 +126,9 @@ export default class Player extends THREE.Group {
             this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta/2)
             this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
-            this.rotation.y+=(delta/100 * this.rotation_ratio)
+            //this.rotation.y+=(delta/100 * this.rotation_ratio)
+            this.rotation.y = this.camera.rotation.y;
+            this.body.quaternion.copy(this.quaternion);
             this.animation_manager.update(delta, this.desired_action, this.play_direction)
             this.updateTransform()
             this.updateMaterials(this.model)
@@ -141,16 +144,15 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.force.x = this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.force.z = this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        this.body.force.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
+        this.body.force.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
         this.camera.quaternion.copy(this.quaternion)
-        this.camera.rotation.y += Math.PI
-        this.camera.translateY(0)
+        this.camera.translateY(-0.5)
         this.camera.translateZ(4)
     }
 

@@ -1,10 +1,8 @@
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import { FirstPersonCamera, Guy } from './guy.js';
-
-var j = 0;
-
+import { Guy } from './guy.js';
+import { FirstPersonCamera } from './FirstPersonControls.js'
 
 class Ground extends THREE.Group{
   constructor(scene, world){
@@ -35,7 +33,7 @@ class Ground extends THREE.Group{
     ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
     this.add(ground)
     this.body = new CANNON.Body({
-      shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
+      shape: new CANNON.Box(new CANNON.Vec3(60, 60, 0.1)),
       type: CANNON.Body.STATIC,
       material: new CANNON.Material()
     })
@@ -71,7 +69,7 @@ var init = function(){
 
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(
-    75, // field of view (fov)
+    95, // field of view (fov)
     window.innerWidth/window.innerHeight, // browser aspect ratio
     0.1, // near clipping plane
     1000 // far clipping plane
@@ -84,11 +82,11 @@ var init = function(){
 
   var cube;
   const loader = new THREE.GLTFLoader();
-  loader.load('../res/meshes/House.glb', function(gltf){
+  loader.load('../res/meshes/FirstFloor.glb', function(gltf){
     cube = gltf.scene
-    cube.position.set(5,-1,-4);
-    cube.scale.set(0.5, 0.5, 0.5);
-    //scene.add(cube);
+    cube.position.set(5,-0.83,-4);
+    cube.scale.set(1, 1, 1);
+    scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -98,23 +96,20 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
   const initial_position = new CANNON.Vec3(0, 0, 5)
-  const guy = new Guy(scene, world, camera)
+  const guy = new Player(scene, world, camera)
   const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   scene.add(light);
 
   const timestep = 1/60
 
-  const g =new Ground(scene, world)
+  const g = new Ground(scene, world)
   console.log(g)
 
   scene.add(g)
 
   var delta = 0
   var time = new Date().getTime()
-
-
-
 
   var update = function(){//game logic
     //stats.begin()
@@ -124,11 +119,7 @@ var init = function(){
     guy.update(delta)
     g.update()
     world.step(timestep)
-    j++;
     fpCamera.update();
-    if (cube != null){
-      //cube.rotation.y = 0.005*j;
-    }
     //stats.end()
   };
 
@@ -137,11 +128,9 @@ var init = function(){
   };
 
   var GameLoop = function(){//run game loop(update, render, repeat)
-    j++;
     update();
     render();
     requestAnimationFrame(GameLoop);
-    
   };
 
   window.addEventListener('resize', () => {
