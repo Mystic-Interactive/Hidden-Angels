@@ -100,7 +100,7 @@ var init = function(){
           }
       });
 
-    scene.add(cube);
+    //scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -121,6 +121,22 @@ var init = function(){
   //Added skybox
   const skybox = sky()
   scene.add(skybox)
+
+    //Create a box
+    const boxGeo = new THREE.BoxGeometry(2,2,2);
+    const boxMat = new THREE.MeshBasicMaterial({
+       color: 0xff0000,
+    });
+    const box = new THREE.Mesh(boxGeo,boxMat);
+    scene.add(box);
+  
+    const boxBody = new CANNON.Body({
+        shape: new CANNON.Box(new CANNON.Vec3(1,1,1)),
+        mass: 1,
+        position: new CANNON.Vec3(0,0,0)
+    });
+  
+    world.addBody(boxBody);
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
@@ -159,6 +175,10 @@ var init = function(){
     moonLight.position.z = 10*(Math.cos(speed));
     moonSphere.position.y = 20*(Math.sin(speed))+10;
     moonSphere.position.z = 10*(Math.cos(speed));
+
+    //Physics bodies movement
+    box.position.copy(boxBody.position); //Copy position
+    box.quaternion.copy(boxBody.quaternion); //Copy orientation
 
     world.step(timestep)
     fpCamera.update();
