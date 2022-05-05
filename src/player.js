@@ -112,7 +112,7 @@ export default class Player extends THREE.Group {
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(1,2,0.7)),
-            position : new CANNON.Vec3(0, 2, 0),
+            position : new CANNON.Vec3(0, 2, 10),
             mass : 60
         })
         this.body.linearDamping = 0.999
@@ -144,8 +144,8 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)/10
-        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)/10
+        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)/5
+        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)/5
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
