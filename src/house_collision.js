@@ -14,7 +14,7 @@ function makeHouse(scene,world){
                 }
             });
 
-        scene.add(house);
+        //scene.add(house);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -31,11 +31,11 @@ function makeHouse(scene,world){
   makeCollisionCube(scene,world,[5,0.75,0.6],[0,-0.6,6.8],[0,0,0]);
   makeCollisionCube(scene,world,[5,0.5,0.6],[0,0,6.25],[0,0,0]);
 
-  // //exterior walls
-  // makeCollisionCube(scene,world,[16,13,0.4],[-12.3,6.5,-6],[0,Math.PI/2,0]); //right
-  // makeCollisionCube(scene,world,[16,13,0.4],[12.3,6.5,-6],[0,Math.PI/2,0]); //left
-  // makeCollisionCube(scene,world,[10,25,0.4],[0,5,-13.95],[0,0,Math.PI/2]); //back
-  // // makeCollisionCube(scene,world,[10,25,0.4],[0,5,1.95],[0,0,Math.PI/2]); //front
+  //exterior walls
+  makeCollisionCube(scene,world,[16,13,0.4],[-12.3,6.5,-6],[0,Math.PI/2,0]); //right
+  makeCollisionCube(scene,world,[16,13,0.4],[12.3,6.5,-6],[0,Math.PI/2,0]); //left
+  makeCollisionCube(scene,world,[10,25,0.4],[0,5,-13.95],[0,0,Math.PI/2]); //back
+  // makeCollisionCube(scene,world,[10,25,0.4],[0,5,1.95],[0,0,Math.PI/2]); //front
 
   //inner staircase
   makeCollisionStaircase(scene,world,[5,0.45,0.5],[0,0.4,-8.5],[0,0,0],'front'); //front
@@ -43,23 +43,23 @@ function makeHouse(scene,world){
   makeCollisionStaircase(scene,world,[2.8,0.45,0.5],[-4.2,5.4,-12.3],[0,Math.PI/2,0],'left'); //left
   makeCollisionStaircase(scene,world,[2.8,0.45,0.5],[4.2,5.4,-12.3],[0,Math.PI/2,0],'right'); //right
 
-  // // downstairs
-  //   // library/office
-  //   makeCollisionCube(scene,world,[7.8,3.1,0.2],[-5.05,1.55,-2],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[15.8,0.5,0.2],[-5.05,4.5,-5.9],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[3.75,3.1,0.2],[-5.05,1.55,-11.9],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[5.8,0.5,0.2],[-9,4.5,-1.5],[0,0,0]);
-  //   makeCollisionCube(scene,world,[2.75,1.8,0.2],[-6,1.55,-1.6],[0,0,Math.PI/2]);
-  //   makeCollisionCube(scene,world,[2.75,1.8,0.2],[-10.5 ,1.55,-1.6],[0,0,Math.PI/2]);
+  // downstairs
+    // library/office
+    makeCollisionCube(scene,world,[7.8,3.1,0.2],[-5.05,1.55,-2],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[15.8,0.5,0.2],[-5.05,4.5,-5.9],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3.75,3.1,0.2],[-5.05,1.55,-11.9],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[5.8,0.5,0.2],[-9,4.5,-1.5],[0,0,0]);
+    makeCollisionCube(scene,world,[2.75,1.8,0.2],[-6,1.55,-1.6],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[2.75,1.8,0.2],[-10.5 ,1.55,-1.6],[0,0,Math.PI/2]);
     
-  //   // kitchen/dining room
-  //   makeCollisionCube(scene,world,[5,3.1,0.2],[5.05,1.55,-4],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[0.5,3.1,0.2],[5.05,1.55,1],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[2.5,3.1,0.2],[5.05,1.55,-12.5],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[15.8,0.5,0.2],[5.05,4.5,-5.9],[0,Math.PI/2,0]);
-  //   makeCollisionCube(scene,world,[6.8,0.5,0.2],[8.5,4.5,-5],[0,0,0]);
-  //   makeCollisionCube(scene,world,[2,2.5,0.2],[7,1.55,-5],[0,0,Math.PI/2]);
-  //   makeCollisionCube(scene,world,[2,1,0.2],[11.5,1.55,-5],[0,0,Math.PI/2]);
+    // kitchen/dining room
+    makeCollisionCube(scene,world,[5,3.1,0.2],[5.05,1.55,-4],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[0.5,3.1,0.2],[5.05,1.55,1],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[2.5,3.1,0.2],[5.05,1.55,-12.5],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[15.8,0.5,0.2],[5.05,4.5,-5.9],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[6.8,0.5,0.2],[8.5,4.5,-5],[0,0,0]);
+    makeCollisionCube(scene,world,[2,2.5,0.2],[7,1.55,-5],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[2,1,0.2],[11.5,1.55,-5],[0,0,Math.PI/2]);
 
   //upstairs
     //flooring
@@ -69,19 +69,19 @@ function makeHouse(scene,world){
     makeCollisionCube(scene,world,[7,0.2,1],[0,6.25,-8],[0,0,0]);
 
     //masterbedroom
-    // makeCollisionCube(scene,world,[3.75,3.1,0.1],[-6.25,8,-11.4],[0,Math.PI/2,0]);
-    // makeCollisionCube(scene,world,[3,3.1,0.1],[-6.25,8,-5.9],[0,Math.PI/2,0]);
-    // makeCollisionCube(scene,world,[3,4.75,0.1],[-10,8,-4],[0,0,Math.PI/2]);
-    // makeCollisionCube(scene,world,[9,0.2,0.1],[-6.2,11,-9],[0,Math.PI/2,0]); //
-    // makeCollisionCube(scene,world,[3,3,0.1],[-8,8,-7],[0,0,Math.PI/2]);
-    // makeCollisionCube(scene,world,[3,0.5,0.1],[-11.8,8,-7],[0,0,Math.PI/2]);
-    // makeCollisionCube(scene,world,[5,0.2,0.1],[-10,11,-7],[0,0,0]);
+    makeCollisionCube(scene,world,[3.75,3.1,0.1],[-6.25,8,-11.4],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3,3.1,0.1],[-6.25,8,-5.9],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3,4.75,0.1],[-10,8,-4],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[9,0.2,0.1],[-6.2,11,-9],[0,Math.PI/2,0]); //
+    makeCollisionCube(scene,world,[3,3,0.1],[-8,8,-7],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[3,0.5,0.1],[-11.8,8,-7],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[5,0.2,0.1],[-10,11,-7],[0,0,0]);
 
     //broom closet
-    // makeCollisionCube(scene,world,[2.5,3,0.1],[-6.25,8,0.5],[0,Math.PI/2,0]);
-    // makeCollisionCube(scene,world,[3,1.5,0.1],[-7.5,8,-0.9],[0,0,Math.PI/2]);
-    // makeCollisionCube(scene,world,[3,1.5,0.1],[-11.3,8,-0.9],[0,0,Math.PI/2]);
-    // makeCollisionCube(scene,world,[5,0.2,0.1],[-10,11,-0.9],[0,0,0]);
+    makeCollisionCube(scene,world,[2.5,3,0.1],[-6.25,8,0.5],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3,1.5,0.1],[-7.5,8,-0.9],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[3,1.5,0.1],[-11.3,8,-0.9],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[5,0.2,0.1],[-10,11,-0.9],[0,0,0]);
 
     //bedroom 1
     makeCollisionCube(scene,world,[3.75,3.1,0.1],[6.25,8,-11.8],[0,Math.PI/2,0]);
@@ -90,12 +90,16 @@ function makeHouse(scene,world){
     makeCollisionCube(scene,world,[5,0.2,0.1],[9.3,11,-9.4],[0,0,0]);
 
     //bathroom
-    makeCollisionCube(scene,world,[0.25,3.1,0.1],[6.25,8,-6.5],[0,Math.PI/2,0]);
-    makeCollisionCube(scene,world,[0.25,3.1,0.1],[6.25,8,-4.3],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[0.25,3.1,0.1],[6.25,8,-6.6],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[0.25,3.1,0.1],[6.25,8,-4.2],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3,4,0.1],[9.5,8,-7],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[3,4,0.1],[9.5,8,-3.9],[0,0,Math.PI/2]);
     
 
     //bedroom 2
-
+    makeCollisionCube(scene,world,[3.75,3.1,0.1],[6.25,8,0],[0,Math.PI/2,0]);
+    makeCollisionCube(scene,world,[3,2.5,0.1],[8,8,-1.8],[0,0,Math.PI/2]);
+    makeCollisionCube(scene,world,[3,0.1,0.1],[11.5,8,-1.8],[0,0,Math.PI/2]);
 
 
 
