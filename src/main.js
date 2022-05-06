@@ -113,7 +113,7 @@ var init = function(){
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
   //ChandelierCreator(0xFFFFFF,0.1,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  //BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,10],[1,1,1],[0,0,0])
+  // BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,0],[1,1,1],[0,0,0])
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
