@@ -155,7 +155,7 @@ export default class Player extends THREE.Group {
         this.camera.position.copy(this.body.position)
         this.camera.quaternion.copy(this.quaternion)
         this.camera.translateY(-0.5)
-        this.camera.translateZ(4)
+        this.camera.translateZ(3)
     }
 
     dispose() {
