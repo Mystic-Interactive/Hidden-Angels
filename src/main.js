@@ -2,6 +2,7 @@ import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import { Guy } from './guy.js';
+import { FirstFloor } from './level2.js'
 import { FirstPersonCamera } from './FirstPersonControls.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 
@@ -85,7 +86,10 @@ var init = function(){
   
   document.body.appendChild(renderer.domElement);
 
-  var cube;
+  const level = new FirstFloor(scene, world, camera);
+  scene.add(level);
+  
+  /*var cube;
   const loader = new THREE.GLTFLoader();
   loader.load('../res/meshes/House.glb', function(gltf){
     cube = gltf.scene
@@ -98,14 +102,14 @@ var init = function(){
               node.castShadow=true;
               node.receiveShadow=true; //allows us to put shadows onto the walls
           }
-      });
+        });
 
     scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
     console.log(error);
-  });
+  });*/
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
