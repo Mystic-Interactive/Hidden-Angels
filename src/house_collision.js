@@ -107,6 +107,7 @@ function makeHouse(scene,world){
 
 
 function makeFirstFloor(scene,world){
+    
     var first_floor;
     const loader = new THREE.GLTFLoader();
     loader.load('../res/meshes/FirstFloor.glb', function(gltf){
@@ -139,6 +140,42 @@ function makeFirstFloor(scene,world){
     // makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
 
 }
+
+function makeFirstFloorStairs(scene,world){
+    var first_floor_stairs;
+    const loader = new THREE.GLTFLoader();
+    loader.load('../res/meshes/FirstFloorStairs.glb', function(gltf){
+        first_floor_stairs = gltf.scene
+        first_floor_stairs.position.set(0,-0.9,-4);
+        first_floor_stairs.scale.set(1, 1, 1);
+            //Creating shadows for each child mesh
+            gltf.scene.traverse(function(node){
+                if(node.type === 'Mesh'){     
+                    node.castShadow=true;
+                    node.receiveShadow=true; //allows us to put shadows onto the walls
+                }
+            });
+
+        scene.add(first_floor_stairs);
+  }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  }, (error) => {
+    console.log(error);
+  });
+
+
+  makeCollisionCube(scene,world,[23,0.1,19.75],[0,-0.85,-4],[0,0,0]); //floor just for now
+
+  //blocks
+//   makeCollisionCube(scene,world,[1.25,2,1.25],[-3.25,0.5,-4.5],[0,0,0]); //right block
+//   makeCollisionCube(scene,world,[1.25,2,1.25],[3.25,0.5,-4.5],[0,0,0]); //left block
+
+  //stairs
+  makeCollisionCube(scene,world,[3,0.1,0.1],[0,0,0],[0,0,0],0,0.4); //left block
+  //makeNewCollisionStairCase(scene,world,[3,0.1,0.1],[0,1,-1],10,0,0.4);
+
+}
+
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
     const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
     const boxMat = new THREE.MeshBasicMaterial({
@@ -162,6 +199,30 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
     boxBody.position.copy(box.position); //Copy position
     boxBody.quaternion.copy(box.quaternion); //Copy orientation
 
+}
+
+function makeNewCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,direction,distance_spread){
+    var rotation = [0,0,0]
+    for(var i =0;i<num_stairs;i++){
+        if(direction<0){
+            rotation[1] = Math.PI/2
+        }
+        else if(direction>0){
+            rotation[1] = -Math.PI/2
+        }
+        makeCollisionCube(scene,world,boxGeoSize,boxPos,rotation)
+        boxPos[1]+=0.2
+        if(direction==0){
+            boxPos[2]-=distance_spread
+        }
+        else if(direction<0){
+            boxPos[0]-=distance_spread
+        }
+        else{
+            boxPos[0]+=distance_spread
+        }
+        
+    }
 }
 
 function makeCollisionStaircase(scene,world,boxGeoSize,boxPos,rotationArr,dir){
@@ -191,4 +252,4 @@ function makeCollisionStaircase(scene,world,boxGeoSize,boxPos,rotationArr,dir){
     
 }
 
-export {makeHouse,makeFirstFloor}
+export {makeHouse,makeFirstFloor,makeFirstFloorStairs}
