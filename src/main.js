@@ -4,7 +4,7 @@ import Player from '../src/player.js'
 import { Guy } from './guy.js';
 import { FirstPersonCamera } from './FirstPersonControls.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
-import {makeHouse,makeFirstFloor,makeFirstFloorStairs} from './house_collision.js'
+import {makeHouse,makeFirstFloor} from './house_collision.js'
 
 
 class Ground extends THREE.Group{
@@ -109,7 +109,7 @@ var init = function(){
   // });
 
   //makeHouse(scene,world)
-  makeFirstFloorStairs(scene,world);
+  makeFirstFloor(scene,world);
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
