@@ -61,6 +61,40 @@ function makeHouse(scene,world){
 
 }
 
+
+function makeFirstFloor(scene,world){
+    var first_floor;
+    const loader = new THREE.GLTFLoader();
+    loader.load('../res/meshes/FirstFloor.glb', function(gltf){
+        first_floor = gltf.scene
+        first_floor.position.set(0,-0.83,-4);
+        first_floor.scale.set(1, 1, 1);
+            //Creating shadows for each child mesh
+            gltf.scene.traverse(function(node){
+                if(node.type === 'Mesh'){     
+                    node.castShadow=true;
+                    node.receiveShadow=true; //allows us to put shadows onto the walls
+                }
+            });
+
+        scene.add(first_floor);
+  }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  }, (error) => {
+    console.log(error);
+  });
+
+  //collision for the first floor
+    //floor and roof
+    makeCollisionCube(scene,world,[23,0.1,19.75],[0,-0.85,-4],[0,0,0]);
+
+    //walls
+    makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0]); //right wall
+    makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0]); //left wall
+    makeCollisionCube(scene,world,[24,2,0.1],[0,1,-14],[0,0,0]); //back wall
+    // makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
+
+}
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
     const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
     const boxMat = new THREE.MeshBasicMaterial({
@@ -113,4 +147,4 @@ function makeCollisionStaircase(scene,world,boxGeoSize,boxPos,rotationArr,dir){
     
 }
 
-export {makeHouse}
+export {makeHouse,makeFirstFloor}
