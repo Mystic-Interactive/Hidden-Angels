@@ -167,12 +167,20 @@ function makeFirstFloorStairs(scene,world){
   makeCollisionCube(scene,world,[23,0.1,19.75],[0,-0.85,-4],[0,0,0]); //floor just for now
 
   //blocks
-//   makeCollisionCube(scene,world,[1.25,2,1.25],[-3.25,0.5,-4.5],[0,0,0]); //right block
-//   makeCollisionCube(scene,world,[1.25,2,1.25],[3.25,0.5,-4.5],[0,0,0]); //left block
+  makeCollisionCube(scene,world,[1.25,2,1.25],[-3.25,0.5,-4.5],[0,0,0]); //right big
+  makeCollisionCube(scene,world,[1.25,2,1.25],[3.25,0.5,-4.5],[0,0,0]); //left big
+  makeCollisionCube(scene,world,[0.25,1,0.5],[-2,0,-1],[0,0,0]); //right small
 
   //stairs
-  makeCollisionCube(scene,world,[3,0.1,0.1],[0,0,0],[0,0,0],0,0.4); //left block
-  //makeNewCollisionStairCase(scene,world,[3,0.1,0.1],[0,1,-1],10,0,0.4);
+  makeNewCollisionStairCase(scene,world,[3,0.1,0.1],[0,-0.9,-1],10,0,0.4); //straight
+  makeCollisionCube(scene,world,[3,0.1,0.6],[0,1.05,-4.5],[0,0,0]); //halfway
+  makeNewCollisionStairCase(scene,world,[0.5,0.1,0.1],[-3,1.25,-4.7],5,-1,0.15); //left
+  makeNewCollisionStairCase(scene,world,[0.5,0.1,0.1],[3,1.25,-4.7],5,1,0.15); //right
+
+  //railings
+//   makeCollisionCube(scene,world,[1.25,1,0.01],[-3.25,2,-4],[0,0,0]); //right top
+//   makeCollisionCube(scene,world,[1.25,1,0.01],[3.25,2,-4],[0,0,0]); //left top
+makeCollisionCube(scene,world,[0.01,1,1.25],[-2.3,0.1,-3],[0,0,0]); //right bottom
 
 }
 
