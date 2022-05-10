@@ -145,8 +145,8 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.force.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.force.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)/5
+        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)/5
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
