@@ -88,27 +88,36 @@ var init = function(){
   const level = new FirstFloor(scene, world, camera);
   scene.add(level);
   
-  /*var cube;
-  const loader = new THREE.GLTFLoader();
-  loader.load('../res/meshes/House.glb', function(gltf){
-    cube = gltf.scene
-    cube.position.set(5,-0.83,-4);
-    cube.scale.set(1, 1, 1);
+  var hudCanvas = document.createElement('canvas');
+  
+  // Again, set dimensions to fit the screen.
+  hudCanvas.width = window.innerWidth;
+  hudCanvas.height = window.innerHeight;
 
-        //Creating shadows for each child mesh
-        gltf.scene.traverse(function(node){
-          if(node.type === 'Mesh'){     
-              node.castShadow=true;
-              node.receiveShadow=true; //allows us to put shadows onto the walls
-          }
-        });
 
-    scene.add(cube);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });*/
+  var hudBitmap = hudCanvas.getContext('2d');
+	hudBitmap.font = "Normal 40px Arial";
+  hudBitmap.textAlign = 'center';
+  hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
+  hudBitmap.fillText('Initializing...', window.innerWidth / 2, window.innerHeight / 2);
+
+  // Create the camera and set the viewport to match the screen dimensions.
+  var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 0, 30 );
+
+  // Create also a custom scene for HUD.
+  var sceneHUD = new THREE.Scene();
+ 
+	// Create texture from rendered graphics.
+	var hudTexture = new THREE.Texture(hudCanvas) 
+	hudTexture.needsUpdate = true;
+
+  // Create HUD material.
+  var material = new THREE.MeshBasicMaterial( {map: hudTexture} );
+  material.transparent = true;
+
+  var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+  var plane = new THREE.Mesh( planeGeometry, material );
+  sceneHUD.add( plane );
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
@@ -148,6 +157,7 @@ var init = function(){
 	blocker.addEventListener( 'click', function () {
 		PointerLock.lock();
 	} );
+
   var update = function(){//game logic
     //stats.begin()
     const new_time = new Date().getTime()
@@ -169,12 +179,18 @@ var init = function(){
     moonSphere.position.z = 10*(Math.cos(speed));
 
     world.step(timestep)
+
+    // Update HUD graphics.
+    hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    hudBitmap.fillText("Hi  " , window.innerWidth / 2, window.innerHeight / 2);
+  	hudTexture.needsUpdate = true;
     
     //stats.end()
   };
 
   var render = function(){//draw scene
     renderer.render(scene, camera);
+    renderer.render(sceneHUD, cameraHUD); 
   };
 
   var GameLoop = function(){//run game loop(update, render, repeat)
