@@ -9,6 +9,7 @@ export default class Player extends THREE.Group {
         this.world = world
         this.camera = camera
         this.controls =  new KeyBoardHandler();
+        this.loaded = false
         this.init_()
     }
 
@@ -70,9 +71,9 @@ export default class Player extends THREE.Group {
         })
 
         document.addEventListener('keyup', (event)=>{
-            console.log(event)
             if(event.key == 'w' || event.key == 's'){
                 this.desired_action = "idle"
+                console.log(this.desired_action)
                 this.direction = 0
             }
 
@@ -104,7 +105,7 @@ export default class Player extends THREE.Group {
             {name : "idle",       action : mixer.clipAction( animations[ 2 ] )},
             {name : "jump",       action : mixer.clipAction( animations[ 3 ] )},
             {name : "walk",       action : mixer.clipAction( animations[ 4 ] )},        
-            //{name : "standUp",    action : mixer.clipAction( animations[ 5 ] )},
+            {name : "stand-up",   action : mixer.clipAction( animations[ 5 ] )},
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
@@ -113,18 +114,21 @@ export default class Player extends THREE.Group {
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
-            position : new CANNON.Vec3(0, 2, 10),
-            mass : 1
+            position : new CANNON.Vec3(0, 3, 20),
+            mass : 6000
         })
-        
+
         this.scene.add(this)
         this.world.addBody(this.body)
+        this.loaded = true
+        this.updateMaterials(this.model)
     }
 
     update = (delta) =>{
         if(delta == 0) return
+        if(!this.loaded) return
             //interpolation functions (logorithmic)
-            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta/60)
+            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta)
             this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
             //this.rotation.y+=(delta/100 * this.rotation_ratio)
@@ -132,9 +136,10 @@ export default class Player extends THREE.Group {
             this.body.quaternion.copy(this.quaternion);
             this.animation_manager.update(delta, this.desired_action, this.play_direction)
             this.updateTransform()
-            this.updateMaterials(this.model)
-        } catch {
-            console.error('not yet loaded')
+            
+        } catch(e) {
+            console.error(e.stack)
+           // console.error('not yet loaded')
         }
     }
 
@@ -146,14 +151,16 @@ export default class Player extends THREE.Group {
 
     updateTransform() {
         this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)     
+        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+
+        //  console.log(this.velocity_ratio)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
-       // this.body.quaternion.copy(this.quaternion)
+        //  this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
         this.body.quaternion.copy(this.camera.quaternion)
-      //  this.camera.quaternion.copy(this.quaternion)
+        //  this.camera.quaternion.copy(this.quaternion)
         this.camera.translateY(-0.5)
         this.camera.translateZ(3)
     }

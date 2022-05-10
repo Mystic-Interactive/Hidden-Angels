@@ -9,16 +9,10 @@ export default class AnimationManager{
         this.actions = actions
         this.paths = paths
         this.mixer = mixer
+        this.state = ""
+        this.prev_state = ""
+        this.playing = []
         this.transition_state = 0
-        this.playAllAnimations()
-    }
-
-    playAllAnimations(){
-        this.actions.forEach(action => {
-            action.action.play()
-            action.action.setEffectiveWeight(4)
-            action.action.loop = true
-        });
     }
 
     setWeight(action, weight, play_direction){
@@ -26,21 +20,75 @@ export default class AnimationManager{
         if (play_direction > 0){
             action.setEffectiveTimeScale(2)
         } else action.setEffectiveTimeScale(-2)
-        action.setEffectiveWeight(weight);
+        if(weight < 10e-3) weight = 0
+        action.setEffectiveWeight(weight); // accurate to 3 decimal places
     }
 
-    update(delta, desired, play_direction){
-        this.actions.forEach(act =>{
-            const a = act.action
-            //console.log(a.getEffectiveTimeScale())
-            if(act.name == desired){
-                this.setWeight(
-                    a,
-                    a.getEffectiveWeight() + (1 - a.getEffectiveWeight())/10,
-                    play_direction
-                )
-            } else this.setWeight(act.action, a.getEffectiveWeight() - (a.getEffectiveWeight()/10), a.getEffectiveTimeScale())
+    getAction(name){
+
+        var result = null
+        this.actions.forEach(act => {
+            if(act.name == name) {
+                result = act.action
+                return
+            }
         })
+
+        return result
+    }
+
+    playAction(act, play_direction){
+        act.reset()
+        act.play()
+        act.setEffectiveTimeScale(1)
+        //act.setEffectiveWeight(act.get)
+        act.loop = true
+    }
+
+    stopAction(act){
+        act.stop()
+    }
+
+
+    update(delta, desired, play_direction){
+        this.prev_state = this.state
+        this.state = desired
+        console.log(this.playing)
+
+        //console.log(this.playing.length)
+
+        if(this.prev_state != desired){
+            const act = this.getAction(desired)
+            const index = this.playing.indexOf(act)
+            //this.playing.splice(index, 1)
+
+            this.playAction(act, play_direction)
+            this.playing.push(act)
+        }
+
+        const to_remove = []
+
+        for (var i = 0; i < this.playing.length - 1; i++){
+            const act = this.playing[i]
+            // decrease weight of past actions
+            this.setWeight(act, act.getEffectiveWeight() - (act.getEffectiveWeight()/10), 1)
+
+            // add to removal buffer when weight has hit 0
+            if (this.playing[i].getEffectiveWeight() == 0) to_remove.push(this.playing[i])
+        }
+        const act = this.playing[this.playing.length -1]
+
+        this.setWeight(
+            act,
+            act.getEffectiveWeight() + (1 - act.getEffectiveWeight())/10,
+            play_direction
+        )
+
+        to_remove.forEach(act => {
+            const index = this.playing.indexOf(act)
+            this.playing.splice(index, 1)
+        })
+
         try{
             this.mixer.update(delta/2000)
         }catch{
