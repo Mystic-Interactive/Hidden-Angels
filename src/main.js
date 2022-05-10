@@ -5,6 +5,7 @@ import { Guy } from './guy.js';
 import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
+import {HUD} from './overlay.js'
 
 class Ground extends THREE.Group{
   constructor(scene, world){
@@ -82,6 +83,7 @@ var init = function(){
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight,);
   renderer.shadowMap.enabled = true;
+  renderer.autoClear=false;
   
   document.body.appendChild(renderer.domElement);
 
@@ -94,12 +96,13 @@ var init = function(){
   hudCanvas.width = window.innerWidth;
   hudCanvas.height = window.innerHeight;
 
+  HUD(8);
+
 
   var hudBitmap = hudCanvas.getContext('2d');
-	hudBitmap.font = "Normal 40px Arial";
+	hudBitmap.font = "Normal 80px Arial";
   hudBitmap.textAlign = 'center';
-  hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
-  hudBitmap.fillText('Initializing...', window.innerWidth / 2, window.innerHeight / 2);
+  hudBitmap.fillStyle = "rgba(245,245,245,0.75)"; 
 
   // Create the camera and set the viewport to match the screen dimensions.
   var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 0, 30 );
@@ -138,13 +141,12 @@ var init = function(){
   const guy = new Player(scene, world, camera)
  // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
-  light.intensity=0.2;
+  light.intensity=0.8;
   scene.add(light);
 
   const timestep = 1/60
 
   const g = new Ground(scene, world)
-  console.log(g)
 
   scene.add(g)
 
@@ -182,7 +184,7 @@ var init = function(){
 
     // Update HUD graphics.
     hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    hudBitmap.fillText("Hi  " , window.innerWidth / 2, window.innerHeight / 2);
+    hudBitmap.fillText("+ " , window.innerWidth / 2, window.innerHeight / 2);
   	hudTexture.needsUpdate = true;
     
     //stats.end()
