@@ -5,7 +5,7 @@ import { Guy } from './guy.js';
 import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD} from './overlay.js'
+import {HUD, tookDamage} from './overlay.js'
 
 class Ground extends THREE.Group{
   constructor(scene, world){
@@ -96,7 +96,11 @@ var init = function(){
   hudCanvas.width = window.innerWidth;
   hudCanvas.height = window.innerHeight;
 
+  //Adds canvas HUD
   HUD(8);
+  // tookDamage();
+  // HUD(8);
+
 
 
   var hudBitmap = hudCanvas.getContext('2d');
@@ -167,6 +171,14 @@ var init = function(){
     time = new_time
     guy.update(delta)
     g.update()
+
+    //Showing that we can decrease the visible hearts on the fly
+    const d = new Date();
+    if(d.getMinutes()==35){
+      tookDamage();
+      HUD(8);
+    }
+
 
     //Rotates the skybox
     skybox.rotation.x+=0.0005;
