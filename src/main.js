@@ -3,9 +3,8 @@ import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import { Guy } from './guy.js';
 import { FirstFloor } from './level2.js'
-import { FirstPersonCamera } from './FirstPersonControls.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
-
+import {PointerLockControls} from './PointerLockControls.js'
 
 class Ground extends THREE.Group{
   constructor(scene, world){
@@ -128,7 +127,7 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
-  const fpCamera = new FirstPersonCamera(camera);
+ // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.2;
   scene.add(light);
@@ -144,6 +143,11 @@ var init = function(){
   var time = new Date().getTime()
   var speed= 0
 
+ const PointerLock = new PointerLockControls(camera,document.body);
+ const blocker = document.getElementById( 'blocker_child' );
+	blocker.addEventListener( 'click', function () {
+		PointerLock.lock();
+	} );
   var update = function(){//game logic
     //stats.begin()
     const new_time = new Date().getTime()
@@ -165,7 +169,7 @@ var init = function(){
     moonSphere.position.z = 10*(Math.cos(speed));
 
     world.step(timestep)
-    fpCamera.update();
+    
     //stats.end()
   };
 

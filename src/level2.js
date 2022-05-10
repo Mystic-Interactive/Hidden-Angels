@@ -6,10 +6,10 @@ export class FirstFloor extends THREE.Group {
         this.scene = scene
         this.world = world
         this.camera = camera
-        this.init()
+        this.init_()
     }
 
-    init() {
+    init_(){
         const loader = new THREE.GLTFLoader()
 
         loader.load('../res/meshes/FirstFloor.glb', (gltf) =>{
