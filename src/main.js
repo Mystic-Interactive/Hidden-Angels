@@ -164,6 +164,9 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
+var t = 29;
+
+
   var update = function(){//game logic
     //stats.begin()
     const new_time = new Date().getTime()
@@ -174,9 +177,11 @@ var init = function(){
 
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
-    if(d.getMinutes()==35){
+    console.log(d.getMinutes())
+    if(d.getMinutes()==t){
       tookDamage();
       HUD(8);
+      t+=1;
     }
 
 

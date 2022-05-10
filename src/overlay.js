@@ -68,12 +68,21 @@ function drawHealthBar(translate_x,translate_y){
   graphics.restore();
 }
 
+function healthIndicator(){
+  graphics.save();
+  var x = 1;
+  graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
+  graphics.strokeRect(-150,-75,300,150);
+  graphics.restore();
+}
+
 //Draws the HUD on the screen
 function HUD(inventory_slots){
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
   drawHealthBar(-140,-65);
+  healthIndicator();
 }
 
 //Decreases the amount of hearts to draw on the screen
