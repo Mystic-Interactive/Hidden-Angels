@@ -20,7 +20,7 @@ export default class Player extends THREE.Group {
             this.define()
         })
 
-        this.max_velocity = 25
+        this.max_velocity = 10
         //(backward = -1)
         //(forward  =  1)
         this.direction = 0 
@@ -112,11 +112,10 @@ export default class Player extends THREE.Group {
         this.addControls()
 
         this.body = new CANNON.Body({
-            shape : new CANNON.Sphere(2),
+            shape : new CANNON.Sphere(0.5),
             position : new CANNON.Vec3(0, 1, 0),
             mass : 1,
         })
-        this.body.linearDamping = 0.999
         this.scene.add(this)
         this.world.addBody(this.body)
     }
@@ -124,7 +123,7 @@ export default class Player extends THREE.Group {
     update = (delta) =>{
         if(delta == 0) return
             //interpolation functions (logorithmic)
-            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta/2)
+            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta/60)
             this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
             //this.rotation.y+=(delta/100 * this.rotation_ratio)
@@ -145,8 +144,8 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.force.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.force.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
+        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
