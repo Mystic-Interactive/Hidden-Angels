@@ -112,10 +112,11 @@ export default class Player extends THREE.Group {
         this.addControls()
 
         this.body = new CANNON.Body({
-            shape : new CANNON.Sphere(0.5),
-            position : new CANNON.Vec3(0, 1, 0),
-            mass : 1,
+            shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
+            position : new CANNON.Vec3(0, 2, 10),
+            mass : 1
         })
+        
         this.scene.add(this)
         this.world.addBody(this.body)
     }
@@ -145,7 +146,7 @@ export default class Player extends THREE.Group {
 
     updateTransform() {
         this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)     
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
@@ -154,7 +155,7 @@ export default class Player extends THREE.Group {
         this.body.quaternion.copy(this.camera.quaternion)
       //  this.camera.quaternion.copy(this.quaternion)
         this.camera.translateY(-0.5)
-       //this.camera.translateZ(4)
+        this.camera.translateZ(3)
     }
 
     dispose() {
