@@ -1,4 +1,4 @@
-import * as CANNON from '../lib/cannon-es.js'
+ import * as CANNON from '../lib/cannon-es.js'
 
 export class FirstFloor extends THREE.Group {
     constructor(scene, world, camera) {

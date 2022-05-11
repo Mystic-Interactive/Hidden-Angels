@@ -115,9 +115,9 @@ export default class Player extends THREE.Group {
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
             position : new CANNON.Vec3(0, 3, 20),
-            mass : 6000
+            mass : 20
         })
-
+        this.body.linearDamping = 0.5
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
@@ -128,7 +128,7 @@ export default class Player extends THREE.Group {
         if(delta == 0) return
         if(!this.loaded) return
             //interpolation functions (logorithmic)
-            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta)
+            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta / 10)
             this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
             //this.rotation.y+=(delta/100 * this.rotation_ratio)
@@ -153,13 +153,16 @@ export default class Player extends THREE.Group {
         this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
         this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
 
-        //  console.log(this.velocity_ratio)
+        //console.log(this.velocity_ratio)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
-        //  this.body.quaternion.copy(this.quaternion)
+        this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
-        this.body.quaternion.copy(this.camera.quaternion)
+        console.log(this.rotation.y +  " - " + this.camera.rotation.y)
+        this.rotation.y = this.camera.rotation.y
+        //this.body.quaternion.copy(this.camera.quaternion)
+        //console.log(this.camera.rotation.y + " " + e.setFromQuaternion(this.body.quaternion).y)
         //  this.camera.quaternion.copy(this.quaternion)
         this.camera.translateY(-0.5)
         this.camera.translateZ(3)

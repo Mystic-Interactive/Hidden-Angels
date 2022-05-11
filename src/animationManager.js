@@ -40,8 +40,7 @@ export default class AnimationManager{
     playAction(act, play_direction){
         act.reset()
         act.play()
-        act.setEffectiveTimeScale(1)
-        //act.setEffectiveWeight(act.get)
+        act.setEffectiveTimeScale(play_direction)
         act.loop = true
     }
 
@@ -53,15 +52,21 @@ export default class AnimationManager{
     update(delta, desired, play_direction){
         this.prev_state = this.state
         this.state = desired
-        console.log(this.playing)
 
-        //console.log(this.playing.length)
-
+        // change from one state to another
         if(this.prev_state != desired){
+
+            // if the desired stack is currently playing remove it from the stack
+            
             const act = this.getAction(desired)
             const index = this.playing.indexOf(act)
-            //this.playing.splice(index, 1)
-
+            console.log(this.playing.length)
+            if(index > -1){
+                this.playing.splice(index, 1)
+                console.log(this.playing.length)
+            }
+            
+            // play the action and place it at the top of the playing stack
             this.playAction(act, play_direction)
             this.playing.push(act)
         }

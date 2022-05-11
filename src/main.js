@@ -1,8 +1,9 @@
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import { Guy } from './guy.js';
+import Monster from '../src/monster.js'
 import { FirstFloor } from './level2.js'
+
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {makeHouse,makeFirstFloor} from './house_collision.js'
@@ -87,54 +88,10 @@ var init = function(){
   
   document.body.appendChild(renderer.domElement);
 
-  const level = new FirstFloor(scene, world, camera);
-  scene.add(level);
-  
-  /*var cube;
-  const loader = new THREE.GLTFLoader();
-  loader.load('../res/meshes/House.glb', function(gltf){
-    cube = gltf.scene
-    cube.position.set(5,-0.83,-4);
-    cube.scale.set(1, 1, 1);
+  //const level = new FirstFloor(scene, world, camera);
+  //scene.add(level);
 
-        //Creating shadows for each child mesh
-        gltf.scene.traverse(function(node){
-          if(node.type === 'Mesh'){     
-              node.castShadow=true;
-              node.receiveShadow=true; //allows us to put shadows onto the walls
-          }
-        });
-
-    scene.add(cube);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });*/
-  // var cube;
-  // const loader = new THREE.GLTFLoader();
-  // loader.load('../res/meshes/House.glb', function(gltf){
-  //   cube = gltf.scene
-  //   cube.position.set(5,-0.83,-4);
-  //   cube.scale.set(1, 1, 1);
-
-  //       //Creating shadows for each child mesh
-  //       gltf.scene.traverse(function(node){
-  //         if(node.type === 'Mesh'){     
-  //             node.castShadow=true;
-  //             node.receiveShadow=true; //allows us to put shadows onto the walls
-  //         }
-  //     });
-
-  //   //scene.add(cube);
-  // }, (xhr) => {
-  //   console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  // }, (error) => {
-  //   console.log(error);
-  // });
-
-  //makeHouse(scene,world)
-  makeFirstFloor(scene,world);
+  //makeFirstFloor(scene,world);
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
@@ -167,8 +124,8 @@ var init = function(){
   
     // world.addBody(boxBody);
 
-  const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
+  const monster = new Monster(scene, world, [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 10), new THREE.Vector3(10, 0, 10), new THREE.Vector3(10, 0, 0)])
  // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
@@ -190,12 +147,15 @@ var init = function(){
 	blocker.addEventListener( 'click', function () {
 		PointerLock.lock();
 	} );
+
+
   var update = function(){//game logic
     //stats.begin()
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
     guy.update(delta)
+    monster.update(delta)
     g.update()
 
     //Rotates the skybox
@@ -237,5 +197,7 @@ var init = function(){
 
   GameLoop()
 };
+
+console.log("hello")
 
 window.init = init
