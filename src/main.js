@@ -5,7 +5,7 @@ import { Guy } from './guy.js';
 import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 
 class Ground extends THREE.Group{
   constructor(scene, world){
@@ -164,7 +164,8 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t = 25;
+var t = 52;
+var selected = 0;
 
 
   var update = function(){//game logic
@@ -179,7 +180,9 @@ var t = 25;
     const d = new Date();
     console.log(d.getMinutes())
     if(d.getMinutes()==t){
+      selected+=2;
       tookDamage();
+      changeInventorySelected(selected)
       HUD(8);
       t+=1;
     }

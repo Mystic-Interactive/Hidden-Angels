@@ -2,6 +2,7 @@
 var hud_canvas = document.getElementById('myCanvas');
 var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
+var selected = 0;
 
 //Viewport transformation
 graphics.translate(150,75);
@@ -50,7 +51,11 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
  
   for(var i=0;i<num_blocks;i++){
+    if(i==selected){
+      graphics.strokeStyle="white"
+    }
      drawBlock(startx,starty,width,height);
+     graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
   }
 }
@@ -139,4 +144,8 @@ function tookDamage(){
   graphics.restore();
 }
 
-export{HUD,tookDamage}
+function changeInventorySelected(_change){
+  selected=_change
+}
+
+export{HUD,tookDamage,changeInventorySelected}
