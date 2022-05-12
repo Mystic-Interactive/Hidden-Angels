@@ -164,7 +164,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t = 29;
+var t = 25;
 
 
   var update = function(){//game logic
