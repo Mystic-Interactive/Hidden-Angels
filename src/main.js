@@ -164,7 +164,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t = 52;
+var t =19;
 var selected = 0;
 
 
@@ -212,7 +212,7 @@ var selected = 0;
 
   var render = function(){//draw scene
     renderer.render(scene, camera);
-    renderer.render(sceneHUD, cameraHUD); 
+    //renderer.render(sceneHUD, cameraHUD); 
   };
 
   var GameLoop = function(){//run game loop(update, render, repeat)

@@ -113,7 +113,7 @@ function healthIndicator(){
   maskCtx.bezierCurveTo(100,140,100,140,100,150);
   maskCtx.bezierCurveTo(10,140,100,140,0,150);
   //left bar
-  maskCtx.bezierCurveTo(5,15,100,250,3,100);
+  maskCtx.bezierCurveTo(5,15,100,250,3,100);  
   maskCtx.lineTo(0,0);
 
   maskCtx.fill();
