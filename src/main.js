@@ -71,7 +71,7 @@ var init = function(){
   //document.body.appendChild( stats.dom )
 
   const world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
+    gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   var scene = new THREE.Scene();
@@ -125,7 +125,15 @@ var init = function(){
     // world.addBody(boxBody);
 
   const guy = new Player(scene, world, camera)
-  const monster = new Monster(scene, world, [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 10), new THREE.Vector3(10, 0, 10), new THREE.Vector3(10, 0, 0)])
+
+  var path = [
+    new THREE.Vector3(0, 0, 0), 
+    new THREE.Vector3(0, 0, 10), 
+    new THREE.Vector3(10, 0, 10), 
+    new THREE.Vector3(10, 0, 0)
+  ]
+  
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
  // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;

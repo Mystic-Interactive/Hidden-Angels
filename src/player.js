@@ -1,4 +1,3 @@
-var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from "./animationManager.js"
 
@@ -31,6 +30,7 @@ export default class Player extends THREE.Group {
         //(right rotation = 1)
         this.rotation_direction = 0
         this.rotation_ratio = 0 //[0, 1]
+        this.ry = 0
 
         this.play_direction = 1
         this.desired_action = "idle"
@@ -81,6 +81,8 @@ export default class Player extends THREE.Group {
                 this.rotation_direction = 0
             }
         })
+
+        this.rotation._onChange = () => console.log(this.rotation)
     }
 
     define(){
@@ -150,22 +152,30 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        var m = -1
+        console.log(this.rotation.y)
+        //if(this.rotation.y < Math.abs(Math.PI/2)) m = 1
+        this.body.velocity.x = m * this.max_velocity * this.velocity_ratio * Math.sin(this.ry)
+        this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)
 
-        //console.log(this.velocity_ratio)
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
         this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
-        console.log(this.rotation.y +  " - " + this.camera.rotation.y)
-        this.rotation.y = this.camera.rotation.y
-        //this.body.quaternion.copy(this.camera.quaternion)
-        //console.log(this.camera.rotation.y + " " + e.setFromQuaternion(this.body.quaternion).y)
-        //  this.camera.quaternion.copy(this.quaternion)
+
+        const _euler = new THREE.Euler( 0, 0, 0, 'YXZ');
+        _euler.setFromQuaternion(this.camera.quaternion)
+        if(_euler.y > 0){
+            this.ry = _euler.y
+        } else {
+            this.ry = _euler.y + Math.PI * 2
+        }
+            
+        this.rotation.y = this.ry
+        //this.quaternion.copy(this.camera.quaternion)
         this.camera.translateY(-0.5)
-        this.camera.translateZ(3)
+        this.camera.translateZ(5)
     }
 
     dispose() {

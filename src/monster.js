@@ -4,11 +4,17 @@ import AnimationManager from './animationManager.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, path){
+    constructor(scene, world, position, path){
         super()
         this.scene = scene
         this.world = world
-        this.start_pos = this.position
+        this.start_pos = position
+        console.log(path)
+        for (var i = 0; i < path.length; i++){
+            console.log(path[i])
+            path[i].add(path[i], this.start_pos)
+            console.log(path[i])
+        }
         this.path = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
@@ -61,7 +67,7 @@ export default class Monster extends THREE.Group {
 
         this.body = new CANNON.Body({
             shape : new CANNON.Sphere(0.5),
-            position : new CANNON.Vec3(0, 1, 0),
+            position : new CANNON.Vec3(0, 0, 0),
             mass : 10,
         })
 
@@ -72,11 +78,12 @@ export default class Monster extends THREE.Group {
         this.loaded = true
     }
 
-    updateTransform(){
+    updateTransform(delta){
        
         const p = this.path[this.path_index]
         const b = this.body.position
         const curr_direction = (new CANNON.Vec3(p.x - b.x, 0, p.z - b.z).unit())
+
 
         // distance between the body and the point its trying to reach
         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
