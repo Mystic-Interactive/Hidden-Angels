@@ -112,10 +112,20 @@ export default class Player extends THREE.Group {
         this.addControls()
 
         this.body = new CANNON.Body({
-            shape : new CANNON.Sphere(2),
-            position : new CANNON.Vec3(0, 1, 0),
-            mass : 1,
+            shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
+            position : new CANNON.Vec3(0, 2, 10),
+            mass : 60
         })
+        this.body.addEventListener("collide",function(e){
+            //Add this to detect collision with specific object
+            // if(e.body.id==24){
+                // console.log("Box collided");
+            // }
+           
+             //console.log(e.body.id)
+        })
+
+        
         this.body.linearDamping = 0.999
         this.scene.add(this)
         this.world.addBody(this.body)
