@@ -13,7 +13,6 @@ const _PI_2 = Math.PI / 2;
 class PointerLockControls extends THREE.EventDispatcher {
 
 	constructor(camera, domElement ) {
-        console.log("got here")
 		super();
 
 		if ( domElement === undefined ) {
@@ -22,10 +21,8 @@ class PointerLockControls extends THREE.EventDispatcher {
 			domElement = document.body;
 
 		}
-
 		this.domElement = domElement;
 		this.isLocked = false;
-
 		// Set to constraint the pitch of the camera
 		// Range is 0 to Math.PI radians
 		this.minPolarAngle = 60 *Math.PI/180; // radians
@@ -33,7 +30,6 @@ class PointerLockControls extends THREE.EventDispatcher {
 		this.pointerSpeed = 1.0;
 		const scope = this;
 		function onMouseMove( event ) {
-
 			if ( scope.isLocked === false ) return;
 
 			const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
@@ -45,9 +41,12 @@ class PointerLockControls extends THREE.EventDispatcher {
 			_euler.x -= movementY * 0.002 * scope.pointerSpeed;
 
 			_euler.x = Math.max( _PI_2 - scope.maxPolarAngle, Math.min( _PI_2 - scope.minPolarAngle, _euler.x ) );
-
+			
+			//camera.rotation.y = _euler.y
+			//this.y_rotation = _euler.y;
+			//camera.rotation.x = _euler.x
+            
 			camera.quaternion.setFromEuler( _euler );
-
 			scope.dispatchEvent( _changeEvent );
 
 		}
@@ -118,9 +117,7 @@ class PointerLockControls extends THREE.EventDispatcher {
 
 
 		this.lock = function () {
-
 			this.domElement.requestPointerLock();
-
 		};
 
 		this.unlock = function () {

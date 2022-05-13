@@ -135,7 +135,7 @@ function HUD(inventory_slots){
   healthIndicator();
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
   drawHealthBar(-140,-65);
-  console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
+ // console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
   graphics.restore();
 }
 
