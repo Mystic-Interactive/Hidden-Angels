@@ -159,6 +159,9 @@ var init = function(){
     moonLight.position.z = 10*(Math.cos(speed));
     moonSphere.position.y = 20*(Math.sin(speed))+10;
     moonSphere.position.z = 10*(Math.cos(speed));
+    moonSphere.rotation.x+=0.005;
+    moonSphere.rotation.y+=0.005;
+    moonSphere.rotation.z+=0.005;
 
     world.step(timestep)
     fpCamera.update();
