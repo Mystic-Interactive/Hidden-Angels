@@ -168,7 +168,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t =39;
+var t =0;
 var selected = 0;
 
 

@@ -40,6 +40,7 @@ var selected = 0;
 
   function drawHeart(){
     graphics.save();
+    graphics.scale(0.75,0.75)
     graphics.strokeStyle="white";
     graphics.fillStyle="red";
     graphics.lineWidth=2;
@@ -69,7 +70,7 @@ function drawHealthBar(translate_x,translate_y){
   graphics.translate(translate_x,translate_y)
   drawHeart()
   for(var i=1;i<hearts;i++){
-    graphics.translate(15,0);
+    graphics.translate(17.5,0);
     drawHeart();
 
   }
@@ -79,12 +80,8 @@ function drawHealthBar(translate_x,translate_y){
 function healthIndicator(){
   graphics.save();
   graphics.translate(-150,-75)
-  var x = 1;
   graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
   graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-  var xoff=-150
-  var yoff=-75
-  var divider = 2.1
 
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
@@ -135,7 +132,7 @@ function HUD(inventory_slots){
   healthIndicator();
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
   drawHealthBar(-140,-65);
- // console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
+  console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
   graphics.restore();
 }
 
