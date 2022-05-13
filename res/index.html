@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Game</title>
     <style>
       body{
@@ -11,7 +11,7 @@
       }
       canvas{
         width: 100%;
-        height: 100%
+        height: 100%;
       }
       #blocker {
 				position: absolute;
@@ -27,8 +27,8 @@
     </style>
   </head>
   <body onload="init();">
-    <div id="blocker">
-		<div id="blocker_child">
+    <div id="blocker"></div>
+		<div id="blocker_child"></div>
     <script src='../lib/three.js'></script>
     <script src='../lib/GLTFLoader.js'></script>
     <script src="../lib/stats.js"></script>
@@ -38,7 +38,7 @@
     <script type="module" src="../src/player.js"></script>
     <script type='module' src='../src/sky.js'></script>
     <script type='module' src='../src/main.js'></script>
-    <canvas id="myCanvas" width=window.innerWidth height=window.innerHeight>
+    <canvas id="myCanvas" style="display:block;position:absolute;"></canvas>
   </body>
   
 </html>
