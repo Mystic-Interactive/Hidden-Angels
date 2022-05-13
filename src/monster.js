@@ -9,7 +9,7 @@ export default class Monster extends three.Group {
         this.world = world
     }
 
-    init() {
+    init_() {
         const loader = new THREE.GLTFLoader()
 
         loader.load('', (gltf) => {

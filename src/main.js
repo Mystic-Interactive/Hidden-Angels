@@ -2,8 +2,10 @@ import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import { Guy } from './guy.js';
-import { FirstPersonCamera } from './FirstPersonControls.js'
+import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
+import {PointerLockControls} from './PointerLockControls.js'
+import {makeHouse,makeFirstFloor} from './house_collision.js'
 
 
 class Ground extends THREE.Group{
@@ -85,7 +87,10 @@ var init = function(){
   
   document.body.appendChild(renderer.domElement);
 
-  var cube;
+  const level = new FirstFloor(scene, world, camera);
+  scene.add(level);
+  
+  /*var cube;
   const loader = new THREE.GLTFLoader();
   loader.load('../res/meshes/House.glb', function(gltf){
     cube = gltf.scene
@@ -98,19 +103,43 @@ var init = function(){
               node.castShadow=true;
               node.receiveShadow=true; //allows us to put shadows onto the walls
           }
-      });
+        });
 
     scene.add(cube);
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
     console.log(error);
-  });
+  });*/
+  // var cube;
+  // const loader = new THREE.GLTFLoader();
+  // loader.load('../res/meshes/House.glb', function(gltf){
+  //   cube = gltf.scene
+  //   cube.position.set(5,-0.83,-4);
+  //   cube.scale.set(1, 1, 1);
+
+  //       //Creating shadows for each child mesh
+  //       gltf.scene.traverse(function(node){
+  //         if(node.type === 'Mesh'){     
+  //             node.castShadow=true;
+  //             node.receiveShadow=true; //allows us to put shadows onto the walls
+  //         }
+  //     });
+
+  //   //scene.add(cube);
+  // }, (xhr) => {
+  //   console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  // }, (error) => {
+  //   console.log(error);
+  // });
+
+  //makeHouse(scene,world)
+  makeFirstFloor(scene,world);
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
   //ChandelierCreator(0xFFFFFF,0.1,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  //BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,10],[1,1,1],[0,0,0])
+  // BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,0],[1,1,1],[0,0,0])
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -122,11 +151,27 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
 
+    // //Create a box
+    // const boxGeo = new THREE.BoxGeometry(2,2,2);
+    // const boxMat = new THREE.MeshBasicMaterial({
+    //    color: 0xff0000,
+    // });
+    // const box = new THREE.Mesh(boxGeo,boxMat);
+    // scene.add(box);
+  
+    // const boxBody = new CANNON.Body({
+    //     shape: new CANNON.Box(new CANNON.Vec3(1,1,1)),
+    //     mass: 1,
+    //     position: new CANNON.Vec3(0,0,0)
+    // });
+  
+    // world.addBody(boxBody);
+
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
-  const fpCamera = new FirstPersonCamera(camera);
+ // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
-  light.intensity=0.2;
+  light.intensity=0.5;
   scene.add(light);
 
   const timestep = 1/60
@@ -140,6 +185,11 @@ var init = function(){
   var time = new Date().getTime()
   var speed= 0
 
+ const PointerLock = new PointerLockControls(camera,document.body);
+ const blocker = document.getElementById( 'blocker_child' );
+	blocker.addEventListener( 'click', function () {
+		PointerLock.lock();
+	} );
   var update = function(){//game logic
     //stats.begin()
     const new_time = new Date().getTime()
@@ -155,16 +205,20 @@ var init = function(){
 
     //Move the moon
     speed+=0.001
-    moonLight.position.y = 20*(Math.sin(speed))+10;
+    moonLight.position.y = 20*(Math.sin(speed))+50;
     moonLight.position.z = 10*(Math.cos(speed));
-    moonSphere.position.y = 20*(Math.sin(speed))+10;
+    moonSphere.position.y = 20*(Math.sin(speed))+50;
     moonSphere.position.z = 10*(Math.cos(speed));
     moonSphere.rotation.x+=0.005;
     moonSphere.rotation.y+=0.005;
     moonSphere.rotation.z+=0.005;
 
+    // //Physics bodies movement
+    // box.position.copy(boxBody.position); //Copy position
+    // box.quaternion.copy(boxBody.quaternion); //Copy orientation
+
     world.step(timestep)
-    fpCamera.update();
+    
     //stats.end()
   };
 

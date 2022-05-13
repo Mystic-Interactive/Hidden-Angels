@@ -1,64 +1,3 @@
-class KeyBoardHandler{ //handles user's keyboard inputs - used to pass movements to character
-
-    constructor(){
-        this.moveForward = false;
-        this.moveBackward = false;
-        this.moveLeft = false;
-        this.moveRight = false;
-
-        document.addEventListener('keydown', (event)=>{
-            if(event.code == 'KeyW'){
-                this.moveForward = true;   
-            }
-
-            if(event.code == 'KeyS'){
-                this.moveBackward = true;
-            }
-
-            if(event.code == 'KeyA'){
-                this.moveRight = true;
-            }           
-    
-            if (event.code == 'KeyD'){
-                this.moveLeft = true;
-            }
-        });
-
-        document.addEventListener('keyup', (event)=>{
-            if(event.code == 'KeyW'){
-            this.moveForward = false;   
-            }
-
-            if(event.code == 'KeyS'){
-                this.moveBackward = false;
-            }
-
-            if(event.code == 'KeyA'){
-                this.moveRight = false;
-            }           
-            
-            if (event.code == 'KeyD'){
-                this.moveLeft = false;
-            }
-        });
-    }
-
-    getForward(){
-        return this.moveForward;
-    }
-
-    getBackward(){
-        return this.moveBackward;
-    }
-
-    getLeft(){
-        return this.moveLeft;
-    }
-
-    getRight(){
-        return this.moveRight;
-    }
-}
 
 class MouseHandler{ //handle's user's mouse movements - for firstperson camera movement
 
@@ -71,8 +10,8 @@ class MouseHandler{ //handle's user's mouse movements - for firstperson camera m
         this.previous = {x : null, y: null};
 
         document.addEventListener('mousemove', (event)=>{
-            this.current.x = event.pageX  - window.innerWidth/2;
-            this.current.y = event.pageY - window.innerHeight/2;
+            this.current.x = event.movementX;
+            this.current.y = event.movementY;
             if(this.previous.x == null){
                 this.previous.x = this.current.x;
                 this.previous.y = this.current.y;
