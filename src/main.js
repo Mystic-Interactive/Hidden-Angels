@@ -96,7 +96,6 @@ var init = function(){
   // const level = new FirstFloor(scene, world, camera);
   // scene.add(level);
   makeFirstFloor(scene,world)
-   HUD(8);
 
   // var hudCanvas = document.createElement('canvas');
   
@@ -172,7 +171,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t =0;
+var t =59;
 var selected = 0;
 
 
@@ -191,10 +190,10 @@ var selected = 0;
       selected+=2;
       tookDamage();
       changeInventorySelected(selected)
-      HUD(8);
+      HUD(8,[-1,-1,-1,-1,-1,-1,-1,-1]);
       t+=1;
     }
-    HUD(8);
+    HUD(8,[-1,-1,-1,-1,1,-1,-1,-1]);
 
     //Rotates the skybox
     skybox.rotation.x+=0.0005;

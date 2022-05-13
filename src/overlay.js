@@ -3,6 +3,7 @@ var hud_canvas = document.getElementById('myCanvas');
 var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
 var selected = 0;
+var inventory = []
 
 //Simple functions to help with creation of the scene
   function drawLine(x0,y0,x1,y1,colour){
@@ -14,11 +15,8 @@ var selected = 0;
     graphics.stroke();
   }
 
-  function drawBlock(startx,starty,width,height,fill){
+  function drawBlock(startx,starty,width,height){
     graphics.strokeRect(startx,starty,width,height);
-    if(fill==true){
-      graphics.fillRect(startx,starty,width,height);
-    } 
   }
 
   function halfHeart(){
@@ -50,14 +48,41 @@ var selected = 0;
     graphics.restore();
   }
 
+  //draw key
+  function drawKey(translate_x,translate_y,width){
+    graphics.save();
+    graphics.translate(translate_x,translate_y)
+    graphics.lineWidth=0.5;
+    graphics.strokeStyle="rgb(0,216,255)"
+    graphics.beginPath();
+    //graphics.moveTo(width,0);
+    graphics.arc(width-3,3,1.5,0,2*Math.PI)
+    graphics.moveTo(8.5,4)
+    graphics.lineTo(3,9);
+    graphics.lineTo(5.5,11);
+    graphics.moveTo(5,7);
+    graphics.lineTo(7,8.75);
+    graphics.stroke();
+    graphics.restore();
+  }
+
+  function drawIcon(item_num,translate_x,translate_y,width){
+    if(item_num==1){
+      drawKey(translate_x,translate_y,width)
+    }
+  }
  //Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
  
   for(var i=0;i<num_blocks;i++){
     if(i==selected){
-      graphics.strokeStyle="white"
+      graphics.strokeStyle="white";
     }
+    if(inventory[i]!=-1){
+      drawIcon(inventory[i],startx,starty,width)
+    }
+    
      drawBlock(startx,starty,width,height);
      graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
@@ -123,11 +148,13 @@ function healthIndicator(){
 }
 
 //Draws the HUD on the screen
-function HUD(inventory_slots){
+function HUD(inventory_slots,_inventory){
   graphics.save();
   graphics.translate(hud_canvas.width/2, hud_canvas.height/2);
   graphics.scale(hud_canvas.width/300,  hud_canvas.height/150);
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
+  
+  inventory=_inventory
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
   healthIndicator();
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
