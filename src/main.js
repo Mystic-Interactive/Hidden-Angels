@@ -93,44 +93,46 @@ var init = function(){
   
   document.body.appendChild(renderer.domElement);
 
-  const level = new FirstFloor(scene, world, camera);
-  scene.add(level);
+  // const level = new FirstFloor(scene, world, camera);
+  // scene.add(level);
+  makeFirstFloor(scene,world)
+   HUD(8);
+
+  // var hudCanvas = document.createElement('canvas');
   
-  var hudCanvas = document.createElement('canvas');
-  
-  // Again, set dimensions to fit the screen.
-  hudCanvas.width = window.innerWidth;
-  hudCanvas.height = window.innerHeight;
+  // // Again, set dimensions to fit the screen.
+  // hudCanvas.width = window.innerWidth;
+  // hudCanvas.height = window.innerHeight;
 
-  //Adds canvas HUD
-  HUD(8);
-  // tookDamage();
-  // HUD(8);
-
-
-
-  var hudBitmap = hudCanvas.getContext('2d');
-	hudBitmap.font = "Normal 80px Arial";
-  hudBitmap.textAlign = 'center';
-  hudBitmap.fillStyle = "rgba(245,245,245,0.75)"; 
-
-  // Create the camera and set the viewport to match the screen dimensions.
-  var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 0, 30 );
-
-  // Create also a custom scene for HUD.
-  var sceneHUD = new THREE.Scene();
+  // //Adds canvas HUD
  
-	// Create texture from rendered graphics.
-	var hudTexture = new THREE.Texture(hudCanvas) 
-	hudTexture.needsUpdate = true;
+  // // tookDamage();
+  // // HUD(8);
 
-  // Create HUD material.
-  var material = new THREE.MeshBasicMaterial( {map: hudTexture} );
-  material.transparent = true;
 
-  var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
-  var plane = new THREE.Mesh( planeGeometry, material );
-  sceneHUD.add( plane );
+
+  // var hudBitmap = hudCanvas.getContext('2d');
+	// hudBitmap.font = "Normal 80px Arial";
+  // hudBitmap.textAlign = 'center';
+  // hudBitmap.fillStyle = "rgba(245,245,245,0.75)"; 
+
+  // // Create the camera and set the viewport to match the screen dimensions.
+  // var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 0, 30 );
+
+  // // Create also a custom scene for HUD.
+  // var sceneHUD = new THREE.Scene();
+ 
+	// // Create texture from rendered graphics.
+	// var hudTexture = new THREE.Texture(hudCanvas) 
+	// hudTexture.needsUpdate = true;
+
+  // // Create HUD material.
+  // var material = new THREE.MeshBasicMaterial( {map: hudTexture} );
+  // material.transparent = true;
+
+  // var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+  // var plane = new THREE.Mesh( planeGeometry, material );
+  // sceneHUD.add( plane );
 
   //Adds the interior wall lights
   //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
@@ -146,22 +148,6 @@ var init = function(){
   //Added skybox
   const skybox = sky()
   scene.add(skybox)
-
-    // //Create a box
-    // const boxGeo = new THREE.BoxGeometry(2,2,2);
-    // const boxMat = new THREE.MeshBasicMaterial({
-    //    color: 0xff0000,
-    // });
-    // const box = new THREE.Mesh(boxGeo,boxMat);
-    // scene.add(box);
-  
-    // const boxBody = new CANNON.Body({
-    //     shape: new CANNON.Box(new CANNON.Vec3(1,1,1)),
-    //     mass: 1,
-    //     position: new CANNON.Vec3(0,0,0)
-    // });
-  
-    // world.addBody(boxBody);
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
@@ -222,16 +208,13 @@ var selected = 0;
     moonSphere.position.y = 20*(Math.sin(speed))+50;
     moonSphere.position.z = 10*(Math.cos(speed));
 
-    // //Physics bodies movement
-    // box.position.copy(boxBody.position); //Copy position
-    // box.quaternion.copy(boxBody.quaternion); //Copy orientation
 
     world.step(timestep)
 
     // Update HUD graphics.
-    hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    hudBitmap.fillText("+ " , window.innerWidth / 2, window.innerHeight / 2);
-  	hudTexture.needsUpdate = true;
+    // hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    // hudBitmap.fillText("+ " , window.innerWidth / 2, window.innerHeight / 2);
+  	// hudTexture.needsUpdate = true;
     
     //stats.end()
   };
