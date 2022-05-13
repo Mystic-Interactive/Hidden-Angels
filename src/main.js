@@ -87,51 +87,9 @@ var init = function(){
   
   document.body.appendChild(renderer.domElement);
 
-  const level = new FirstFloor(scene, world, camera);
-  scene.add(level);
+  //const level = new FirstFloor(scene, world, camera);
+  //scene.add(level);
   
-  /*var cube;
-  const loader = new THREE.GLTFLoader();
-  loader.load('../res/meshes/House.glb', function(gltf){
-    cube = gltf.scene
-    cube.position.set(5,-0.83,-4);
-    cube.scale.set(1, 1, 1);
-
-        //Creating shadows for each child mesh
-        gltf.scene.traverse(function(node){
-          if(node.type === 'Mesh'){     
-              node.castShadow=true;
-              node.receiveShadow=true; //allows us to put shadows onto the walls
-          }
-        });
-
-    scene.add(cube);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });*/
-  // var cube;
-  // const loader = new THREE.GLTFLoader();
-  // loader.load('../res/meshes/House.glb', function(gltf){
-  //   cube = gltf.scene
-  //   cube.position.set(5,-0.83,-4);
-  //   cube.scale.set(1, 1, 1);
-
-  //       //Creating shadows for each child mesh
-  //       gltf.scene.traverse(function(node){
-  //         if(node.type === 'Mesh'){     
-  //             node.castShadow=true;
-  //             node.receiveShadow=true; //allows us to put shadows onto the walls
-  //         }
-  //     });
-
-  //   //scene.add(cube);
-  // }, (xhr) => {
-  //   console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  // }, (error) => {
-  //   console.log(error);
-  // });
 
   //makeHouse(scene,world)
   makeFirstFloor(scene,world);
@@ -150,22 +108,6 @@ var init = function(){
   //Added skybox
   const skybox = sky()
   scene.add(skybox)
-
-    // //Create a box
-    // const boxGeo = new THREE.BoxGeometry(2,2,2);
-    // const boxMat = new THREE.MeshBasicMaterial({
-    //    color: 0xff0000,
-    // });
-    // const box = new THREE.Mesh(boxGeo,boxMat);
-    // scene.add(box);
-  
-    // const boxBody = new CANNON.Body({
-    //     shape: new CANNON.Box(new CANNON.Vec3(1,1,1)),
-    //     mass: 1,
-    //     position: new CANNON.Vec3(0,0,0)
-    // });
-  
-    // world.addBody(boxBody);
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
@@ -213,9 +155,6 @@ var init = function(){
     moonSphere.rotation.y+=0.005;
     moonSphere.rotation.z+=0.005;
 
-    // //Physics bodies movement
-    // box.position.copy(boxBody.position); //Copy position
-    // box.quaternion.copy(boxBody.quaternion); //Copy orientation
 
     world.step(timestep)
     
