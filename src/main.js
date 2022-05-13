@@ -162,7 +162,6 @@ var init = function(){
   var time = new Date().getTime()
   var speed= 0
 
-  console.log(document.body);
  const PointerLock = new PointerLockControls(camera,document.body);
  const blocker = document.getElementById( 'myCanvas' );
 	blocker.addEventListener( 'click', function () {
