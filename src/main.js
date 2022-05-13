@@ -68,6 +68,10 @@ var init = function(){
   //stats.showPanel(5)
   //document.body.appendChild( stats.dom )
 
+  var hud_canvas = document.getElementById('myCanvas');
+  hud_canvas.width = window.innerWidth;
+  hud_canvas.height = window.innerHeight;
+
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -9.81, 0)
   })
@@ -164,7 +168,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t =19;
+var t =39;
 var selected = 0;
 
 
@@ -186,7 +190,7 @@ var selected = 0;
       HUD(8);
       t+=1;
     }
-
+    HUD(8);
 
     //Rotates the skybox
     skybox.rotation.x+=0.0005;
@@ -222,6 +226,8 @@ var selected = 0;
   };
 
   window.addEventListener('resize', () => {
+    hud_canvas.width = window.innerWidth;
+    hud_canvas.height = window.innerHeight;
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();

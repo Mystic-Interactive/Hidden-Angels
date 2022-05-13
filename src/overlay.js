@@ -4,9 +4,6 @@ var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
 var selected = 0;
 
-//Viewport transformation
-graphics.translate(150,75);
-
 //Simple functions to help with creation of the scene
   function drawLine(x0,y0,x1,y1,colour){
     graphics.lineWidth = 0.5;
@@ -27,10 +24,16 @@ graphics.translate(150,75);
   function halfHeart(){
     graphics.save();
     graphics.beginPath();
+
     graphics.moveTo(0,0);
-    graphics.bezierCurveTo(-2.5,-3.75,-5,-2.5,-5,0);
-    graphics.bezierCurveTo(-5,2.5,-3.75,3.75,0.05,7.5);
+    graphics.bezierCurveTo(-5,-7.5,-10,-5,-10,0);
+    graphics.bezierCurveTo(-10,5,-7.5,7.5,0.1,15);
+    // graphics.bezierCurveTo(-2.5,-3.75,-5,-2.5,-5,0);
+    // graphics.bezierCurveTo(-5,2.5,-3.75,3.75,0.05,7.5);
+    graphics.save();
+    graphics.lineWidth=1;
     graphics.stroke();
+    graphics.restore();
     graphics.fill();
     graphics.restore();
   }
@@ -124,12 +127,16 @@ function healthIndicator(){
 
 //Draws the HUD on the screen
 function HUD(inventory_slots){
+  graphics.save();
+  graphics.translate(hud_canvas.width/2, hud_canvas.height/2);
+  graphics.scale(hud_canvas.width/300,  hud_canvas.height/150);
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
   healthIndicator();
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
   drawHealthBar(-140,-65);
-  
+  console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
+  graphics.restore();
 }
 
 //Decreases the amount of hearts to draw on the screen
