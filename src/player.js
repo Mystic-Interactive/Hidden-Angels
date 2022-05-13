@@ -153,8 +153,6 @@ export default class Player extends THREE.Group {
 
     updateTransform() {
         var m = -1
-        console.log(this.rotation.y)
-        //if(this.rotation.y < Math.abs(Math.PI/2)) m = 1
         this.body.velocity.x = m * this.max_velocity * this.velocity_ratio * Math.sin(this.ry)
         this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)
 
@@ -173,7 +171,6 @@ export default class Player extends THREE.Group {
         }
             
         this.rotation.y = this.ry
-        //this.quaternion.copy(this.camera.quaternion)
         this.camera.translateY(-0.5)
         this.camera.translateZ(5)
     }

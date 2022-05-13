@@ -60,7 +60,6 @@ export default class AnimationManager{
             
             const act = this.getAction(desired)
             const index = this.playing.indexOf(act)
-            console.log(this.playing.length)
             if(index > -1){
                 this.playing.splice(index, 1)
                 console.log(this.playing.length)
