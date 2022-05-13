@@ -80,6 +80,10 @@ export default class Player extends THREE.Group {
             if(event.key == 'a' || event.key == 'd'){
                 this.rotation_direction = 0
             }
+
+            if (event.key == ' '){
+                this.desired_action = 'idle'
+            }
         })
 
         this.rotation._onChange = () => console.log(this.rotation)
@@ -153,6 +157,12 @@ export default class Player extends THREE.Group {
 
     updateTransform() {
         var m = -1
+
+        if(this.desired_action == "jump"){
+            this.body.applyImpulse(new CANNON.Vec3(0, 40, 0))
+        }
+        console.log(this.position.y)
+
         this.body.velocity.x = m * this.max_velocity * this.velocity_ratio * Math.sin(this.ry)
         this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)
 
