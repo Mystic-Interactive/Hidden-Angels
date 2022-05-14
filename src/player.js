@@ -26,10 +26,6 @@ export default class Player extends THREE.Group {
         this.direction = 0 
         this.velocity_ratio = 0 //[0 , 1]
 
-        //(left rotation  = -1)
-        //(right rotation = 1)
-        this.rotation_direction = 0
-        this.rotation_ratio = 0 //[0, 1]
         this.ry = 0
 
         this.play_direction = 1
@@ -42,12 +38,6 @@ export default class Player extends THREE.Group {
                 this.direction = 1
                 this.play_direction = 1
                 this.desired_action = "walk"
-                if (event.ctrlKey == false){
-                    
-                    this.velocity_ratio = 1
-                }else {
-                    this.velocity_ratio = 2
-                } 
             }
 
             if(event.key == 's'){
@@ -55,19 +45,7 @@ export default class Player extends THREE.Group {
                 this.direction = -1
                 this.play_direction = -1
                 this.velocity_ratio = -1
-            }
-
-            if(event.key == 'a'){
-                this.rotation_direction = 1
-            }           
-            
-            if (event.key == 'd'){
-                this.rotation_direction = -1
-            }
-
-            if (event.key == ' '){
-                this.desired_action = 'jump'
-            }
+            }       
         })
 
         document.addEventListener('keyup', (event)=>{
@@ -75,10 +53,6 @@ export default class Player extends THREE.Group {
                 this.desired_action = "idle"
                 console.log(this.desired_action)
                 this.direction = 0
-            }
-
-            if(event.key == 'a' || event.key == 'd'){
-                this.rotation_direction = 0
             }
 
             if (event.key == ' '){
@@ -136,7 +110,6 @@ export default class Player extends THREE.Group {
         if(!this.loaded) return
             //interpolation functions (logorithmic)
             this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta / 10)
-            this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
             //this.rotation.y+=(delta/100 * this.rotation_ratio)
             this.rotation.y = this.camera.rotation.y;
@@ -146,7 +119,6 @@ export default class Player extends THREE.Group {
             
         } catch(e) {
             console.error(e.stack)
-           // console.error('not yet loaded')
         }
     }
 
@@ -168,8 +140,7 @@ export default class Player extends THREE.Group {
         this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)
 
         this.position.copy(this.body.position)
-        this.position.y -= .5
-        this.translateY(-1.5)
+        this.position.y -= 2
         this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
 
