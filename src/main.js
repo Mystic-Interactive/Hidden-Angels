@@ -1,6 +1,9 @@
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
+import Monster from '../src/monster.js'
+import { FirstFloor } from './level2.js'
+
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {makeHouse,makeFirstFloor} from './house_collision.js'
@@ -64,7 +67,7 @@ class Ground extends THREE.Group{
 
 var init = function(){
   const world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
+    gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   var scene = new THREE.Scene();
@@ -95,7 +98,17 @@ var init = function(){
   scene.add(skybox)
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
+
   const guy = new Player(scene, world, camera)
+
+  var path = [
+    new THREE.Vector3(0, 0, 0), 
+    new THREE.Vector3(0, 0, 10), 
+    new THREE.Vector3(10, 0, 10), 
+    new THREE.Vector3(10, 0, 0)
+  ]
+  
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
  // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
@@ -117,11 +130,14 @@ var init = function(){
 	blocker.addEventListener( 'click', function () {
 		PointerLock.lock();
 	} );
+
+
   var update = function(){//game logic
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
     guy.update(delta)
+    monster.update(delta)
     g.update()
 
     //Rotates the skybox
@@ -160,5 +176,7 @@ var init = function(){
 
   GameLoop()
 };
+
+console.log("hello")
 
 window.init = init

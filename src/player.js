@@ -1,6 +1,6 @@
-var loaded = null
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from "./animationManager.js"
+import PlayerController from "./playerControls.js"
 
 export default class Player extends THREE.Group {
     constructor(scene, world, camera) {
@@ -8,7 +8,6 @@ export default class Player extends THREE.Group {
         this.scene = scene
         this.world = world
         this.camera = camera
-        this.controls =  new KeyBoardHandler();
         this.loaded = false
         this.init_()
     }
@@ -31,6 +30,7 @@ export default class Player extends THREE.Group {
         //(right rotation = 1)
         this.rotation_direction = 0
         this.rotation_ratio = 0 //[0, 1]
+        this.ry = 0
 
         this.play_direction = 1
         this.desired_action = "idle"
@@ -80,7 +80,13 @@ export default class Player extends THREE.Group {
             if(event.key == 'a' || event.key == 'd'){
                 this.rotation_direction = 0
             }
+
+            if (event.key == ' '){
+                this.desired_action = 'idle'
+            }
         })
+
+        this.rotation._onChange = () => console.log(this.rotation)
     }
 
     define(){
@@ -100,24 +106,25 @@ export default class Player extends THREE.Group {
 
         //Getting the animations from the mesh
         const actions = [
-            {name : "crouch",     action : mixer.clipAction( animations[ 0 ] )},
-            {name : "walk",       action : mixer.clipAction( animations[ 1 ] )},
-            {name : "idle",       action : mixer.clipAction( animations[ 2 ] )},
-            {name : "jump",       action : mixer.clipAction( animations[ 3 ] )},
-            {name : "walk",       action : mixer.clipAction( animations[ 4 ] )},        
-            {name : "stand-up",   action : mixer.clipAction( animations[ 5 ] )},
+            {name : "crouch",       action : mixer.clipAction( animations[ 0 ] )},
+            {name : "crouch-walk",  action : mixer.clipAction( animations[ 1 ] )},
+            {name : "idle",         action : mixer.clipAction( animations[ 2 ] )},
+            {name : "jump",         action : mixer.clipAction( animations[ 3 ] )},
+            {name : "walk",         action : mixer.clipAction( animations[ 4 ] )},        
+            {name : "stand-up",     action : mixer.clipAction( animations[ 5 ] )},
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
+        this.player_controlls = new PlayerController(this, this.animation_manager)
         
         this.addControls()
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
             position : new CANNON.Vec3(0, 3, 20),
-            mass : 6000
+            mass : 20
         })
-
+        this.body.linearDamping = 0.5
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
@@ -128,7 +135,7 @@ export default class Player extends THREE.Group {
         if(delta == 0) return
         if(!this.loaded) return
             //interpolation functions (logorithmic)
-            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta)
+            this.velocity_ratio += (this.direction - this.velocity_ratio) / (delta / 10)
             this.rotation_ratio += (this.rotation_direction - this.rotation_ratio) / (delta)
         try{
             //this.rotation.y+=(delta/100 * this.rotation_ratio)
@@ -150,84 +157,37 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
-        this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-        this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+        var m = -1
 
-        //  console.log(this.velocity_ratio)
+        if(this.desired_action == "jump"){
+            this.body.applyImpulse(new CANNON.Vec3(0, 40, 0))
+        }
+        console.log(this.position.y)
+
+        this.body.velocity.x = m * this.max_velocity * this.velocity_ratio * Math.sin(this.ry)
+        this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)
+
         this.position.copy(this.body.position)
         this.position.y -= .5
         this.translateY(-1.5)
-        //  this.body.quaternion.copy(this.quaternion)
+        this.body.quaternion.copy(this.quaternion)
         this.camera.position.copy(this.body.position)
-        this.body.quaternion.copy(this.camera.quaternion)
-        //  this.camera.quaternion.copy(this.quaternion)
+
+        const _euler = new THREE.Euler( 0, 0, 0, 'YXZ');
+        _euler.setFromQuaternion(this.camera.quaternion)
+        
+        if(_euler.y > 0){
+            this.ry = _euler.y
+        } else {
+            this.ry = _euler.y + Math.PI * 2
+        }
+            
+        this.rotation.y = this.ry
         this.camera.translateY(-0.5)
-        this.camera.translateZ(3)
+        this.camera.translateZ(5)
     }
 
     dispose() {
         // Dispose everything that was created in this class - GLTF model, materials etc.
-    }
-}
-
-class KeyBoardHandler{ //handles user's keyboard inputs - used to pass movements to character
-
-    constructor(){
-        this.moveForward = false;
-        this.moveBackward = false;
-        this.moveLeft = false;
-        this.moveRight = false;
-
-        document.addEventListener('keydown', (event)=>{
-            if(event.code == 'KeyW'){
-                this.moveForward = true;   
-            }
-
-            if(event.code == 'KeyS'){
-                this.moveBackward = true;
-            }
-
-            if(event.code == 'KeyA'){
-                this.moveRight = true;
-            }           
-    
-            if (event.code == 'KeyD'){
-                this.moveLeft = true;
-            }
-        });
-
-        document.addEventListener('keyup', (event)=>{
-            if(event.code == 'KeyW'){
-            this.moveForward = false;   
-            }
-
-            if(event.code == 'KeyS'){
-                this.moveBackward = false;
-            }
-
-            if(event.code == 'KeyA'){
-                this.moveRight = false;
-            }           
-            
-            if (event.code == 'KeyD'){
-                this.moveLeft = false;
-            }
-        });
-    }
-
-    getForward(){
-        return this.moveForward;
-    }
-
-    getBackward(){
-        return this.moveBackward;
-    }
-
-    getLeft(){
-        return this.moveLeft;
-    }
-
-    getRight(){
-        return this.moveRight;
     }
 }
