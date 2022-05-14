@@ -6,7 +6,7 @@ import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
-import {makeHouse,makeFirstFloor} from './house_collision.js'
+import {makeHouse,makeFirstFloor,makeSecondFloor} from './house_collision.js'
 
 
 class Ground extends THREE.Group{
@@ -95,7 +95,11 @@ var init = function(){
 
   // const level = new FirstFloor(scene, world, camera);
   // scene.add(level);
-  makeFirstFloor(scene,world)
+    //makeFirstFloor(scene,world)
+    makeSecondFloor(scene,world);
+
+
+
 
   // var hudCanvas = document.createElement('canvas');
   
@@ -171,7 +175,7 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-var t =59;
+var t =43;
 var selected = 0;
 
 

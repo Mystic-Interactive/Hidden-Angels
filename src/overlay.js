@@ -105,8 +105,8 @@ function drawHealthBar(translate_x,translate_y){
 function healthIndicator(){
   graphics.save();
   graphics.translate(-150,-75)
-  graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-  graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
+  // graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
+  // graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
 
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
@@ -119,7 +119,10 @@ function healthIndicator(){
   maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
   maskCtx.globalCompositeOperation = 'xor';
   if(hearts==2){
+    graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
     maskCtx.fillStyle = "rgba(0,0,0,1)";
+    // graphics.strokeStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts-3))+")";
+    // graphics.fillStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts))+")";
   }
   
   
@@ -156,10 +159,9 @@ function HUD(inventory_slots,_inventory){
   
   inventory=_inventory
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
-  healthIndicator();
-  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
+  healthIndicator(); 
   drawHealthBar(-140,-65);
-  console.log("DRAWING HUD!!!!!" + hud_canvas.width + " - " + hud_canvas.height);
+  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
   graphics.restore();
 }
 
