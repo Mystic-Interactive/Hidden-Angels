@@ -66,15 +66,12 @@ class Ground extends THREE.Group{
 }
 
 var init = function(){
-  //var stats = new Stats()
-  //stats.showPanel(5)
-  //document.body.appendChild( stats.dom )
-
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   var scene = new THREE.Scene();
+	
   var camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
     window.innerWidth/window.innerHeight, // browser aspect ratio
@@ -87,16 +84,8 @@ var init = function(){
   renderer.shadowMap.enabled = true;
   
   document.body.appendChild(renderer.domElement);
-
-  //const level = new FirstFloor(scene, world, camera);
-  //scene.add(level);
-
-  //makeFirstFloor(scene,world);
-
-  //Adds the interior wall lights
-  //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  //ChandelierCreator(0xFFFFFF,0.1,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  // BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,0],[1,1,1],[0,0,0])
+  
+  makeFirstFloor(scene,world);
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -108,21 +97,7 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
 
-    // //Create a box
-    // const boxGeo = new THREE.BoxGeometry(2,2,2);
-    // const boxMat = new THREE.MeshBasicMaterial({
-    //    color: 0xff0000,
-    // });
-    // const box = new THREE.Mesh(boxGeo,boxMat);
-    // scene.add(box);
-  
-    // const boxBody = new CANNON.Body({
-    //     shape: new CANNON.Box(new CANNON.Vec3(1,1,1)),
-    //     mass: 1,
-    //     position: new CANNON.Vec3(0,0,0)
-    // });
-  
-    // world.addBody(boxBody);
+  const initial_position = new CANNON.Vec3(0, 0, 5)
 
   const guy = new Player(scene, world, camera)
 
@@ -148,7 +123,7 @@ var init = function(){
 
   var delta = 0
   var time = new Date().getTime()
-  var speed= 0
+  var speed = 0
 
  const PointerLock = new PointerLockControls(camera,document.body);
  const blocker = document.getElementById( 'blocker_child' );
@@ -158,7 +133,6 @@ var init = function(){
 
 
   var update = function(){//game logic
-    //stats.begin()
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
@@ -177,14 +151,11 @@ var init = function(){
     moonLight.position.z = 10*(Math.cos(speed));
     moonSphere.position.y = 20*(Math.sin(speed))+50;
     moonSphere.position.z = 10*(Math.cos(speed));
-
-    // //Physics bodies movement
-    // box.position.copy(boxBody.position); //Copy position
-    // box.quaternion.copy(boxBody.quaternion); //Copy orientation
+    moonSphere.rotation.x+=0.005;
+    moonSphere.rotation.y+=0.005;
+    moonSphere.rotation.z+=0.005;
 
     world.step(timestep)
-    
-    //stats.end()
   };
 
   var render = function(){//draw scene

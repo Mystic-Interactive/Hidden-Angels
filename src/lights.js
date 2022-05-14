@@ -240,8 +240,24 @@ function moonCreator(colour,intensity,distance,decay){
 }
 
 function addSphereMoon(radius){
+  const textLoader = new THREE.TextureLoader();
+  var texture = textLoader.load("./textures/moon_texture.jfif");
+  var displacementMap =  textLoader.load("./textures/moon_displacement.jpg");
+
+
   const sphereGeo = new THREE.SphereGeometry(radius);
-  const sphereMaterial = new THREE.MeshBasicMaterial({color:0xFFFFFF});
+  const sphereMaterial = new THREE.MeshLambertMaterial ( 
+    { color: 0xffffff ,
+    map: texture ,
+    displacementMap: displacementMap,
+    displacementScale: 0.2,
+    bumpMap: displacementMap,
+    bumpScale: 0.1,
+     reflectivity:1, 
+     shininess :0,
+     emissive:0xffffff,
+     emissiveIntensity:0.75
+    }); 
   const moon = new THREE.Mesh(sphereGeo,sphereMaterial);
   moon.position.set(0,0,0);
   moon.castShadow = false; 
