@@ -1,8 +1,6 @@
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import { Guy } from './guy.js';
-import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {makeHouse,makeFirstFloor} from './house_collision.js'
@@ -65,15 +63,12 @@ class Ground extends THREE.Group{
 }
 
 var init = function(){
-  //var stats = new Stats()
-  //stats.showPanel(5)
-  //document.body.appendChild( stats.dom )
-
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -9.81, 0)
   })
 
   var scene = new THREE.Scene();
+	
   var camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
     window.innerWidth/window.innerHeight, // browser aspect ratio
@@ -86,18 +81,8 @@ var init = function(){
   renderer.shadowMap.enabled = true;
   
   document.body.appendChild(renderer.domElement);
-
-  //const level = new FirstFloor(scene, world, camera);
-  //scene.add(level);
   
-
-  //makeHouse(scene,world)
   makeFirstFloor(scene,world);
-
-  //Adds the interior wall lights
-  //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  //ChandelierCreator(0xFFFFFF,0.1,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  // BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,0],[1,1,1],[0,0,0])
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -125,7 +110,7 @@ var init = function(){
 
   var delta = 0
   var time = new Date().getTime()
-  var speed= 0
+  var speed = 0
 
  const PointerLock = new PointerLockControls(camera,document.body);
  const blocker = document.getElementById( 'blocker_child' );
@@ -133,7 +118,6 @@ var init = function(){
 		PointerLock.lock();
 	} );
   var update = function(){//game logic
-    //stats.begin()
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
@@ -155,10 +139,7 @@ var init = function(){
     moonSphere.rotation.y+=0.005;
     moonSphere.rotation.z+=0.005;
 
-
     world.step(timestep)
-    
-    //stats.end()
   };
 
   var render = function(){//draw scene
