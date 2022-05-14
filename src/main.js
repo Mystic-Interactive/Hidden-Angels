@@ -2,7 +2,6 @@ import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
-import { FirstFloor } from './level2.js'
 
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
@@ -176,7 +175,5 @@ var init = function(){
 
   GameLoop()
 };
-
-console.log("hello")
 
 window.init = init
