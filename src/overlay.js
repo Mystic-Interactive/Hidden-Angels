@@ -120,7 +120,7 @@ function healthIndicator(){
   maskCtx.globalCompositeOperation = 'xor';
   if(hearts==2){
     graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
-    maskCtx.fillStyle = "rgba(0,0,0,1)";
+    maskCtx.fillStyle = "rgba(0,0,0,1)"; 
     // graphics.strokeStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts-3))+")";
     // graphics.fillStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts))+")";
   }

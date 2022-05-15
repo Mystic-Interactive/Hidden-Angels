@@ -6,9 +6,14 @@ import { FirstFloor } from './level2.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
-import {makeHouse,makeFirstFloor,makeSecondFloor} from './house_collision.js'
+import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
 
-
+var paused = false;
+var curr_lvl = null;
+var lvl = null;
+var lvl1_uuid = "";
+var lvl2_uuid = "";
+var lvl3_uuid = "";
 class Ground extends THREE.Group{
   constructor(scene, world){
     super();
@@ -90,57 +95,12 @@ var init = function(){
   renderer.setSize(window.innerWidth, window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear=false;
+  renderer.toneMapping=THREE.ReinhardToneMapping;
+  renderer.toneMappingExposure=2.4;
   
   document.body.appendChild(renderer.domElement);
 
-  // const level = new FirstFloor(scene, world, camera);
-  // scene.add(level);
-    //makeFirstFloor(scene,world)
-    makeSecondFloor(scene,world);
-
-
-
-
-  // var hudCanvas = document.createElement('canvas');
-  
-  // // Again, set dimensions to fit the screen.
-  // hudCanvas.width = window.innerWidth;
-  // hudCanvas.height = window.innerHeight;
-
-  // //Adds canvas HUD
- 
-  // // tookDamage();
-  // // HUD(8);
-
-
-
-  // var hudBitmap = hudCanvas.getContext('2d');
-	// hudBitmap.font = "Normal 80px Arial";
-  // hudBitmap.textAlign = 'center';
-  // hudBitmap.fillStyle = "rgba(245,245,245,0.75)"; 
-
-  // // Create the camera and set the viewport to match the screen dimensions.
-  // var cameraHUD = new THREE.OrthographicCamera(-window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, 0, 30 );
-
-  // // Create also a custom scene for HUD.
-  // var sceneHUD = new THREE.Scene();
- 
-	// // Create texture from rendered graphics.
-	// var hudTexture = new THREE.Texture(hudCanvas) 
-	// hudTexture.needsUpdate = true;
-
-  // // Create HUD material.
-  // var material = new THREE.MeshBasicMaterial( {map: hudTexture} );
-  // material.transparent = true;
-
-  // var planeGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
-  // var plane = new THREE.Mesh( planeGeometry, material );
-  // sceneHUD.add( plane );
-
-  //Adds the interior wall lights
-  //InteriorWallLightCreator(0xFFFFFF,0.5,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  //ChandelierCreator(0xFFFFFF,0.1,50,1,scene,[0,2,0],[1,1,1],[0,0,0])
-  // BedroomLightCreator(0xFFFFFF,0.1,25,1,scene,[0,1.75,0],[1,1,1],[0,0,0])
+  const mousePos = new THREE.Vector2();
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -154,7 +114,6 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
   const guy = new Player(scene, world, camera)
- // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -175,58 +134,125 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
+  //Creating the pause menu
+  var container = document.createElement('canvas');
+  container.setAttribute(
+    "style","width:1px; height:1px","position:absolute");
+    document.body.appendChild( container );
+    var cameraHUD = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2,window.innerHeight / - 2, - 500, 1000 );
+      cameraHUD.position.x = 0;
+      cameraHUD.position.y = 0;
+      cameraHUD.position.z = 0;
+    
+    var sceneHUD = new THREE.Scene();
+
+    var spriteMaterial = new THREE.SpriteMaterial({map:
+      THREE.ImageUtils.loadTexture(
+      "../res/textures/pause_menu/level-1.png")});
+      var sprite = new THREE.Sprite(spriteMaterial);
+      sprite.position.set(0,300,0);
+      sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+
+      var spriteMaterial2 = new THREE.SpriteMaterial({map:
+        THREE.ImageUtils.loadTexture(
+        "../res/textures/pause_menu/level-2.png")});
+        var sprite2 = new THREE.Sprite(spriteMaterial2);
+        sprite2.position.set(0,50,0);
+        sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+
+        var spriteMaterial3 = new THREE.SpriteMaterial({map:
+          THREE.ImageUtils.loadTexture(
+          "../res/textures/pause_menu/level-3.png")});
+          var sprite3 = new THREE.Sprite(spriteMaterial3);
+          sprite3.position.set(0,-200,0);
+          sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+      
+      lvl1_uuid = sprite.uuid;
+      lvl2_uuid = sprite2.uuid;
+      lvl3_uuid = sprite3.uuid;
+
+      sceneHUD.add(sprite);
+      sceneHUD.add(sprite2);
+      sceneHUD.add(sprite3);
+
+
 var t =43;
 var selected = 0;
 
 
   var update = function(){//game logic
-    //stats.begin()
-    const new_time = new Date().getTime()
-    delta = new_time - time
-    time = new_time
-    guy.update(delta)
-    g.update()
+    if(!paused){
+      const new_time = new Date().getTime()
+      delta = new_time - time
+      time = new_time
+      guy.update(delta)
+      g.update()
 
-    //Showing that we can decrease the visible hearts on the fly
-    const d = new Date();
-    console.log(d.getMinutes())
-    if(d.getMinutes()==t){
-      selected+=2;
-      tookDamage();
-      changeInventorySelected(selected)
-      HUD(8,[-1,-1,-1,-1,-1,-1,-1,-1]);
-      t+=1;
+      //Showing that we can decrease the visible hearts on the fly
+      const d = new Date();
+      //console.log(d.getMinutes())
+      if(d.getMinutes()==t){
+        selected+=2;
+        tookDamage();
+        changeInventorySelected(selected)
+        HUD(8,[-1,-1,-1,-1,-1,-1,-1,-1]);
+        t+=1;
+      }
+      HUD(8,[-1,-1,-1,-1,1,-1,-1,-1]);
+
+      //Rotates the skybox
+      skybox.rotation.x+=0.0005;
+      skybox.rotation.y+=0.0005;
+      skybox.rotation.z+=0.0005;
+
+      //Move the moon
+      speed+=0.001
+      moonLight.position.y = 20*(Math.sin(speed))+50;
+      moonLight.position.z = 10*(Math.cos(speed));
+      moonSphere.position.y = 20*(Math.sin(speed))+50;
+      moonSphere.position.z = 10*(Math.cos(speed));
+      moonSphere.rotation.x+=0.005;
+      moonSphere.rotation.y+=0.005;
+      moonSphere.rotation.z+=0.005;
+
+      world.step(timestep)
+
+
+
+      //stats.end()
     }
-    HUD(8,[-1,-1,-1,-1,1,-1,-1,-1]);
+    else{
+    const rayCaster = new THREE.Raycaster();
+    rayCaster.setFromCamera(mousePos,cameraHUD);
+    const intersects = rayCaster.intersectObjects(sceneHUD.children);
+    if(intersects.length==0){
+      console.log("Nothing selected")
+      lvl = null;
+    }
+    else if(intersects[0].object.uuid === lvl1_uuid){
+      console.log("Level 1 Highlighted")
+      lvl = 1;
+    }
+    else if(intersects[0].object.uuid === lvl2_uuid){
+      console.log("Level 2 Highlighted")
+      lvl = 2;
+    }
+    else{
+      console.log("Level 3 Highlighted")
+      lvl = 3;
+    }
 
-    //Rotates the skybox
-    skybox.rotation.x+=0.0005;
-    skybox.rotation.y+=0.0005;
-    skybox.rotation.z+=0.0005;
-
-    //Move the moon
-    speed+=0.001
-    moonLight.position.y = 20*(Math.sin(speed))+50;
-    moonLight.position.z = 10*(Math.cos(speed));
-    moonSphere.position.y = 20*(Math.sin(speed))+50;
-    moonSphere.position.z = 10*(Math.cos(speed));
-    moonSphere.rotation.x+=0.005;
-    moonSphere.rotation.y+=0.005;
-    moonSphere.rotation.z+=0.005;
-
-    world.step(timestep)
-
-    // Update HUD graphics.
-    // hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    // hudBitmap.fillText("+ " , window.innerWidth / 2, window.innerHeight / 2);
-  	// hudTexture.needsUpdate = true;
+    }
     
-    //stats.end()
   };
 
   var render = function(){//draw scene
     renderer.render(scene, camera);
-    //renderer.render(sceneHUD, cameraHUD); 
+    if(paused){
+      //renderer.clearDepth();
+      renderer.render(sceneHUD, cameraHUD); 
+    }
+    
   };
 
   var GameLoop = function(){//run game loop(update, render, repeat)
@@ -241,6 +267,39 @@ var selected = 0;
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
+  })
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.code=='Escape'){
+      console.log("Bring up menu")
+      paused = true;
+    }
+  })
+  
+  window.addEventListener('mousemove',(e)=>{
+    mousePos.x = (e.clientX/window.innerWidth)*2-1;
+    mousePos.y = - (e.clientY/window.innerHeight)*2+1;
+  })
+
+  window.addEventListener('mousedown',(e)=>{
+    console.log("clicked")
+    console.log("Level: ",lvl)
+    paused=false;
+    if(lvl==null|lvl==1){
+      removeFloor(scene,world,curr_lvl)
+      curr_lvl=1;
+      makeFirstFloor(scene,world);
+    }
+    if(lvl==2){
+      removeFloor(scene,world,curr_lvl);
+      curr_lvl=2;
+      makeSecondFloor(scene,world);
+    }
+    if(lvl==3){
+      removeFloor(scene,world,curr_lvl);
+      curr_lvl=3;
+      makeSecondFloor(scene,world);
+    }
   })
 
   GameLoop()
