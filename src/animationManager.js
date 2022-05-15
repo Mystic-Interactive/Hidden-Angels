@@ -62,7 +62,6 @@ export default class AnimationManager{
             const index = this.playing.indexOf(act)
             if(index > -1){
                 this.playing.splice(index, 1)
-                console.log(this.playing.length)
             }
             
             // play the action and place it at the top of the playing stack

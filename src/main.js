@@ -101,10 +101,8 @@ var init = function(){
   const guy = new Player(scene, world, camera)
 
   var path = [
-    new THREE.Vector3(0, 0, 0), 
-    new THREE.Vector3(0, 0, 10), 
-    new THREE.Vector3(10, 0, 10), 
-    new THREE.Vector3(10, 0, 0)
+    new THREE.Vector3(10, 0, 0), 
+    new THREE.Vector3(-10, 0, 0)
   ]
   
   const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
