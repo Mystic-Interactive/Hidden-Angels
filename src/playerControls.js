@@ -45,10 +45,20 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
     state_comp(action, direction){
         return {action : action, direction : direction}
     }
+    
 
     choose_state(delta){
         const st = []
 
+        
+        if(this.left) {
+            st.push(this.state_comp("left", 1))
+        }
+
+        if(this.right) {
+            st.push(this.state_comp("right", -1))
+        }
+        
         if(this.jump) {
             if(this.jump_duration < this.max_jump_duration){
                 st.push(this.state_comp("jump", 1))
@@ -57,6 +67,7 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
         } else {
             this.jump_duration = 0
         }
+
         
         if(this.crouch) {
             if(this.forward) {
@@ -81,22 +92,17 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
             st.push(this.state_comp("idle", 1))
 
         }
-
-        if(this.left) {
-            st.push(this.state_comp("left", 1))
-        }
-
-        if(this.right) {
-            st.push(this.state_comp("right", 1))
-        }
-
         this.state = st
     }
 
     update(delta){
         this.choose_state(delta)
-        const current_state = this.state[0]
+        var current_state = this.state[0]
         this.player.current_state = current_state
+        var anim_index = 0
+        if (this.left) anim_index += 1
+        if (this.right) anim_index += 1
+        current_state = this.state[anim_index]
         this.animation_manager.update(delta, current_state.action, current_state.direction)
 
     }

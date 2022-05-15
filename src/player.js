@@ -71,10 +71,12 @@ export default class Player extends THREE.Group {
         //guards
         if(delta == 0) return
         if(!this.loaded) return
-        
         this.player_controlls.update(delta)
-            //interpolation functions (logorithmic)
-            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (delta / 10)
+        //interpolation functions (logorithmic)
+        if(["walk", "crouch_walk", "left", "right"].indexOf(this.current_state.action) > -1){
+            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (delta * 0.1)
+        }
+        
         try{
             //this.rotation.y = this.camera.rotation.y;
             this.body.quaternion.copy(this.quaternion);
@@ -96,10 +98,12 @@ export default class Player extends THREE.Group {
         if(this.current_state.action == "jump"){
             this.body.applyImpulse(new CANNON.Vec3(0, 33.5, 0))
         } else if (this.current_state.action == "walk" || this.current_state.action == "crouch-walk"){
-
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
-
+        } else if (this.current_state.action == "left" || this.current_state.action == "right"){
+            console.log(Math.cos(this.rotation.y))
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2)
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2)
         }
 
         this.position.copy(this.body.position)
@@ -115,7 +119,7 @@ export default class Player extends THREE.Group {
         } else {
             this.rotation.y = _euler.y + Math.PI * 2
         }
-        
+
         this.camera.translateY(-0.5)
         this.camera.translateZ(5)
     }
