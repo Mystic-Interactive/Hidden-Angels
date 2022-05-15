@@ -226,7 +226,7 @@ function makeToilet(scene,world){
     console.log(error);
   });
 
-  makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2); //wall
+  makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2); //collision
 }
 
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
