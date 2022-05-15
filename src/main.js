@@ -176,7 +176,7 @@ var init = function(){
       sceneHUD.add(sprite3);
 
 
-var t =43;
+var t =5;
 var selected = 0;
 
 
@@ -190,7 +190,7 @@ var selected = 0;
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      //console.log(d.getMinutes())
+      console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage();
@@ -285,12 +285,12 @@ var selected = 0;
     console.log("clicked")
     console.log("Level: ",lvl)
     paused=false;
-    if(lvl==null|lvl==1){
+    if(lvl==1){
       removeFloor(scene,world,curr_lvl)
       curr_lvl=1;
       makeFirstFloor(scene,world);
     }
-    if(lvl==2){
+    if(lvl==null|lvl==2){
       removeFloor(scene,world,curr_lvl);
       curr_lvl=2;
       makeSecondFloor(scene,world);

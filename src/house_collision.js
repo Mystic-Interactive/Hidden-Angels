@@ -96,11 +96,31 @@ function makeSecondFloor(scene,world){
   });;
 
   //Collision boxes
-      //walls
+    //exterior walls
       makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0],2); //right wall
       makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0],2); //left wall
       makeCollisionCube(scene,world,[24,2,0.1],[0,1,-13.95],[0,0,0],2); //back wall stairs
     //   makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
+
+    //master bedroom
+    makeCollisionCube(scene,world,[8,2,0.01],[-7.5,1,0.1],[0,0,0],2); //back bathroom
+    makeCollisionCube(scene,world,[5,2,0.1],[-6,1,-4],[0,0,0],2); //bathroom divider big
+    makeCollisionCube(scene,world,[2,2,0.1],[-11,1,-4],[0,0,0],2); //bathroom divider small
+    makeCollisionCube(scene,world,[0.1,2,6.5],[-3,1,-3.75],[0,0,0],2); //right divider big
+    makeCollisionCube(scene,world,[0.1,2,5],[-3,1,-11],[0,0,0],2); //right divider small
+
+    //bedroom far
+    makeCollisionCube(scene,world,[6,2,0.1],[8,1,-6.5],[0,0,0],2); //door
+    makeCollisionCube(scene,world,[0.1,2,7],[5,1,-10],[0,0,0],2); //wall
+
+    //bedroom close
+    makeCollisionCube(scene,world,[5,2,0.1],[8,1,-1.5],[0,0,0],2); //door
+    makeCollisionCube(scene,world,[0.1,2,7],[5,1,2],[0,0,0],2); //wall
+
+    //toilet
+    makeCollisionCube(scene,world,[3,2,0.1],[3,1,1],[0,0,0],2); //door
+    makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
+
 
 }
 
@@ -198,12 +218,15 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
   
     world.addBody(boxBody);
     if(floor==1){
+        first_floor_objects.push(box);
         first_floor_collisions.push(boxBody);
     }
     else if(floor == 2){
+        second_floor_objects.push(box);
         second_floor_collisions.push(boxBody);
     }
     else{
+        third_floor_objects.push(box);
         third_floor_collisions.push(boxBody);
     }
 
@@ -242,28 +265,28 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
 function removeFloor(scene,world,floor){
     if(floor==1){
         for(var i=0;i<first_floor_collisions.length;i++){
-            world.removeBody(first_floor_collisions[i])
+            world.removeBody(first_floor_collisions[i]);
         }
         for(var i=0;i<first_floor_objects.length;i++){
-            scene.remove(first_floor_objects[i])
+            scene.remove(first_floor_objects[i]);
         }
     }
 
     if(floor==2){
         for(var i=0;i<second_floor_collisions.length;i++){
-            world.removeBody(second_floor_collisions[i])
+            world.removeBody(second_floor_collisions[i]);
         }
         for(var i=0;i<second_floor_objects.length;i++){
-            scene.remove(second_floor_objects[i])
+            scene.remove(second_floor_objects[i]);
         }
     }
 
     if(floor==3){
         for(var i=0;i<second_floor_collisions.length;i++){
-            world.removeBody(third_floor_collisions[i])
+            world.removeBody(third_floor_collisions[i]);
         }
         for(var i=0;i<second_floor_objects.length;i++){
-            scene.remove(third_floor_objects[i])
+            scene.remove(third_floor_objects[i]);
         }
 
     }
