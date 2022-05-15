@@ -121,6 +121,8 @@ function makeSecondFloor(scene,world){
     makeCollisionCube(scene,world,[3,2,0.1],[3,1,1],[0,0,0],2); //door
     makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
 
+    makeToilet(scene,world);
+
 
 }
 
@@ -198,6 +200,33 @@ function makeFridge(scene,world){
 
   makeCollisionCube(scene,world,[0.5,1,0.5],[5,1,-1],[0,0,0],1); //main fridge
   makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0],1); //door
+}
+
+function makeToilet(scene,world){
+    var toilet;
+    const loader = new THREE.GLTFLoader();
+    loader.load('../res/meshes/Toilet.glb', function(gltf){
+        toilet = gltf.scene
+        toilet.scale.set(0.16,0.16,0.16);
+        toilet.position.set(0.75,-0.75,5.4);
+        toilet.rotation.y=-Math.PI
+            //Creating shadows for each child mesh
+            gltf.scene.traverse(function(node){
+                if(node.type === 'Mesh'){     
+                    node.castShadow=true;
+                    node.receiveShadow=true; //allows us to put shadows onto the walls
+                }
+            });
+
+            scene.add(toilet);
+            second_floor_objects.push(toilet);
+  }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  }, (error) => {
+    console.log(error);
+  });
+
+  makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2); //wall
 }
 
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
