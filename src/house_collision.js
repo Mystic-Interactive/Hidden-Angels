@@ -1,7 +1,9 @@
 import * as CANNON from '../lib/cannon-es.js'
+import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon, removeMeshes } from './lights.js';
 
     var first_floor_objects = [];
     var first_floor_collisions= [];
+    var lights = [];
 
     var second_floor_objects= [];
     var second_floor_collisions= [];
@@ -10,6 +12,8 @@ import * as CANNON from '../lib/cannon-es.js'
     var third_floor_collisions= [];
 
 function makeFirstFloor(scene,world){
+    
+
     var first_floor;
     const loader = new THREE.GLTFLoader();
     loader.load('../res/meshes/FirstFloor.glb', function(gltf){
@@ -21,6 +25,7 @@ function makeFirstFloor(scene,world){
                 if(node.type === 'Mesh'){     
                     node.castShadow=true;
                     node.receiveShadow=true; //allows us to put shadows onto the walls
+                    
                 }
             });
 
@@ -39,12 +44,12 @@ function makeFirstFloor(scene,world){
 
 
     //walls
-    makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0],1); //right wall
-    makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0],1); //left wall
-    makeCollisionCube(scene,world,[10,2,0.1],[0,3,-13.95],[0,0,0],1); //back wall stairs
-    makeCollisionCube(scene,world,[6,2,0.1],[-8.5,2,-13.95],[0,0,0],1); //backwall office
-    makeCollisionCube(scene,world,[6,2,0.1],[8.5,2,-13.95],[0,0,0],1); //backwall diningroom
-    // makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
+        makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0],1); //right wall
+        makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0],1); //left wall
+        makeCollisionCube(scene,world,[10,2,0.1],[0,3,-13.95],[0,0,0],1); //back wall stairs
+        makeCollisionCube(scene,world,[6,2,0.1],[-8.5,2,-13.95],[0,0,0],1); //backwall office
+        makeCollisionCube(scene,world,[6,2,0.1],[8.5,2,-13.95],[0,0,0],1); //backwall diningroom
+        // makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
 
     //interior walls
         //main dividers
@@ -63,10 +68,32 @@ function makeFirstFloor(scene,world){
             makeCollisionCube(scene,world,[2.5,2,0.02],[5.6,1,-1.95],[0,0,0],1); //divider 1
             //makeCollisionCube(scene,world,[2,2,0.02],[11,1,-1.95],[0,0,0]); //divider 2
 
-    //stairs
-    makeFirstFloorStairs(scene,world,[0,0,-8.5]);
+    //Interior objs
+        makeFirstFloorStairs(scene,world,[0,0,-8.5]);
+        makeFridge(scene,world);
 
-    makeFridge(scene,world);
+    //adding lights
+        //entrance hall
+            
+            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,3],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 1
+            // lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,-5],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 2
+            // lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,3],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 1
+            //lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,-5],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 2
+        
+        //library
+            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-1],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+        
+        //office
+            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-11],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+        
+        //kitchen
+            lights.push(InteriorWallLightCreator(0xede2b7,0.5,7.5,1,scene,[8,1,5.5],[1,1,1],[0,Math.PI,0],-0.04));
+        
+        //dining room
+            lights.push(ChandelierCreator(0xede2b7,0.5,7.5,1,scene,[8,1.8,-8],[2,1.5,2],[0,Math.PI,0],-0.04));
+        
+        addLights(scene);
+
 
 }
 
@@ -292,6 +319,13 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
 
 
 function removeFloor(scene,world,floor){
+
+    //removes all the lights in the scene
+    for(var i=0;i<lights.length;i++){
+        scene.remove(lights[i]);
+    }
+    removeMeshes(scene);
+
     if(floor==1){
         for(var i=0;i<first_floor_collisions.length;i++){
             world.removeBody(first_floor_collisions[i]);
@@ -318,6 +352,12 @@ function removeFloor(scene,world,floor){
             scene.remove(third_floor_objects[i]);
         }
 
+    }
+}
+
+function addLights(scene){
+    for(var i=0;i<lights.length;i++){
+        scene.add(lights[i]);
     }
 }
 export {makeFirstFloor,makeSecondFloor,removeFloor}

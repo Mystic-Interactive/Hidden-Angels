@@ -3,7 +3,7 @@ import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
 
-import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
+import { moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
@@ -91,7 +91,7 @@ var init = function(){
     1000 // far clipping plane
   );
   
-  var renderer = new THREE.WebGLRenderer();
+  var renderer = new THREE.WebGLRenderer({maxLights: 8});
   renderer.setSize(window.innerWidth, window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear=false;
@@ -102,7 +102,7 @@ var init = function(){
 
   
   //Setting up the moon
-  var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
+  var moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
   scene.add(moonLight);
   var moonSphere = addSphereMoon(2);
   scene.add(moonSphere)
@@ -126,7 +126,7 @@ var init = function(){
  // const fpCamera = new FirstPersonCamera(camera);
 
   const light = new THREE.AmbientLight();
-  light.intensity=0.5;
+  light.intensity=0.1;
   scene.add(light);
 
   const timestep = 1/60
@@ -188,7 +188,7 @@ var init = function(){
       sceneHUD.add(sprite3);
 
 
-var t =5;
+var t =60;
 var selected = 0;
 
 
