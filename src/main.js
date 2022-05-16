@@ -298,19 +298,27 @@ var selected = 0;
     console.log("Level: ",lvl)
     paused=false;
     if(lvl==1){
-      removeFloor(scene,world,curr_lvl)
-      curr_lvl=1;
-      makeFirstFloor(scene,world);
+      if(curr_lvl!=1){
+        removeFloor(scene,world,curr_lvl)
+        curr_lvl=1;
+        makeFirstFloor(scene,world);
+      }
     }
-    if(lvl==null|lvl==2){
-      removeFloor(scene,world,curr_lvl);
-      curr_lvl=2;
-      makeSecondFloor(scene,world);
+    if(lvl==2){
+      if(curr_lvl!=2){
+        removeFloor(scene,world,curr_lvl);
+        curr_lvl=2;
+        makeSecondFloor(scene,world);
+      }
+      
     }
     if(lvl==3){
-      removeFloor(scene,world,curr_lvl);
-      curr_lvl=3;
-      makeSecondFloor(scene,world);
+      if(curr_lvl!=3){
+        removeFloor(scene,world,curr_lvl);
+        curr_lvl=3;
+        makeSecondFloor(scene,world);
+      }
+      
     }
   })
 
