@@ -1,8 +1,8 @@
 import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import { Guy } from './guy.js';
-import { FirstFloor } from './level2.js'
+import Monster from '../src/monster.js'
+
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
@@ -72,15 +72,18 @@ class Ground extends THREE.Group{
 
 var init = function(){
 
+
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
 
+
   const world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
+    gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   var scene = new THREE.Scene();
+	
   var camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
     window.innerWidth/window.innerHeight, // browser aspect ratio
@@ -96,6 +99,7 @@ var init = function(){
   document.body.appendChild(renderer.domElement);
 
   const mousePos = new THREE.Vector2();
+
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -108,7 +112,19 @@ var init = function(){
   scene.add(skybox)
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
+
   const guy = new Player(scene, world, camera)
+
+
+
+  var path = [
+    new THREE.Vector3(10, 0, 0), 
+    new THREE.Vector3(-10, 0, 0)
+  ]
+  
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
+ // const fpCamera = new FirstPersonCamera(camera);
+
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -121,13 +137,14 @@ var init = function(){
 
   var delta = 0
   var time = new Date().getTime()
-  var speed= 0
+  var speed = 0
 
  const PointerLock = new PointerLockControls(camera,document.body);
  const blocker = document.getElementById( 'myCanvas' );
 	blocker.addEventListener( 'click', function () {
 		PointerLock.lock();
 	} );
+
 
   //Creating the pause menu
   var container = document.createElement('canvas');
