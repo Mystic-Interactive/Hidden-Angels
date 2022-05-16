@@ -6,8 +6,8 @@ import Monster from '../src/monster.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {makeHouse,makeFirstFloor} from './house_collision.js'
-
-
+import * as YUKA from '../lib/yuka.module.js'
+import {Monster_AI} from './monsterAI.js'
 class Ground extends THREE.Group{
   constructor(scene, world){
     super();
@@ -108,7 +108,6 @@ var init = function(){
   ]
   
   const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
- // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -116,7 +115,6 @@ var init = function(){
   const timestep = 1/60
 
   const g = new Ground(scene, world)
-  console.log(g)
 
   scene.add(g)
 
@@ -130,9 +128,13 @@ var init = function(){
 		PointerLock.lock();
 	} );
 
-
+  //yuka AI stuff
+  const monster_ai = new Monster_AI();
+  scene.add(monster_ai.vehicleMesh);
+  //end of yuka AI stuff
   var update = function(){//game logic
-    const new_time = new Date().getTime()
+    monster_ai.update();
+    const new_time = new Date().getTime() 
     delta = new_time - time
     time = new_time
     guy.update(delta)

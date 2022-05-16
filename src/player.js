@@ -51,7 +51,7 @@ export default class Player extends THREE.Group {
         document.addEventListener('keyup', (event)=>{
             if(event.key == 'w' || event.key == 's'){
                 this.desired_action = "idle"
-                console.log(this.desired_action)
+              //  console.log(this.desired_action)
                 this.direction = 0
             }
 
@@ -134,7 +134,7 @@ export default class Player extends THREE.Group {
         if(this.desired_action == "jump"){
             this.body.applyImpulse(new CANNON.Vec3(0, 40, 0))
         }
-        console.log(this.position.y)
+       // console.log(this.position.y)
 
         this.body.velocity.x = m * this.max_velocity * this.velocity_ratio * Math.sin(this.ry)
         this.body.velocity.z = m * this.max_velocity * this.velocity_ratio * Math.cos(this.ry)

@@ -2,6 +2,7 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
+import * as YUKA from '../lib/yuka.module.js' 
 
 export default class Monster extends THREE.Group {
 
@@ -18,10 +19,10 @@ export default class Monster extends THREE.Group {
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
         this.loaded = false
-        this.init()
+        this.init_()
     }
 
-    init() {
+    init_() {
         const loader = new THREE.GLTFLoader()
         loader.load('../res/meshes/Basic_Monster.glb', (gltf) => {
             this.gltf = gltf
