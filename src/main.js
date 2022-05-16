@@ -71,9 +71,6 @@ class Ground extends THREE.Group{
 }
 
 var init = function(){
-  //var stats = new Stats()
-  //stats.showPanel(5)
-  //document.body.appendChild( stats.dom )
 
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
@@ -95,8 +92,6 @@ var init = function(){
   renderer.setSize(window.innerWidth, window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear=false;
-  renderer.toneMapping=THREE.ReinhardToneMapping;
-  renderer.toneMappingExposure=2.4;
   
   document.body.appendChild(renderer.domElement);
 
