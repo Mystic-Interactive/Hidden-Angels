@@ -61,6 +61,16 @@ export default class Player extends THREE.Group {
             mass : 20
         })
         this.body.linearDamping = 0.5
+
+        this.body.addEventListener("collide",function(e){
+            //Add this to detect collision with specific object
+            // if(e.body.id==24){
+                // console.log("Box collided");
+            // }
+           
+             //console.log(e.body.id)
+        })
+
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
@@ -94,6 +104,7 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform() {
+
 
         if(this.current_state.action == "jump"){
             this.body.applyImpulse(new CANNON.Vec3(0, 33.5, 0))
