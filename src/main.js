@@ -286,7 +286,7 @@ var selected = 0;
   })
 
   document.addEventListener('keydown',(e)=>{
-    if(e.code=='Escape'){
+    if(e.code=='Enter'){
       console.log("Bring up menu")
       paused = true;
     }
