@@ -112,7 +112,7 @@ export default class Player extends THREE.Group {
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
         } else if (this.current_state.action == "left" || this.current_state.action == "right"){
-            console.log(Math.cos(this.rotation.y))
+            //console.log(Math.cos(this.rotation.y))
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2)
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2)
         }
@@ -130,9 +130,8 @@ export default class Player extends THREE.Group {
         } else {
             this.rotation.y = _euler.y + Math.PI * 2
         }
-
         this.camera.translateY(-0.5)
-        this.camera.translateZ(5)
+        //this.camera.translateZ(5)
     }
 
     dispose() {
