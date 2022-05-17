@@ -97,8 +97,7 @@ var init = function(){
   scene.add(skybox)
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
-
-  const guy = new Player(scene, world, camera)
+  const player = new Player(scene, world, camera, initial_position)
 
   var path = [
     new THREE.Vector3(10, 0, 0), 
@@ -106,6 +105,7 @@ var init = function(){
   ]
   
   const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
+
  // const fpCamera = new FirstPersonCamera(camera);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
@@ -133,7 +133,7 @@ var init = function(){
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time
-    guy.update(delta)
+    player.update(delta)
     monster.update(delta)
     g.update()
 

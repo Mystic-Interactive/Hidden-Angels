@@ -3,12 +3,13 @@ import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
 
 export default class Player extends THREE.Group {
-    constructor(scene, world, camera) {
+    constructor(scene, world, camera, init_pos) {
         super()
         this.scene = scene
         this.world = world
         this.camera = camera
         this.loaded = false
+        this.init_pos = init_pos
         this.init_()
     }
 
@@ -57,7 +58,7 @@ export default class Player extends THREE.Group {
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
-            position : new CANNON.Vec3(0, 3, 20),
+            position : this.init_pos,
             mass : 20
         })
         this.body.linearDamping = 0.5
@@ -121,7 +122,7 @@ export default class Player extends THREE.Group {
         }
 
         this.camera.translateY(-0.5)
-        this.camera.translateZ(5)
+        this.camera.translateZ(0)
     }
 
     dispose() {
