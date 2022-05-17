@@ -2,10 +2,11 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
+import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path){
+    constructor(scene, world, position, path, player){
         super()
         this.scene = scene
         this.world = world
@@ -14,10 +15,12 @@ export default class Monster extends THREE.Group {
         for (var i = 0; i < path.length; i++){
             path[i].add(path[i], this.start_pos)
         }
+        this.hitting = false
         this.path = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
         this.loaded = false
+        this.enemy = player
         this.init()
     }
 
@@ -107,8 +110,18 @@ export default class Monster extends THREE.Group {
         try{
             this.play_direction = 1 
             this.desired_action = "roar"
+            if(this.position.distanceTo(this.enemy.position) < 2){
+                if(!this.hitting) {
+                    tookDamage()
+                }
+                this.desired_action = "basic_attack"
+            } else { 
+                this.hitting = false;
+                this.updateTransform(delta)
+            }
+            
             this.animation_manager.update( delta, this.desired_action, this.play_direction )
-            this.updateTransform(delta)
+            
         }catch(e){
             console.error(e.stack)
         }

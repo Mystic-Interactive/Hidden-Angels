@@ -21,7 +21,7 @@ export default class Player extends THREE.Group {
             this.define()
         })
 
-        this.max_velocity = 10
+        this.max_velocity = 0.1
         //(backward = -1)
         //(forward  =  1)
         this.direction = 0 
@@ -62,6 +62,16 @@ export default class Player extends THREE.Group {
             mass : 20
         })
         this.body.linearDamping = 0.5
+
+        this.body.addEventListener("collide",function(e){
+            //Add this to detect collision with specific object
+            // if(e.body.id==24){
+                // console.log("Box collided");
+            // }
+           
+             //console.log(e.body.id)
+        })
+
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
@@ -75,13 +85,13 @@ export default class Player extends THREE.Group {
         this.player_controlls.update(delta)
         //interpolation functions (logorithmic)
         if(["walk", "crouch_walk", "left", "right"].indexOf(this.current_state.action) > -1){
-            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (delta * 0.1)
+            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (10)
         }
         
         try{
             //this.rotation.y = this.camera.rotation.y;
             this.body.quaternion.copy(this.quaternion);
-            this.updateTransform()
+            this.updateTransform(delta)
             
         } catch(e) {
             console.error(e.stack)
@@ -94,17 +104,18 @@ export default class Player extends THREE.Group {
         });
     }
 
-    updateTransform() {
+    updateTransform(delta) {
 
+        console.log(this.position)
         if(this.current_state.action == "jump"){
-            this.body.applyImpulse(new CANNON.Vec3(0, 33.5, 0))
+            this.body.applyForce(new CANNON.Vec3(0, 100 * 20, 0))
         } else if (this.current_state.action == "walk" || this.current_state.action == "crouch-walk"){
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y) * delta
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y) * delta
         } else if (this.current_state.action == "left" || this.current_state.action == "right"){
             console.log(Math.cos(this.rotation.y))
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2)
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2)
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
         }
 
         this.position.copy(this.body.position)
