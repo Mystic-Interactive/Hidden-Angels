@@ -11,7 +11,6 @@ export default class Monster extends THREE.Group {
         this.scene = scene
         this.world = world
         this.start_pos = position
-        console.log(path)
         for (var i = 0; i < path.length; i++){
             path[i].add(path[i], this.start_pos)
         }
@@ -23,8 +22,8 @@ export default class Monster extends THREE.Group {
         this.enemy = player
         this.init()
     }
-
-    init() {
+    
+    init(){
         const loader = new THREE.GLTFLoader()
         loader.load('../res/meshes/Basic_Monster.glb', (gltf) => {
             this.gltf = gltf

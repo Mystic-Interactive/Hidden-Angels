@@ -10,6 +10,7 @@ export default class Player extends THREE.Group {
         this.camera = camera
         this.loaded = false
         this.init_pos = init_pos
+        this.view = 0
         this.init_()
     }
 
@@ -106,14 +107,12 @@ export default class Player extends THREE.Group {
 
     updateTransform(delta) {
 
-        console.log(this.position)
         if(this.current_state.action == "jump"){
             this.body.applyForce(new CANNON.Vec3(0, 100 * 20, 0))
         } else if (this.current_state.action == "walk" || this.current_state.action == "crouch-walk"){
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y) * delta
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y) * delta
         } else if (this.current_state.action == "left" || this.current_state.action == "right"){
-            console.log(Math.cos(this.rotation.y))
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
         }
@@ -131,9 +130,9 @@ export default class Player extends THREE.Group {
         } else {
             this.rotation.y = _euler.y + Math.PI * 2
         }
-
         this.camera.translateY(-0.5)
-        this.camera.translateZ(0)
+        
+        this.camera.translateZ(this.view)
     }
 
     dispose() {

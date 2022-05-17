@@ -11,8 +11,8 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
         this.right = false
         this.jump = false
         this.crouch = false
-
         this.max_jump_duration = 1500
+        this.fps = true
         this.define()
 
         this.state = []
@@ -27,6 +27,7 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
                 case "d"        : this.right       = true; break
                 case " "        : this.jump        = true; break
                 case "shift"    : this.crouch      = true; break
+                case "tab"      : this.fps         = !this.fps; break
             }
         })
 
@@ -50,6 +51,9 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
     choose_state(delta){
         const st = []
 
+        if(this.fps){
+            this.player.view = 0
+        } else {this.player.view = 3}
         
         if(this.left) {
             st.push(this.state_comp("left", 1))

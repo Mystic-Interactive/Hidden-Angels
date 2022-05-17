@@ -2,7 +2,7 @@ import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
-
+import  monster_ai  from '../src/monster_ai.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
@@ -123,10 +123,10 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
   
-  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
+  //const monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
 
  // const fpCamera = new FirstPersonCamera(camera);
-
+  var monster_v2 = new monster_ai(scene,player);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -196,16 +196,17 @@ var selected = 0;
 
   var update = function(){//game logic
     if(!paused){
+      monster_v2.update();
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time
       player.update(delta)
-      monster.update(delta)
+      //monster.update(delta)
       g.update()
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      console.log(d.getMinutes())
+     // console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage();
