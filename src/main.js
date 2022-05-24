@@ -3,7 +3,7 @@ import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
 
-import { moonCreator, addSphereMoon } from './lights.js';
+import { moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
@@ -127,7 +127,7 @@ var init = function(){
 
   const light = new THREE.AmbientLight();
   light.intensity=0.1;
-  scene.add(light);
+  // scene.add(light);
 
   const timestep = 1/60
 
@@ -162,21 +162,21 @@ var init = function(){
       THREE.ImageUtils.loadTexture(
       "../res/textures/pause_menu/level-1.png")});
       var sprite = new THREE.Sprite(spriteMaterial);
-      sprite.position.set(0,300,0);
+      sprite.position.set(0,window.innerHeight/3,0);
       sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
       var spriteMaterial2 = new THREE.SpriteMaterial({map:
         THREE.ImageUtils.loadTexture(
         "../res/textures/pause_menu/level-2.png")});
         var sprite2 = new THREE.Sprite(spriteMaterial2);
-        sprite2.position.set(0,50,0);
+        sprite2.position.set(0,window.innerHeight/12,0);
         sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
         var spriteMaterial3 = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
           "../res/textures/pause_menu/level-3.png")});
           var sprite3 = new THREE.Sprite(spriteMaterial3);
-          sprite3.position.set(0,-200,0);
+          sprite3.position.set(0,-window.innerHeight/6,0);
           sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
       
       lvl1_uuid = sprite.uuid;
@@ -190,8 +190,9 @@ var init = function(){
 
 var t =60;
 var selected = 0;
-
-
+      
+var torchLight = torch(0xFFFFFF,0.5,5,1,-0.004,[0,0,0])
+scene.add(torchLight)
   var update = function(){//game logic
     if(!paused){
       const new_time = new Date().getTime()
@@ -202,7 +203,7 @@ var selected = 0;
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      console.log(d.getMinutes())
+      // console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage();
@@ -228,6 +229,10 @@ var selected = 0;
       moonSphere.rotation.z+=0.005;
 
       world.step(timestep)
+      console.log(camera.position)
+      torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
+
+      
 
 
 
@@ -321,6 +326,7 @@ var selected = 0;
       
     }
   })
+
 
   GameLoop()
 };

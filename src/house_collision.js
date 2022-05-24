@@ -75,22 +75,22 @@ function makeFirstFloor(scene,world){
     //adding lights
         //entrance hall
             
-            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,3],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 1
+            // lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,3],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 1
             // lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,-5],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 2
             // lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,3],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 1
             //lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,-5],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 2
         
         //library
-            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-1],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+            // lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-1],[1,0.75,1],[0,Math.PI/2,0],-0.04));
         
         //office
-            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-11],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+            // lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-11],[1,0.75,1],[0,Math.PI/2,0],-0.04));
         
         //kitchen
-            lights.push(InteriorWallLightCreator(0xede2b7,0.5,7.5,1,scene,[8,1,5.5],[1,1,1],[0,Math.PI,0],-0.04));
+            // lights.push(InteriorWallLightCreator(0xede2b7,0.5,7.5,1,scene,[8,1,5.5],[1,1,1],[0,Math.PI,0],-0.04));
         
         //dining room
-            lights.push(ChandelierCreator(0xede2b7,0.5,7.5,1,scene,[8,1.8,-8],[2,1.5,2],[0,Math.PI,0],-0.04));
+            // lights.push(ChandelierCreator(0xede2b7,0.5,7.5,1,scene,[8,1.8,-8],[2,1.5,2],[0,Math.PI,0],-0.04));
         
         addLights(scene);
 

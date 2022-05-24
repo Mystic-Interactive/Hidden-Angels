@@ -46,9 +46,6 @@ function InteriorWallLightCreator(colour,intensity,distance,decay,scene,position
     var pLightHelper = pLightObject[1];
     var pLightShadowHelper = pLightObject[2];
     return pLight;
-    // scene.add(pLight);
-    // scene.add(pLightHelper);
-    // scene.add(pLightShadowHelper);
 }
 
 function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
@@ -87,75 +84,6 @@ function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,
     var pLightHelper = pLightObject[1];
     var pLightShadowHelper = pLightObject[2];
     return pLight;
-    // scene.add(pLightHelper);
-    // scene.add(pLightShadowHelper);
-
-    
-    // var pLightObject2 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight2 = pLightObject2[0];
-    // pLight2.position.set(0.323*scale[0]+position[0],position[1],0.323*scale[2]-position[2]);
-    // var pLightHelper2 = pLightObject2[1];
-    // var pLightShadowHelper2 = pLightObject2[2];
-    // scene.add(pLight2);
-    // // scene.add(pLightHelper2);
-    // // scene.add(pLightShadowHelper2);
-
-    // var pLightObject3 = pointLightCreator(colour,intensity,distance,decay),bias;
-    // var pLight3 = pLightObject3[0];
-    // pLight3.position.set(position[0],position[1],0.45*scale[2]-position[2]);
-    // var pLightHelper3 = pLightObject3[1];
-    // var pLightShadowHelper3 = pLightObject3[2];
-    // scene.add(pLight3);
-    // // scene.add(pLightHelper3);
-    // // scene.add(pLightShadowHelper3);
-
-    // var pLightObject4 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight4 = pLightObject4[0];
-    // pLight4.position.set(-0.323*scale[0]+position[0],position[1],0.323*scale[2]-position[2]);
-    // var pLightHelper4 = pLightObject4[1];
-    // var pLightShadowHelper4 = pLightObject4[2];
-    // scene.add(pLight4);
-    // // scene.add(pLightHelper4);
-    // // scene.add(pLightShadowHelper4);
-
-    // var pLightObject5 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight5 = pLightObject5[0];
-    // pLight5.position.set(-0.45*scale[0]+position[0],position[1],position[2]);
-    // var pLightHelper5 = pLightObject5[1];
-    // var pLightShadowHelper5 = pLightObject5[2];
-    // scene.add(pLight5);
-    // // scene.add(pLightHelper5);
-    // // scene.add(pLightShadowHelper5);
-
-    // var pLightObject6 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight6 = pLightObject6[0];
-    // pLight6.position.set(-0.323*scale[0]+position[0],position[1],-0.323*scale[2]-position[2]);
-    // var pLightHelper6 = pLightObject6[1];
-    // var pLightShadowHelper6 = pLightObject6[2];
-    // scene.add(pLight6);
-    // // scene.add(pLightHelper6);
-    // // scene.add(pLightShadowHelper6);
-
-    // var pLightObject6 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight6 = pLightObject6[0];
-    // pLight6.position.set(position[0],position[1],-0.45*scale[2]-position[2]);
-    // var pLightHelper6 = pLightObject6[1];
-    // var pLightShadowHelper6 = pLightObject6[2];
-    // scene.add(pLight6);
-    // // scene.add(pLightHelper6);
-    // // scene.add(pLightShadowHelper6);
-
-    // var pLightObject7 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight7 = pLightObject7[0];
-    // pLight7.position.set(0.323*scale[0]+position[0],position[1],-0.323*scale[2]-position[2]);
-    // var pLightHelper7 = pLightObject7[1];
-    // var pLightShadowHelper7 = pLightObject7[2];
-    // scene.add(pLight7);
-    // // scene.add(pLightHelper7);
-    // // scene.add(pLightShadowHelper7);
-
-
-    
 }
 
 function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
@@ -192,39 +120,7 @@ function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scal
     pLight.position.set(position[0],position[1]+0.3,position[2]);
     var pLightHelper = pLightObject[1];
     var pLightShadowHelper = pLightObject[2];
-    return pLight;
-    // scene.add(pLight);
-    // scene.add(pLightHelper);
-    // scene.add(pLightShadowHelper);
-
-    // var pLightObject2 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight2 = pLightObject2[0];
-    // pLight2.position.set(position[0],position[1],0.5*scale[2]+position[2]);
-    // var pLightHelper2 = pLightObject2[1];
-    // var pLightShadowHelper2 = pLightObject2[2];
-    // scene.add(pLight2);
-    // // scene.add(pLightHelper2);
-    // // scene.add(pLightShadowHelper2);
-
-    // var pLightObject3 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight3 = pLightObject3[0];
-    // pLight3.position.set(-0.5*scale[0]+position[0],position[1],position[2]);
-    // var pLightHelper3 = pLightObject3[1];
-    // var pLightShadowHelper3 = pLightObject3[2];
-    // scene.add(pLight3);
-    // // scene.add(pLightHelper3);
-    // // scene.add(pLightShadowHelper3);
-
-    // var pLightObject4 = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight4 = pLightObject4[0];
-    // pLight4.position.set(position[0],position[1],-0.5*scale[2]+position[2]);
-    // var pLightHelper4 = pLightObject4[1];
-    // var pLightShadowHelper4 = pLightObject4[2];
-    // scene.add(pLight4);
-    // // scene.add(pLightHelper4);
-    // // scene.add(pLightShadowHelper4);
-
-    
+    return pLight;   
 }
 
 function moonCreator(colour,intensity,distance,decay,bias){
@@ -238,10 +134,6 @@ function moonCreator(colour,intensity,distance,decay,bias){
 
     var pLightHelper = pLightObject[1];
     var pLightShadowHelper = pLightObject[2];
-
-    // scene.add(moonLight);
-    // scene.add(pLightHelper);
-    // scene.add(pLightShadowHelper);
     return moonLight
         
 }
@@ -278,4 +170,13 @@ function removeMeshes(scene){
   meshes = []
 }
 
-export { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon,removeMeshes}
+function torch(colour,intensity,distance,decay,bias,position){
+  var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
+  var pLight = pLightObject[0];
+  pLight.position.set(position[0],position[1]+0.4,position[2]);
+  var pLightHelper = pLightObject[1];
+  var pLightShadowHelper = pLightObject[2];
+  return pLight;
+}
+
+export { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon,removeMeshes,torch}
