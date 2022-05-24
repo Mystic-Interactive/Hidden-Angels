@@ -19,7 +19,7 @@ var inventory = []
     graphics.strokeRect(startx,starty,width,height);
   }
 
-  function halfHeart(){
+  function halfHeart(closePath){
     graphics.save();
     graphics.beginPath();
 
@@ -28,11 +28,24 @@ var inventory = []
     graphics.bezierCurveTo(-10,5,-7.5,7.5,0.1,15);
     // graphics.bezierCurveTo(-2.5,-3.75,-5,-2.5,-5,0);
     // graphics.bezierCurveTo(-5,2.5,-3.75,3.75,0.05,7.5);
+    if(closePath){
+      graphics.lineTo(0,0);
+    }
     graphics.save();
     graphics.lineWidth=1;
     graphics.stroke();
     graphics.restore();
     graphics.fill();
+    graphics.restore();
+  }
+
+  function drawHalfHeart(){
+    graphics.save();
+    graphics.scale(0.75,0.75);
+    graphics.strokeStyle="white";
+    graphics.fillStyle="red";
+    graphics.lineWidth=2;
+    halfHeart(true);
     graphics.restore();
   }
 
@@ -42,9 +55,9 @@ var inventory = []
     graphics.strokeStyle="white";
     graphics.fillStyle="red";
     graphics.lineWidth=2;
-    halfHeart();
+    halfHeart(false);
     graphics.scale(-1,1);
-    halfHeart();
+    halfHeart(false);
     graphics.restore();
   }
 
@@ -93,11 +106,12 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
 function drawHealthBar(translate_x,translate_y){
   graphics.save();
   graphics.translate(translate_x,translate_y)
-  drawHeart()
-  for(var i=1;i<hearts;i++){
+  for(var i=1;i<Math.floor(hearts+1);i++){ //gets the number of full hearts to be drawn
+    drawHeart(); 
     graphics.translate(17.5,0);
-    drawHeart();
-
+  }
+  if(Math.floor(hearts)!=hearts){ //then they they have a half heart
+    drawHalfHeart();
   }
   graphics.restore();
 }
@@ -115,10 +129,10 @@ function healthIndicator(){
   maskCanvas.height = hud_canvas.height;
   var maskCtx = maskCanvas.getContext('2d');
 
-  maskCtx.fillStyle = 'rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
+  maskCtx.fillStyle = 'rgba(255,0,0,'+ (-1/2 * (Math.trunc(hearts)-3))+")";
   maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
   maskCtx.globalCompositeOperation = 'xor';
-  if(hearts==2){
+  if(Math.trunc(hearts)==2){
     graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
     maskCtx.fillStyle = "rgba(0,0,0,1)"; 
     // graphics.strokeStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts-3))+")";
@@ -166,8 +180,8 @@ function HUD(inventory_slots,_inventory){
 }
 
 //Decreases the amount of hearts to draw on the screen
-function tookDamage(){
-  hearts-=1;
+function tookDamage(damageTaken){
+  hearts-=damageTaken;
   if(hearts<1){
     console.log("You have died");
   }

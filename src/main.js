@@ -188,7 +188,7 @@ var init = function(){
       sceneHUD.add(sprite3);
 
 
-var t =60;
+var t =11;
 var selected = 0;
       
 var torchLight = torch(0xFFFFFF,0.5,5,1,-0.004,[0,0,0])
@@ -203,10 +203,10 @@ scene.add(torchLight)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      // console.log(d.getMinutes())
+      console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
-        tookDamage();
+        tookDamage(1.5);
         changeInventorySelected(selected)
         HUD(8,[-1,-1,-1,-1,-1,-1,-1,-1]);
         t+=1;
@@ -229,7 +229,7 @@ scene.add(torchLight)
       moonSphere.rotation.z+=0.005;
 
       world.step(timestep)
-      console.log(camera.position)
+      // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
 
       
