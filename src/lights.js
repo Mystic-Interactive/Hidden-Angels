@@ -51,7 +51,7 @@ function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,
     var obj;
     var loaded_model = false;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/Chandelier.glb', function(gltf){
+    loader.load('../res/meshes/FirstFloor/Chandelier.glb', function(gltf){
       obj = gltf.scene
       obj.position.set(position[0],position[1],position[2]);
       
@@ -157,7 +157,7 @@ function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scal
     var obj;
     var loaded_model = false;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/BedroomLights.glb', function(gltf){
+    loader.load('../res/meshes/SecondFloor/BedroomLights.glb', function(gltf){
       obj = gltf.scene
       obj.position.set(position[0],position[1],position[2]);
       

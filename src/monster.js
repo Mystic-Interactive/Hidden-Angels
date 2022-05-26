@@ -19,7 +19,7 @@ export default class Monster extends THREE.Group {
         this.loaded = false
 
         const loader = new THREE.GLTFLoader()
-        loader.load('../res/meshes/Basic_Monster.glb', (gltf) => {
+        loader.load('../res/meshes/Characters/BasicMonster.glb', (gltf) => {
             this.gltf = gltf
             this.define()
         })
