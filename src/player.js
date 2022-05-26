@@ -132,7 +132,7 @@ export default class Player extends THREE.Group {
         }
 
         this.camera.translateY(-0.5)
-        this.camera.translateZ(5)
+        this.camera.translateZ(0)
     }
 
     dispose() {

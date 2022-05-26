@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import { moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
+import {makeFirstFloor,makeSecondFloor,makeBasement,removeFloor} from './house_collision.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -126,8 +126,9 @@ var init = function(){
  // const fpCamera = new FirstPersonCamera(camera);
 
   const light = new THREE.AmbientLight();
-  light.intensity=0.1;
-  // scene.add(light);
+  light.intensity=0.02;
+  // light.intensity=1;
+  scene.add(light);
 
   const timestep = 1/60
 
@@ -191,7 +192,7 @@ var init = function(){
 var t =11;
 var selected = 0;
       
-var torchLight = torch(0xFFFFFF,0.5,5,1,-0.004,[0,0,0])
+var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
     if(!paused){
@@ -321,7 +322,7 @@ scene.add(torchLight)
       if(curr_lvl!=3){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=3;
-        makeSecondFloor(scene,world);
+        makeBasement(scene,world);
       }
       
     }
