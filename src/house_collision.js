@@ -1,13 +1,13 @@
 import * as CANNON from '../lib/cannon-es.js'
 
-    var first_floor_objects = [];
-    var first_floor_collisions= [];
+var first_floor_objects = [];
+var first_floor_collisions= [];
 
-    var second_floor_objects= [];
-    var second_floor_collisions= [];
+var second_floor_objects= [];
+var second_floor_collisions= [];
 
-    var third_floor_objects= [];
-    var third_floor_collisions= [];
+var third_floor_objects= [];
+var third_floor_collisions= [];
 
 function makeFirstFloor(scene,world){
     var first_floor;
@@ -122,8 +122,6 @@ function makeSecondFloor(scene,world){
     makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
 
     makeToilet(scene,world);
-
-
 }
 
 function makeFirstFloorStairs(scene,world,translate){

@@ -7,6 +7,7 @@ import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, Bedroom
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
+import { Reflector } from '../lib/Reflector.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -56,7 +57,6 @@ class Ground extends THREE.Group{
     
     this.scene.add(this)
     this.world.addBody(this.body)
-
   }
   
   update(){
@@ -71,8 +71,6 @@ class Ground extends THREE.Group{
 }
 
 var init = function(){
-
-
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
@@ -99,7 +97,6 @@ var init = function(){
   document.body.appendChild(renderer.domElement);
 
   const mousePos = new THREE.Vector2();
-
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1)
@@ -307,6 +304,52 @@ var selected = 0;
       removeFloor(scene,world,curr_lvl);
       curr_lvl=2;
       makeSecondFloor(scene,world);
+
+      const mirrorOptions = {
+        clipBias: 0.000,
+        textureWidth: window.innerWidth * window.devicePixelRatio,
+        textureHeight: window.innerHeight * window.devicePixelRatio,
+        color: 0x808080,
+        multisample: 4,
+      }
+
+      const mirrorGeo = new THREE.PlaneGeometry(1, 1);
+      const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      mainBathroomMirror.rotation.y = -Math.PI/2
+      mainBathroomMirror.position.set(4.85, 0.85, 2);
+      bedroomBathroomMirror.rotation.y = Math.PI/2
+      bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
+      scene.add(mainBathroomMirror);
+      scene.add(bedroomBathroomMirror);
+
+      const loader = new THREE.GLTFLoader()
+      let mainMirrorFrame;
+      let bedroomMirrorFrame
+
+      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        bedroomMirrorFrame = gltf.scene;
+        bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
+        bedroomMirrorFrame.rotation.y = -Math.PI/2
+        bedroomMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(bedroomMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
+
+      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        mainMirrorFrame = gltf.scene;
+        mainMirrorFrame.position.set(4.85, 0.3, 2);
+        mainMirrorFrame.rotation.y = -Math.PI/2
+        mainMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(mainMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
     }
     if(lvl==3){
       removeFloor(scene,world,curr_lvl);
