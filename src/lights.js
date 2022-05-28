@@ -40,12 +40,12 @@ function InteriorWallLightCreator(colour,intensity,distance,decay,scene,position
       console.log(error);
     });
 
-    var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    var pLight = pLightObject[0];
-    pLight.position.set(position[0],position[1]+0.4,position[2]);
-    var pLightHelper = pLightObject[1];
-    var pLightShadowHelper = pLightObject[2];
-    return pLight;
+    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
+    // var pLight = pLightObject[0];
+    // pLight.position.set(position[0],position[1]+0.4,position[2]);
+    // var pLightHelper = pLightObject[1];
+    // var pLightShadowHelper = pLightObject[2];
+    // return pLight;
 }
 
 function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
@@ -78,12 +78,12 @@ function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,
     });
 
     //Builds the individual lights in the chandelier
-    var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    var pLight = pLightObject[0];
-    pLight.position.set(position[0],position[1]+0.01,position[2]);
-    var pLightHelper = pLightObject[1];
-    var pLightShadowHelper = pLightObject[2];
-    return pLight;
+    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
+    // var pLight = pLightObject[0];
+    // pLight.position.set(position[0],position[1]+0.01,position[2]);
+    // var pLightHelper = pLightObject[1];
+    // var pLightShadowHelper = pLightObject[2];
+    // return pLight;
 }
 
 function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
@@ -115,12 +115,12 @@ function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scal
       console.log(error);
     });
 
-    var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    var pLight = pLightObject[0];
-    pLight.position.set(position[0],position[1]+0.3,position[2]);
-    var pLightHelper = pLightObject[1];
-    var pLightShadowHelper = pLightObject[2];
-    return pLight;   
+    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
+    // var pLight = pLightObject[0];
+    // pLight.position.set(position[0],position[1]+0.3,position[2]);
+    // var pLightHelper = pLightObject[1];
+    // var pLightShadowHelper = pLightObject[2];
+    // return pLight;   
 }
 
 function moonCreator(colour,intensity,distance,decay,bias){

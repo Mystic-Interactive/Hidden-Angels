@@ -126,8 +126,8 @@ var init = function(){
  // const fpCamera = new FirstPersonCamera(camera);
 
   const light = new THREE.AmbientLight();
-  light.intensity=0.02;
-  // light.intensity=1;
+  // light.intensity=0.02;
+  light.intensity=1;
   scene.add(light);
 
   const timestep = 1/60
