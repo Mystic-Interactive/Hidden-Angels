@@ -11,6 +11,9 @@ import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, Bedroom
     var third_floor_objects= [];
     var third_floor_collisions= [];
 
+    var fourth_floor_objects= [];
+    var fouth_floor_collisions= [];
+
 function makeFirstFloor(scene,world){
     
 
@@ -226,6 +229,75 @@ function makeBasement(scene,world){
     //ladder
     makeCollisionCube(scene,world,[0.01,5,0.5],[10,1.5,4.75],[0,0,-Math.PI/4],3);
 }
+
+function makeFourthFloor(scene,world){
+    // makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4)
+    //collisions
+        //outer walls 
+        makeCollisionCube(scene,world,[0.1,3,30],[-14.75,1,0],[0,0,0],4); //left
+        makeCollisionCube(scene,world,[0.1,3,30],[14.75,1,0],[0,0,0],4); //right
+        makeCollisionCube(scene,world,[20,3,0.01],[-4,1,-14.75],[0,0,0],4); //back long
+        makeCollisionCube(scene,world,[5.5,3,0.01],[11.5,1,-14.75],[0,0,0],4); //exit
+        // makeCollisionCube(scene,world,[30,3,0.01],[0,1,14.75],[0,0,0],4); //front
+
+        //inner horizontal walls
+        makeCollisionCube(scene,world,[6,3,0.25],[-11.5,1,5.8],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[-8.8,1,11.65],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.8,3,0.25],[-9.8,1,8.8],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-1.4,1,6],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[1,1,11.7],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[7,1,11.7],[0,0,0],4);
+        makeCollisionCube(scene,world,[5,3,0.25],[6,1,6],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[12,1,9],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[13,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[3,3,0.25],[-10,1,3],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[-6,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[-8.5,1,-3],[0,0,0],4);
+        makeCollisionCube(scene,world,[3,3,0.25],[-10.5,1,-6],[0,0,0],4);
+        makeCollisionCube(scene,world,[3,3,0.25],[-13.5,1,-11.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-7.5,1,-8.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[-3,1,-5.75],[0,0,0],4);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-4.75,1,-11.75],[0,0,0],4);
+        makeCollisionCube(scene,world,[9,3,0.25],[4.5,1,-8.75],[0,0,0],4);
+        makeCollisionCube(scene,world,[6,3,0.25],[8.75,1,-11.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[3,3,0.25],[13.25,1,-8.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[9,3,0.25],[7,1,-5.75],[0,0,0],4);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[10.25,1,-3],[0,0,0],4);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,1,-2.9],[0,0,0],4);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[1.5,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,1,3],[0,0,0],4);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[4.3,1,3],[0,0,0],4);
+
+        //inner vertical walls
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-11.5,1,10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[-6,1,7.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,6.4],[-2.9,1,8.75],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[0,1,7.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[3,1,7.5],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[3,1,13],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[5.75,1,10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[8.75,1,10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[11.75,1,13],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[8.75,1,3],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[11.75,1,3],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[5.75,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-3,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[2.8,1,-3],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-0.2,1,-6],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,1,2],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.5,1,0],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,1,-4],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.6,1,-9],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,1,-10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,1,-13],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-2.9,1,-10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[0,1,-13],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[3,1,-10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-13],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
+
+}
 function makeFirstFloorStairs(scene,world,translate){
     var first_floor_stairs;
     const translate_x =translate[0] 
@@ -302,7 +374,7 @@ function makeFridge(scene,world){
   makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0],1); //door
 }
 
-function makeBookShelf(scene,world,translate,rotation){
+function makeBookShelf(scene,translate,rotation){
     var bookshelf;
     const loader = new THREE.GLTFLoader();
     loader.load('../res/meshes/FirstFloor/Bookshelf.glb', function(gltf){
@@ -335,11 +407,13 @@ function makeObject(scene,path,scale,translate,rotation,floor){
         obj.position.set(translate[0],translate[1],translate[2]);
         obj.scale.set(scale[0],scale[1],scale[2])
         obj.rotation.set(rotation[0],rotation[1],rotation[2])
+        var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
             //Creating shadows for each child mesh
             gltf.scene.traverse(function(node){
                 if(node.type === 'Mesh'){     
                     node.castShadow=true;
                     node.receiveShadow=true; //allows us to put shadows onto the walls
+                    node.material = newMaterial
                 }
             });
             
@@ -352,6 +426,9 @@ function makeObject(scene,path,scale,translate,rotation,floor){
             }
             else if(floor == 3){
                 third_floor_objects.push(obj);
+            }
+            else{
+                fourth_floor_objects.push(obj)
             }
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -412,9 +489,13 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
         second_floor_objects.push(box);
         second_floor_collisions.push(boxBody);
     }
-    else{
+    else if(floor == 3){
         third_floor_objects.push(box);
         third_floor_collisions.push(boxBody);
+    }
+    else{
+        fourth_floor_objects.push(box);
+        fouth_floor_collisions.push(boxBody);
     }
 
 
@@ -447,7 +528,6 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
         
     }
 }
-
 
 function removeFloor(scene,world,floor){
 
@@ -491,4 +571,4 @@ function addLights(scene){
         scene.add(lights[i]);
     }
 }
-export {makeFirstFloor,makeSecondFloor,makeBasement,removeFloor}
+export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}

@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import { moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,makeBasement,removeFloor} from './house_collision.js'
+import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -14,6 +14,7 @@ var lvl = null;
 var lvl1_uuid = "";
 var lvl2_uuid = "";
 var lvl3_uuid = "";
+var lvl4_uuid = "";
 class Ground extends THREE.Group{
   constructor(scene, world){
     super();
@@ -179,14 +180,23 @@ var init = function(){
           var sprite3 = new THREE.Sprite(spriteMaterial3);
           sprite3.position.set(0,-window.innerHeight/6,0);
           sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+
+        var spriteMaterial4 = new THREE.SpriteMaterial({map:
+           THREE.ImageUtils.loadTexture(
+           "../res/textures/pause_menu/level-4.png")});
+           var sprite4 = new THREE.Sprite(spriteMaterial4);
+           sprite4.position.set(250,-window.innerHeight/8,0);
+           sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
+      lvl4_uuid = sprite4.uuid
 
       sceneHUD.add(sprite);
       sceneHUD.add(sprite2);
       sceneHUD.add(sprite3);
+      sceneHUD.add(sprite4);
 
 
 var t =11;
@@ -220,13 +230,16 @@ scene.add(torchLight)
       skybox.rotation.z+=0.0005;
 
       //Move the moon
-      speed+=0.001
-      moonLight.position.y = 20*(Math.sin(speed))+50;
-      moonLight.position.z = 10*(Math.cos(speed));
-      moonSphere.position.y = 20*(Math.sin(speed))+50;
-      moonSphere.position.z = 10*(Math.cos(speed));
-      moonSphere.rotation.x+=0.005;
-      moonSphere.rotation.y+=0.005;
+      if(curr_lvl==4){
+        speed+=0.001
+        moonLight.position.y = 20*(Math.sin(speed))+50;
+        moonLight.position.z = 10*(Math.cos(speed));
+        moonSphere.position.y = 20*(Math.sin(speed))+50;
+        moonSphere.position.z = 10*(Math.cos(speed));
+        moonSphere.rotation.x+=0.005;
+        moonSphere.rotation.y+=0.005;
+      }
+      
       moonSphere.rotation.z+=0.005;
 
       world.step(timestep)
@@ -255,9 +268,13 @@ scene.add(torchLight)
       console.log("Level 2 Highlighted")
       lvl = 2;
     }
-    else{
+    else if(intersects[0].object.uuid === lvl3_uuid){
       console.log("Level 3 Highlighted")
       lvl = 3;
+    }
+    else{
+      console.log("Level 4 Highlighted")
+      lvl = 4;
     }
 
     }
@@ -323,6 +340,14 @@ scene.add(torchLight)
         removeFloor(scene,world,curr_lvl);
         curr_lvl=3;
         makeBasement(scene,world);
+      }
+      
+    }
+    if(lvl==4){
+      if(curr_lvl!=4){
+        removeFloor(scene,world,curr_lvl);
+        curr_lvl=4;
+        makeFourthFloor(scene,world);
       }
       
     }
