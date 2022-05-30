@@ -5,6 +5,7 @@ var hearts = 3;
 var selected = 0;
 var inventory = []
 
+
 //Simple functions to help with creation of the scene
   function drawLine(x0,y0,x1,y1,colour){
     graphics.lineWidth = 0.5;
@@ -82,22 +83,38 @@ var inventory = []
   function drawIcon(item_num,translate_x,translate_y,width){
     if(item_num==1){
       drawKey(translate_x,translate_y,width)
+      return "Key"
     }
+  }
+
+  //Writes the name of the item that they have currently selected so that they know what it is for
+  function writeItem(word,colour){
+    graphics.save();
+    graphics.fillStyle=colour
+    graphics.textAlign="center";
+    graphics.font = "7.5px Calibri";
+    graphics.fillText(word, 0, 45);
+    graphics.restore();
   }
  //Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
- 
+  var selected_item = "";
   for(var i=0;i<num_blocks;i++){
+    if(inventory[i]!=-1){
+      var word = drawIcon(inventory[i],startx,starty,width)
+      if(selected==i){
+        selected_item = word;
+      }
+      
+    }
     if(i==selected){
       graphics.strokeStyle="white";
+      writeItem(selected_item,colour)
     }
-    if(inventory[i]!=-1){
-      drawIcon(inventory[i],startx,starty,width)
-    }
-    
-     drawBlock(startx,starty,width,height);
-     graphics.strokeStyle=colour;
+
+    drawBlock(startx,starty,width,height);
+    graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
   }
 }

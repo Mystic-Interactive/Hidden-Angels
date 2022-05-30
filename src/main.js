@@ -199,7 +199,7 @@ var init = function(){
       sceneHUD.add(sprite4);
 
 
-var t =11;
+var t =41;
 var selected = 0;
       
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
@@ -214,23 +214,21 @@ scene.add(torchLight)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      // console.log(d.getMinutes())
+      console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage(1.5);
         changeInventorySelected(selected)
-        HUD(8,[-1,-1,-1,-1,-1,-1,-1,-1]);
+        HUD(8,[-1,-1,1,-1,-1,-1,-1,-1]);
         t+=1;
       }
-      HUD(8,[-1,-1,-1,-1,1,-1,-1,-1]);
+      HUD(8,[-1,-1,1,-1,-1,-1,-1,-1]);
 
-      //Rotates the skybox
-      skybox.rotation.x+=0.0005;
-      skybox.rotation.y+=0.0005;
-      skybox.rotation.z+=0.0005;
+      
 
-      //Move the moon
+      //Move the moon and skybox only when you can see them to reduce the compuation needed
       if(curr_lvl==4){
+        //Rotates and moves the moon
         speed+=0.001
         moonLight.position.y = 20*(Math.sin(speed))+50;
         moonLight.position.z = 10*(Math.cos(speed));
@@ -238,9 +236,15 @@ scene.add(torchLight)
         moonSphere.position.z = 10*(Math.cos(speed));
         moonSphere.rotation.x+=0.005;
         moonSphere.rotation.y+=0.005;
+        moonSphere.rotation.z+=0.005;
+        
+        //Rotates the skybox
+        skybox.rotation.x+=0.0005;
+        skybox.rotation.y+=0.0005;
+        skybox.rotation.z+=0.0005;
       }
       
-      moonSphere.rotation.z+=0.005;
+      
 
       world.step(timestep)
       // console.log(camera.position)
