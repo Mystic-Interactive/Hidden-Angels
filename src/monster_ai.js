@@ -27,7 +27,7 @@ export default class monster_ai extends THREE.Group{
         
         //make monster mesh
         const loader = new THREE.GLTFLoader()
-        loader.load('../res/meshes/Basic_Monster.glb', (gltf) => {
+        loader.load('../res/meshes/Characters/BasicMonster.glb', (gltf) => {
             this.gltf = gltf;
             var model = this.gltf.scene
             this.model = model;

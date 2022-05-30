@@ -1,0 +1,22 @@
+body {
+    background: url('./images/background.jpg') no-repeat;     
+    background-size: 100%;
+}
+h1 {
+    color: whitesmoke;
+    font-size: 64px;
+    position: relative;
+    width: 500px;
+    left: 35%;
+    font-family: 'Times New Roman', Times, serif;
+}
+button{
+    background-color: rgba(38, 50, 54, 0.993);
+    color: whitesmoke;
+    position: relative;
+    width: 100px;
+    height: 45px;
+    left: 45%;
+    font-family: 'Times New Roman', Times, serif;
+    border-color: whitesmoke;
+}

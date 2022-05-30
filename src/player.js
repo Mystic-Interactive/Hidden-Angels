@@ -23,7 +23,7 @@ export default class Player extends THREE.Group {
    init_() {
         const loader = new THREE.GLTFLoader()
 
-        loader.load('../res/meshes/Character_Main.glb', (gltf) =>{
+        loader.load('../res/meshes/Characters/Character_Main.glb', (gltf) =>{
             this.gltf = gltf
             this.define()
         })

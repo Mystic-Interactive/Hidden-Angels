@@ -1,22 +1,21 @@
 import * as CANNON from '../lib/cannon-es.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon, removeMeshes } from './lights.js';
 
-    var first_floor_objects = [];
-    var first_floor_collisions= [];
-    var lights = [];
+var first_floor_objects = [];
+var first_floor_collisions= [];
 
-    var second_floor_objects= [];
-    var second_floor_collisions= [];
+var second_floor_objects= [];
+var second_floor_collisions= [];
 
-    var third_floor_objects= [];
-    var third_floor_collisions= [];
+var third_floor_objects= [];
+var third_floor_collisions= [];
 
 function makeFirstFloor(scene,world){
     
 
     var first_floor;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor.glb', function(gltf){
+    loader.load('../res/meshes/FirstFloor/FirstFloor.glb', function(gltf){
         first_floor = gltf.scene
         first_floor.position.set(0,-0.83,-4);
         first_floor.scale.set(1, 1, 1);
@@ -100,7 +99,7 @@ function makeFirstFloor(scene,world){
 function makeSecondFloor(scene,world){
     var second_floor;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/SecondFloor.glb', function(gltf){
+    loader.load('../res/meshes/SecondFloor/SecondFloor.glb', function(gltf){
         second_floor = gltf.scene
         // second_floor.position.set(0,3.5,-4);
         second_floor.position.set(0,-0.83,-4);
@@ -149,8 +148,6 @@ function makeSecondFloor(scene,world){
     makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
 
     makeToilet(scene,world);
-
-
 }
 
 function makeFirstFloorStairs(scene,world,translate){
@@ -160,7 +157,7 @@ function makeFirstFloorStairs(scene,world,translate){
     const translate_z =translate[2] 
 
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloorStairs.glb', function(gltf){
+    loader.load('../res/meshes/FirstFloor/FirstFloorStairs.glb', function(gltf){
         first_floor_stairs = gltf.scene
         first_floor_stairs.position.set(translate_x,-0.9+translate_y,-4+translate_z);
         first_floor_stairs.scale.set(1, 1, 1);
@@ -205,7 +202,7 @@ function makeFirstFloorStairs(scene,world,translate){
 function makeFridge(scene,world){
     var fridge;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/Fridge.glb', function(gltf){
+    loader.load('../res/meshes/FirstFloor/Fridge.glb', function(gltf){
         fridge = gltf.scene
         fridge.position.set(5,-0.75,-1);
         fridge.rotation.y=-Math.PI
@@ -232,7 +229,7 @@ function makeFridge(scene,world){
 function makeToilet(scene,world){
     var toilet;
     const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/Toilet.glb', function(gltf){
+    loader.load('../res/meshes/SecondFloor/Toilet.glb', function(gltf){
         toilet = gltf.scene
         toilet.scale.set(0.16,0.16,0.16);
         toilet.position.set(0.75,-0.75,5.4);
@@ -355,9 +352,4 @@ function removeFloor(scene,world,floor){
     }
 }
 
-function addLights(scene){
-    for(var i=0;i<lights.length;i++){
-        scene.add(lights[i]);
-    }
-}
 export {makeFirstFloor,makeSecondFloor,removeFloor}
