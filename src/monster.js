@@ -108,7 +108,7 @@ export default class Monster extends THREE.Group {
         if(!this.loaded) return
         try{
             this.play_direction = 1 
-            this.desired_action = "roar"
+            this.desired_action = "walk"
             if(this.position.distanceTo(this.enemy.position) < 2){
                 if(!this.hitting) {
                     tookDamage()
@@ -116,7 +116,7 @@ export default class Monster extends THREE.Group {
                 this.desired_action = "basic_attack"
             } else { 
                 this.hitting = false;
-                this.updateTransform(delta)
+                //this.updateTransform(delta)
             }
             
             this.animation_manager.update( delta, this.desired_action, this.play_direction )

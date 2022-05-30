@@ -1,9 +1,10 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
+import { can_see } from './sight.js'
 
 export default class Player extends THREE.Group {
-    constructor(scene, world, camera, init_pos) {
+    constructor(scene, world, camera, init_pos, monsters) {
         super()
         this.scene = scene
         this.world = world
@@ -12,6 +13,11 @@ export default class Player extends THREE.Group {
         this.init_pos = init_pos
         this.view = 0
         this.init_()
+        this.vision_limit = 2
+        this.monsters = monsters
+
+        this.h_angle = Math.PI/6
+        this.v_angle = Math.PI/9
     }
 
    init_() {
@@ -37,7 +43,7 @@ export default class Player extends THREE.Group {
 
         this.updateMaterials(this.gltf.scene);
         var skeleton = new THREE.SkeletonHelper( model );
-        skeleton.visible = true;
+        skeleton.visible = false;
         this.scene.add( skeleton );
         
         const animations = this.gltf.animations;
@@ -78,6 +84,10 @@ export default class Player extends THREE.Group {
         this.loaded = true
         this.updateMaterials(this.model)
     }
+    
+    looking_at(other) {
+        return can_see(this, other, this.vision_limit, this.h_angle, this.v_angle)
+    } 
 
     update = (delta) =>{
         //guards
@@ -93,10 +103,16 @@ export default class Player extends THREE.Group {
             //this.rotation.y = this.camera.rotation.y;
             this.body.quaternion.copy(this.quaternion);
             this.updateTransform(delta)
-            
+            //this.looking_at()
+                
+            this.monsters.forEach(element => {
+                console.log(this.looking_at(element))
+            });
         } catch(e) {
             console.error(e.stack)
         }
+
+
     }
 
     updateMaterials(model) {

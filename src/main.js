@@ -112,7 +112,7 @@ var init = function(){
   scene.add(skybox)
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
-  const player = new Player(scene, world, camera, initial_position)
+
 
 
 
@@ -122,11 +122,12 @@ var init = function(){
     new THREE.Vector3(-2, 0, -2),
     new THREE.Vector3(-2, 0, 2)
   ]
-  
-  //const monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
-
+  const monsters = []
+  const player = new Player(scene, world, camera, initial_position, monsters)
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
+  monsters.push(monster)
  // const fpCamera = new FirstPersonCamera(camera);
-  var monster_v2 = new monster_ai(scene,player);
+  //var monster_v2 = new monster_ai(scene,player);
   const light = new THREE.AmbientLight();
   light.intensity=0.1;
   scene.add(light);
@@ -196,7 +197,7 @@ var selected = 0;
 
   var update = function(){//game logic
     if(!paused){
-      monster_v2.update();
+      monster.update( delta );
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time

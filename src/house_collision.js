@@ -265,7 +265,7 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
     const box = new THREE.Mesh(boxGeo,boxMat);
     box.position.set(boxPos[0],boxPos[1],boxPos[2]);
     box.rotation.set(rotationArr[0],rotationArr[1],rotationArr[2])
-    scene.add(box);
+    //scene.add(box);
   
     const boxBody = new CANNON.Body({
         shape: new CANNON.Box(new CANNON.Vec3(boxGeoSize[0]/2,boxGeoSize[1]/2,boxGeoSize[2]/2)),
