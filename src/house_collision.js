@@ -97,6 +97,9 @@ function makeFirstFloor(scene,world){
         //Oven
         makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],1,null)
             makeCollisionCube(scene,world,[0.5,1,0.5],[11.5,1,0.9],[0,0,0],1);
+        
+        //counter
+        makeObject(scene,'..res/meshes/FirstFloor/Counter.glb',[100,100,100],[0,0,0],[0,0,0],1,null)
 
 
     //adding lights
