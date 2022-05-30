@@ -231,7 +231,8 @@ function makeBasement(scene,world){
 }
 
 function makeFourthFloor(scene,world){
-    // makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4)
+    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4)
+    
     //collisions
         //outer walls 
         makeCollisionCube(scene,world,[0.1,3,30],[-14.75,1,0],[0,0,0],4); //left
