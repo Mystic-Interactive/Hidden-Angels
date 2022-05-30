@@ -96,10 +96,13 @@ function makeFirstFloor(scene,world){
 
         //Oven
         makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],1,null)
-            makeCollisionCube(scene,world,[0.5,1,0.5],[11.5,1,0.9],[0,0,0],1);
         
         //counter
-        makeObject(scene,'..res/meshes/FirstFloor/Counter.glb',[100,100,100],[0,0,0],[0,0,0],1,null)
+        makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[4.1,1,1],[8.2,-0.7,5.4],[0,Math.PI,0],1,null)
+        makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.6,1,1],[11.75,-0.7,3.1],[0,Math.PI/2,0],1,null)
+        makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.15,1,1],[11.75,-0.7,-0.8],[0,Math.PI/2,0],1,null)
+            makeCollisionCube(scene,world,[8,0.75,0.5],[8,0.5,5],[0,0,0],1);
+            makeCollisionCube(scene,world,[0.5,0.75,6],[12,0.5,1],[0,0,0],1);
 
 
     //adding lights
@@ -136,11 +139,11 @@ function makeSecondFloor(scene,world){
     //   makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
 
     //master bedroom
-    makeCollisionCube(scene,world,[8,2,0.01],[-7.5,1,0.1],[0,0,0],2); //back bathroom
-    makeCollisionCube(scene,world,[5,2,0.1],[-6,1,-4],[0,0,0],2); //bathroom divider big
-    makeCollisionCube(scene,world,[2,2,0.1],[-11,1,-4],[0,0,0],2); //bathroom divider small
-    makeCollisionCube(scene,world,[0.1,2,6.5],[-3,1,-3.75],[0,0,0],2); //right divider big
-    makeCollisionCube(scene,world,[0.1,2,5],[-3,1,-11],[0,0,0],2); //right divider small
+    makeCollisionCube(scene,world,[8,3,0.01],[-7.5,1,0.1],[0,0,0],2); //back bathroom
+    makeCollisionCube(scene,world,[5,3,0.1],[-6,1,-4],[0,0,0],2); //bathroom divider big
+    makeCollisionCube(scene,world,[2,3,0.1],[-11,1,-4],[0,0,0],2); //bathroom divider small
+    makeCollisionCube(scene,world,[0.1,3,6.5],[-3,1,-3.75],[0,0,0],2); //right divider big
+    makeCollisionCube(scene,world,[0.1,3,5],[-3,1,-11],[0,0,0],2); //right divider small
 
     //bedroom far
     makeCollisionCube(scene,world,[6,2,0.1],[8,1,-6.5],[0,0,0],2); //door
@@ -172,6 +175,9 @@ function makeSecondFloor(scene,world){
             //Toilet
             makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[-11.8,-0.8,-2],[0,Math.PI,0],2,null)
                 makeCollisionCube(scene,world,[0.3,0.01,0.1],[-12,0,-2],[0,0,0],2);
+            //Bath
+            makeObject(scene,'../res/meshes/SecondFloor/Bath.glb',[1,1,1.25],[-4,-0.8,-2],[0,Math.PI,0],2,null)
+                makeCollisionCube(scene,world,[0.5,0.5,3.5],[-4,0,-2],[0,0,0],2); //right divider small
         
         //Other bedrooms
         makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,-13],[0,-Math.PI/2,0],2,null) //bedroom 1
