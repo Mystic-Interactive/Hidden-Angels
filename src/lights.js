@@ -1,5 +1,3 @@
-var meshes = []
-
 function pointLightCreator(colour,intensity,distance,decay,bias){
     const pointLight = new THREE.PointLight(colour,intensity,distance,decay);
     pointLight.castShadow=true; //allows the light to cast shadows
@@ -9,118 +7,6 @@ function pointLightCreator(colour,intensity,distance,decay,bias){
     const pLightShadowHelper = new THREE.CameraHelper(pointLight.shadow.camera);
 
     return [pointLight,pLightHelper,pLightShadowHelper];
-}
-
-function InteriorWallLightCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
-    var obj;
-    var loaded_model = false;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/InteriorWallLight.glb', function(gltf){
-      obj = gltf.scene
-      obj.position.set(position[0],position[1],position[2]);
-      
-      obj.rotation.x+=rotation[0];
-      obj.rotation.y=rotation[1];
-      obj.rotation.z=rotation[2];
-      
-      obj.scale.set(scale[0], scale[1], scale[2]);
-
-      //Creating shadows for each child mesh
-      gltf.scene.traverse(function(node){
-        if(node.type === 'Mesh'){     
-            node.castShadow=true;
-            node.receiveShadow=true; //allows us to put shadows onto the walls
-        }
-        scene.add(obj)
-        meshes.push(obj)
-    });
-    }, (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-    }, (error) => {
-      console.log(error);
-    });
-
-    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight = pLightObject[0];
-    // pLight.position.set(position[0],position[1]+0.4,position[2]);
-    // var pLightHelper = pLightObject[1];
-    // var pLightShadowHelper = pLightObject[2];
-    // return pLight;
-}
-
-function ChandelierCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
-    var obj;
-    var loaded_model = false;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor/Chandelier.glb', function(gltf){
-      obj = gltf.scene
-      obj.position.set(position[0],position[1],position[2]);
-      
-      obj.rotation.x+=rotation[0];
-      obj.rotation.y=rotation[1];
-      obj.rotation.z=rotation[2];
-      
-      obj.scale.set(scale[0], scale[1], scale[2]);
-
-      //Creating shadows for each child mesh
-      gltf.scene.traverse(function(node){
-        if(node.type === 'Mesh'){     
-            node.castShadow=true;
-            node.receiveShadow=true; //allows us to put shadows onto the walls
-        }
-        scene.add(obj)
-        meshes.push(obj)
-    });
-    }, (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-    }, (error) => {
-      console.log(error);
-    });
-
-    //Builds the individual lights in the chandelier
-    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight = pLightObject[0];
-    // pLight.position.set(position[0],position[1]+0.01,position[2]);
-    // var pLightHelper = pLightObject[1];
-    // var pLightShadowHelper = pLightObject[2];
-    // return pLight;
-}
-
-function BedroomLightCreator(colour,intensity,distance,decay,scene,position,scale,rotation,bias){
-    var obj;
-    var loaded_model = false;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/SecondFloor/BedroomLights.glb', function(gltf){
-      obj = gltf.scene
-      obj.position.set(position[0],position[1],position[2]);
-      
-      obj.rotation.x+=rotation[0];
-      obj.rotation.y=rotation[1];
-      obj.rotation.z=rotation[2];
-      
-      obj.scale.set(scale[0], scale[1], scale[2]);
-
-      //Creating shadows for each child mesh
-      gltf.scene.traverse(function(node){
-        if(node.type === 'Mesh'){     
-            node.castShadow=true;
-            node.receiveShadow=true; //allows us to put shadows onto the walls
-        }
-        scene.add(obj)
-        meshes.push(obj)
-    });
-    }, (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-    }, (error) => {
-      console.log(error);
-    });
-
-    // var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
-    // var pLight = pLightObject[0];
-    // pLight.position.set(position[0],position[1]+0.3,position[2]);
-    // var pLightHelper = pLightObject[1];
-    // var pLightShadowHelper = pLightObject[2];
-    // return pLight;   
 }
 
 function moonCreator(colour,intensity,distance,decay,bias){
@@ -163,13 +49,6 @@ function addSphereMoon(radius){
   return moon;
 }
 
-function removeMeshes(scene){
-  for(var i =0;i<meshes.length;i++){
-    scene.remove(meshes[i]);
-  }
-  meshes = []
-}
-
 function torch(colour,intensity,distance,decay,bias,position){
   var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
   var pLight = pLightObject[0];
@@ -179,4 +58,4 @@ function torch(colour,intensity,distance,decay,bias,position){
   return pLight;
 }
 
-export { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon,removeMeshes,torch}
+export { pointLightCreator, moonCreator, addSphereMoon,torch}

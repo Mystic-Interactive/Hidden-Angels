@@ -13,10 +13,40 @@
         width: 100%;
         height: 100%;
       }
+      .progress-bar-container{
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      #progress-bar{
+        width: 30%;
+        margin-top: 30%;
+        height: 2%;
+        align-items: center;
+      }
+
+      label{
+        color: white;
+        font-size: 2rem;
+      }
     </style>
   </head>
   
   <body onload="init();">
+    <div class="progress-bar-container">
+      <label for="progress-bar">Loading...</label>
+      <progress id="progress-bar" value="0" max = "100"></progress>
+    </div>
     <script src='../lib/three.js'></script>
     <script src='../lib/GLTFLoader.js'></script>
     <script src="../lib/stats.js"></script>

@@ -1,9 +1,7 @@
 import * as CANNON from '../lib/cannon-es.js'
-import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon, removeMeshes } from './lights.js';
 
     var first_floor_objects = [];
     var first_floor_collisions= [];
-    var lights = [];
 
     var second_floor_objects= [];
     var second_floor_collisions= [];
@@ -12,33 +10,41 @@ import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, Bedroom
     var third_floor_collisions= [];
 
     var fourth_floor_objects= [];
-    var fouth_floor_collisions= [];
+    var fourth_floor_collisions= [];
+
+    const loadingManager = new THREE.LoadingManager();
+    const progressBar = document.getElementById('progress-bar')
+    const progressBarContainer = document.querySelector('.progress-bar-container')
+
+    // Method to do things when we starting loading 
+    loadingManager.onStart = function(url,item,total){
+        progressBarContainer.style.display = 'block';
+        progressBarContainer.style.position = 'absolute';
+
+        console.log(`Started loading: ${url}`)
+    }
+    
+    // Method called when the loading is under progress
+    loadingManager.onProgress = function(url,loaded,total){
+        progressBar.value = (loaded/total)*100;
+    }
+
+    
+    // Method called called when the loading of the assest has finished
+    loadingManager.onLoad = function(){
+        progressBarContainer.style.display = 'none';
+    }
+
+    // Method called when there is an error
+    loadingManager.onError = function(url){
+        console.error(`Problem loading ${url}`)
+    }
+
+    const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
 function makeFirstFloor(scene,world){
-    
-
-    var first_floor;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor/FirstFloor.glb', function(gltf){
-        first_floor = gltf.scene
-        first_floor.position.set(0,-0.83,-4);
-        first_floor.scale.set(1, 1, 1);
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                    
-                }
-            });
-
-            scene.add(first_floor);
-            first_floor_objects.push(first_floor);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+    //Make first floor blender model
+    makeObject(scene,'../res/meshes/FirstFloor/FirstFloor.glb',[1,1,1],[0,-0.83,-4],[0,0,0],1,null)
 
   //collision for the first floor
     //floor and roof
@@ -60,7 +66,7 @@ function makeFirstFloor(scene,world){
         makeCollisionCube(scene,world,[0.02,2,10],[-4,1,-7.5],[0,0,0],1); //right wall 2
         makeCollisionCube(scene,world,[0.02,2,4],[4,1,3.5],[0,0,0],1); //left wall 1
         makeCollisionCube(scene,world,[0.02,2,6],[4,1,-3],[0,0,0],1); //left wall 2
-        makeCollisionCube(scene,world,[0.02,2,2],[4,1,-9.75],[0,0,0],1); //left wall 3
+        makeCollisionCube(scene,world,[0.02,2,4],[4,1,-11],[0,0,0],1); //left wall 3
 
         //room dividers
             //office/library divider
@@ -72,70 +78,52 @@ function makeFirstFloor(scene,world){
             makeCollisionCube(scene,world,[2,2,0.02],[11,1,-1.95],[0,0,0],1); //divider 2
 
     //Interior objs
+        //Stairs
         makeFirstFloorStairs(scene,world,[0,0,-8.5]);
-        makeFridge(scene,world);
         
-        makeBookShelf(scene,world,[-12,-0.8,4.2],[0,Math.PI/2,0]);
-        makeBookShelf(scene,world,[-12,-0.8,0.9],[0,Math.PI/2,0]);
-        makeBookShelf(scene,world,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
-        makeBookShelf(scene,world,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
-        makeBookShelf(scene,world,[-10,-0.8,-7.5],[0,0,0]);
+        //Fridge
+        makeObject(scene,'../res/meshes/FirstFloor/Fridge.glb',[1,1,1],[5,-0.75,-1],[0,-Math.PI,0],1,null)
+        makeCollisionCube(scene,world,[0.5,1,0.5],[5,1,-1],[0,0,0],1); //main fridge
+        makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0],1); //door
+        
+        //Bookshelves
+        makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-10,-0.8,-7.5],[0,0,0]);
             makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
-        
+
         //Oven
-        makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],1)
+        makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],1,null)
             makeCollisionCube(scene,world,[0.5,1,0.5],[11.5,1,0.9],[0,0,0],1);
 
 
     //adding lights
         //entrance hall
             
-            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,3],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 1
-            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[-3.5,1,-5],[1,1,1],[0,Math.PI/2,0],-0.04)); //right wall 2
-            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,3],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 1
-            lights.push(InteriorWallLightCreator(0xede2b7,0.2,7.5,1,scene,[3.5,1,-5],[1,1,1],[0,-Math.PI/2,0],-0.04)); //left wall 2
+            InteriorWallLightCreator(scene,[-3.5,1,3],[0,Math.PI/2,0],1); //right wall 1
+            InteriorWallLightCreator(scene,[-3.5,1,-5],[0,Math.PI/2,0],1); //right wall 2
+            InteriorWallLightCreator(scene,[3.5,1,3],[0,-Math.PI/2,0],1); //left wall 1
+            InteriorWallLightCreator(scene,[3.5,1,-5],[0,-Math.PI/2,0],1); //left wall 2
         
         //library
-            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-1],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+            BedroomLightCreator(scene,[-8,2.15,-1],[0,Math.PI/2,0],1);
         
         //office
-            lights.push(BedroomLightCreator(0xede2b7,0.3,7.5,1,scene,[-8,2.15,-11],[1,0.75,1],[0,Math.PI/2,0],-0.04));
+            BedroomLightCreator(scene,[-8,2.15,-11],[0,Math.PI/2,0],1);
         
         //kitchen
-            lights.push(InteriorWallLightCreator(0xede2b7,0.5,7.5,1,scene,[8,1,5.5],[1,1,1],[0,Math.PI,0],-0.04));
+            InteriorWallLightCreator(scene,[8,1,5.5],[0,Math.PI,0],1);
         
         //dining room
-            lights.push(ChandelierCreator(0xede2b7,0.5,7.5,1,scene,[8,1.8,-8],[2,1.5,2],[0,Math.PI,0],-0.04));
-
-    // addLights(scene);
-
+            ChandelierCreator(scene,[8,1.8,-8],[0,Math.PI,0],1);
 
 }
 
 function makeSecondFloor(scene,world){
-    var second_floor;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/SecondFloor/SecondFloor.glb', function(gltf){
-        second_floor = gltf.scene
-        // second_floor.position.set(0,3.5,-4);
-        second_floor.position.set(0,-0.83,-4);
-
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                    if(node.material.map) node.material.map.anisotropy = 16; 
-                }
-            });
-
-            scene.add(second_floor);
-            second_floor_objects.push(second_floor)
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });;
+    //House exterior walls
+    makeObject(scene,'../res/meshes/SecondFloor/SecondFloor.glb',[1,1,1],[0,-0.83,-4],[0,0,0],2,null)
 
   //Collision boxes
     //exterior walls
@@ -163,47 +151,35 @@ function makeSecondFloor(scene,world){
     makeCollisionCube(scene,world,[3,2,0.1],[3,1,1],[0,0,0],2); //door
     makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
 
+    //storage room
+    makeCollisionCube(scene,world,[3.25,2,0.01],[-7.3,1,2.5],[0,0,0],2); //front wall big
+    makeCollisionCube(scene,world,[1.25,2,0.01],[-11.1,1,2.5],[0,0,0],2); //front wall small
+    makeCollisionCube(scene,world,[0.1,2,2.5],[-5.5,1,4.3],[0,0,0],2); //right wall
+
 
     //Adding objects to the scene
-    makeToilet(scene,world);
+        //Bathroom
+        makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[0.75,-0.75,5.4],[0,-Math.PI,0],2,null)
+            makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2);
+        
         //Main Bedroom
             //Bed
-            makeObject(scene,'../res/meshes/SecondFloor/DoubleBed.glb',[0.7,0.7,0.7],[-9,-0.8,-12],[0,-Math.PI/2,0],2)
-            makeCollisionCube(scene,world,[2.2,1,4],[-8.9,0,-12],[0,0,0],2); 
+            makeObject(scene,'../res/meshes/SecondFloor/DoubleBed.glb',[0.7,0.7,0.7],[-9,-0.8,-12],[0,-Math.PI/2,0],2,null)
+                makeCollisionCube(scene,world,[2.2,1,4],[-8.9,0,-12],[0,0,0],2); 
             //Toilet
-            makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[-11.8,-0.8,-2],[0,Math.PI,0],2)
-            makeCollisionCube(scene,world,[0.3,0.01,0.1],[-12,0,-2],[0,0,0],2);
+            makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[-11.8,-0.8,-2],[0,Math.PI,0],2,null)
+                makeCollisionCube(scene,world,[0.3,0.01,0.1],[-12,0,-2],[0,0,0],2);
         
-            //Other bedrooms
-            makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,-13],[0,-Math.PI/2,0],2) //bedroom 1
+        //Other bedrooms
+        makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,-13],[0,-Math.PI/2,0],2,null) //bedroom 1
             makeCollisionCube(scene,world,[2.5,0.01,1],[6.5,0,-13],[0,0,0],2);
-            makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,5],[0,-Math.PI/2,0],2) //bedroom 2
+        makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,5],[0,-Math.PI/2,0],2,null) //bedroom 2
             makeCollisionCube(scene,world,[2.5,0.01,1],[6.5,0,5],[0,0,0],2);
 }
 
 function makeBasement(scene,world){
-    var basement;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/Basement/Basement.glb', function(gltf){
-        basement = gltf.scene
-        basement.position.set(0,-0.83,-4);
-        basement.scale.set(1, 1, 1);
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                    
-                }
-            });
-
-            scene.add(basement);
-            third_floor_objects.push(basement);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+    //Make basement blender model
+    makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],3,null)
 
   //Collision boxes
     //exterior walls
@@ -231,7 +207,7 @@ function makeBasement(scene,world){
 }
 
 function makeFourthFloor(scene,world){
-    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4)
+    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4,null)
     
     //collisions
         //outer walls 
@@ -299,32 +275,14 @@ function makeFourthFloor(scene,world){
         makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
 
 }
+
 function makeFirstFloorStairs(scene,world,translate){
-    var first_floor_stairs;
     const translate_x =translate[0] 
     const translate_y =translate[1] 
     const translate_z =translate[2] 
 
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor/FirstFloorStairs.glb', function(gltf){
-        first_floor_stairs = gltf.scene
-        first_floor_stairs.position.set(translate_x,-0.9+translate_y,-4+translate_z);
-        first_floor_stairs.scale.set(1, 1, 1);
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                }
-            });
-
-        scene.add(first_floor_stairs);
-        first_floor_objects.push(first_floor_stairs);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+    //Make stairs blender model
+    makeObject(scene,'../res/meshes/FirstFloor/FirstFloorStairs.glb',[1,1,1],[translate_x,-0.9+translate_y,-4+translate_z],[0,0,0],1,null)
 
 
   //blocks
@@ -348,73 +306,28 @@ function makeFirstFloorStairs(scene,world,translate){
 
 }
 
-function makeFridge(scene,world){
-    var fridge;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor/Fridge.glb', function(gltf){
-        fridge = gltf.scene
-        fridge.position.set(5,-0.75,-1);
-        fridge.rotation.y=-Math.PI
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                }
-            });
-
-            scene.add(fridge);
-            first_floor_objects.push(fridge);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
-
-  makeCollisionCube(scene,world,[0.5,1,0.5],[5,1,-1],[0,0,0],1); //main fridge
-  makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0],1); //door
-}
-
 function makeBookShelf(scene,translate,rotation){
-    var bookshelf;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/FirstFloor/Bookshelf.glb', function(gltf){
-        bookshelf = gltf.scene
-        bookshelf.position.set(translate[0],translate[1],translate[2]);
-        bookshelf.scale.set(0.035,0.015,0.015)
-        bookshelf.rotation.set(rotation[0],rotation[1],rotation[2])
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                }
-            });
-            
-            scene.add(bookshelf);
-            first_floor_objects.push(bookshelf);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],translate,rotation,1,null)
 }
 
-function makeObject(scene,path,scale,translate,rotation,floor){
+function makeObject(scene,path,scale,translate,rotation,floor,material){
     var obj;
-    const loader = new THREE.GLTFLoader();
-    loader.load(path, function(gltf){
+    // const loader = new THREE.GLTFLoader();
+    gltfLoader.load(path, function(gltf){
         obj = gltf.scene
         obj.position.set(translate[0],translate[1],translate[2]);
         obj.scale.set(scale[0],scale[1],scale[2])
         obj.rotation.set(rotation[0],rotation[1],rotation[2])
-        var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
+        // var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
             //Creating shadows for each child mesh
             gltf.scene.traverse(function(node){
                 if(node.type === 'Mesh'){     
                     node.castShadow=true;
                     node.receiveShadow=true; //allows us to put shadows onto the walls
-                    node.material = newMaterial
+                    if(material!=null){
+                        node.material = material
+                    }
+                    
                 }
             });
             
@@ -436,33 +349,6 @@ function makeObject(scene,path,scale,translate,rotation,floor){
   }, (error) => {
     console.log(error);
   });
-}
-
-function makeToilet(scene,world){
-    var toilet;
-    const loader = new THREE.GLTFLoader();
-    loader.load('../res/meshes/SecondFloor/Toilet.glb', function(gltf){
-        toilet = gltf.scene
-        toilet.scale.set(0.16,0.16,0.16);
-        toilet.position.set(0.75,-0.75,5.4);
-        toilet.rotation.y=-Math.PI
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                }
-            });
-
-            scene.add(toilet);
-            second_floor_objects.push(toilet);
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
-
-  makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2); //collision
 }
 
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
@@ -496,7 +382,7 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
     }
     else{
         fourth_floor_objects.push(box);
-        fouth_floor_collisions.push(boxBody);
+        fourth_floor_collisions.push(boxBody);
     }
 
 
@@ -530,13 +416,19 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
     }
 }
 
-function removeFloor(scene,world,floor){
+function InteriorWallLightCreator(scene,position,rotation,floor){
+    makeObject(scene,'../res/meshes/InteriorWallLight.glb',[1,1,1],position,rotation,floor,null)
+}
 
-    //removes all the lights in the scene
-    for(var i=0;i<lights.length;i++){
-        scene.remove(lights[i]);
-    }
-    removeMeshes(scene);
+function BedroomLightCreator(scene,position,rotation,floor){
+    makeObject(scene,'../res/meshes/SecondFloor/BedroomLights.glb',[1,0.75,1],position,rotation,floor,null)
+}
+
+function ChandelierCreator(scene,position,rotation,floor){
+    makeObject(scene,'../res/meshes/FirstFloor/Chandelier.glb',[2,1.5,2],position,rotation,floor,null)
+}
+
+function removeFloor(scene,world,floor){
 
     if(floor==1){
         for(var i=0;i<first_floor_collisions.length;i++){
@@ -565,11 +457,14 @@ function removeFloor(scene,world,floor){
         }
 
     }
-}
-
-function addLights(scene){
-    for(var i=0;i<lights.length;i++){
-        scene.add(lights[i]);
+    else{
+        for(var i=0;i<fourth_floor_collisions.length;i++){
+            world.removeBody(fourth_floor_collisions[i]);
+        }
+        for(var i=0;i<fourth_floor_objects.length;i++){
+            scene.remove(fourth_floor_objects[i]);
+        }
     }
 }
+
 export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}

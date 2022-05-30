@@ -65,7 +65,7 @@ class Ground extends THREE.Group{
       this.position.copy(this.body.position)
       this.quaternion.copy(this.body.quaternion)
     }catch{
-      console.log("umm")
+      // console.log("umm")
     }
     
   }
@@ -214,7 +214,7 @@ scene.add(torchLight)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      console.log(d.getMinutes())
+      // console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage(1.5);
@@ -321,6 +321,7 @@ scene.add(torchLight)
     console.log("Level: ",lvl)
     paused=false;
     if(lvl==1){
+      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
         removeFloor(scene,world,curr_lvl)
         curr_lvl=1;
@@ -328,6 +329,7 @@ scene.add(torchLight)
       }
     }
     if(lvl==2){
+      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=2){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=2;
@@ -336,6 +338,7 @@ scene.add(torchLight)
       
     }
     if(lvl==3){
+      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=3;
@@ -344,6 +347,7 @@ scene.add(torchLight)
       
     }
     if(lvl==4){
+      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=4;
