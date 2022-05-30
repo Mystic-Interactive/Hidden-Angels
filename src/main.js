@@ -243,6 +243,10 @@ scene.add(torchLight)
         skybox.rotation.y+=0.0005;
         skybox.rotation.z+=0.0005;
       }
+      else{
+        moonLight.position.set(0,10,0);
+        moonSphere.position.set(0,10,0);
+      }
       
       
 
