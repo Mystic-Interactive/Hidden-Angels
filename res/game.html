@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Game</title>
+    <style>
+      body{
+        margin: 0;
+      }
+      canvas{
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  
+  <body onload="init();">
+    <script src='../lib/three.js'></script>
+    <script src='../lib/GLTFLoader.js'></script>
+    <script src="../lib/stats.js"></script>
+    <script type='module' src="../lib/cannon-es.js"></script>
+    <script type="module" src="../src/playerControls.js"></script>
+    <script type="module" src="../src/misc.js"></script>
+    <script type='module' src="../src/animationManager.js"></script>
+    <script type ="module" src = "../src/PointerLockControls.js"></script>
+    <script type="module" src="../src/player.js"></script>
+    <script type='module' src='../src/sky.js'></script>
+    <script type='module' src='../src/main.js'></script>
+    <canvas id="myCanvas" style="display:block;position:absolute;cursor:pointer"></canvas>
+  </body>
+  
+</html>

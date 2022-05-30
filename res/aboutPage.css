@@ -1,0 +1,50 @@
+body {
+    background-color: rgb(31, 32, 43)
+}
+
+h1 {
+    color: whitesmoke;
+    text-align: center;
+    font-size: 64px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h3{
+    color: gainsboro;
+}
+
+.Description{
+    color: wheat;
+    text-align: center;
+}
+
+.image1{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 480px;
+}
+
+.controls-1{
+    display: flex;
+}
+
+.controlsText{
+    flex-grow: 1;
+    color: wheat;
+}
+
+.playerControls{
+    width: 600px;
+    height: 300px;
+    background-color: black;
+    justify-content: left;
+}

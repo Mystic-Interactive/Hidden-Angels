@@ -318,4 +318,6 @@ function removeFloor(scene,world,floor){
 
     }
 }
+
+
 export {makeFirstFloor,makeSecondFloor,removeFloor}
