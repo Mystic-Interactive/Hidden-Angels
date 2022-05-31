@@ -170,7 +170,7 @@ function makeSecondFloor(scene,world){
         //Bathroom
         makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[0.75,-0.75,5.4],[0,-Math.PI,0],2,null)
             makeCollisionCube(scene,world,[0.1,1,0.1],[0.75,1,5.5],[0,0,0],2);
-        InteriorWallLightCreator(scene,[4.5,1,3.5],[0,3*Math.PI/2,0],1);
+        InteriorWallLightCreator(scene,[4.5,1,3.5],[0,3*Math.PI/2,0],2);
         
         //Main Bedroom
             //Bed
@@ -183,21 +183,21 @@ function makeSecondFloor(scene,world){
             makeObject(scene,'../res/meshes/SecondFloor/Bath.glb',[1,1,1.25],[-4,-0.8,-2],[0,Math.PI,0],2,null)
                 makeCollisionCube(scene,world,[0.5,0.5,3.5],[-4,0,-2],[0,0,0],2); //right divider small
             //Light
-            BedroomLightCreator(scene,[-8,2.15,-8],[0,Math.PI/2,0],1);
-            InteriorWallLightCreator(scene,[-7.5,1,-3.5],[0,0,0],1);
+            BedroomLightCreator(scene,[-8,2.15,-8],[0,Math.PI/2,0],2);
+            InteriorWallLightCreator(scene,[-7.5,1,-3.5],[0,0,0],2);
         
         //Other bedrooms
             //Bedroom 1
             makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,-13],[0,-Math.PI/2,0],2,null) //bedroom 1
                 makeCollisionCube(scene,world,[2.5,0.01,1],[6.5,0,-13],[0,0,0],2);
-            BedroomLightCreator(scene,[9,2.15,-11],[0,Math.PI/2,0],1);
+            BedroomLightCreator(scene,[9,2.15,-11],[0,Math.PI/2,0],2);
             //Bedroom 2
             makeObject(scene,'../res/meshes/SecondFloor/SingleBed.glb',[0.7,0.7,0.7],[6.5,-0.8,5],[0,-Math.PI/2,0],2,null) //bedroom 2
                 makeCollisionCube(scene,world,[2.5,0.01,1],[6.5,0,5],[0,0,0],2);
-            BedroomLightCreator(scene,[9,2.15,2],[0,Math.PI/2,0],1);
+            BedroomLightCreator(scene,[9,2.15,2],[0,Math.PI/2,0],2);
         
         //storage room
-        InteriorWallLightCreator(scene,[-6,1,4],[0,3*Math.PI/2,0],1);
+        InteriorWallLightCreator(scene,[-6,1,4],[0,3*Math.PI/2,0],2);
 }
 
 function makeBasement(scene,world){

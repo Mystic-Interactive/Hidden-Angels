@@ -8,12 +8,41 @@ var inventory = [];
 
 //Simple functions to help with creation of the scene
   function drawLine(x0,y0,x1,y1,colour){
-    graphics.lineWidth = 0.5;
+    graphics.save();
+    graphics.lineWidth = 0.4;
     graphics.strokeStyle=colour;
     graphics.beginPath();
     graphics.moveTo(x0,y0);
     graphics.lineTo(x1,y1);
     graphics.stroke();
+    graphics.restore();
+  }
+
+  function drawTriangle(colour){
+    graphics.save();
+    graphics.lineWidth = 0.5;
+    graphics.fillStyle=colour;
+    graphics.beginPath();
+		graphics.moveTo(-6,0);
+		graphics.lineTo(6,0);
+		graphics.lineTo(0,12);
+		graphics.closePath();
+		graphics.fill();
+    graphics.restore();
+  }
+
+  function drawShovelBase(colour){
+    graphics.save();
+    graphics.lineWidth = 0.4;
+    graphics.fillStyle=colour;
+    graphics.beginPath();
+    graphics.arc(6, 6, 3, -Math.PI/3,Math.PI/3);
+    graphics.moveTo(8,8);
+    graphics.lineTo(6,10);
+    graphics.lineTo(6,2);
+    graphics.lineTo(8.5,4)
+    graphics.fill();
+    graphics.restore();
   }
 
   function drawBlock(startx,starty,width,height){
@@ -81,29 +110,127 @@ var inventory = [];
     graphics.moveTo(5,7);
     graphics.lineTo(7,8.75);
     graphics.stroke();
+    graphics.closePath();
     graphics.restore();
   }
 
+  //draws the screw driver
+  function drawScrewdriver(translate_x,translate_y,colour){
+    //Draw the rectangle
+    graphics.save();
+    graphics.translate(translate_x,translate_y);
+    graphics.lineWidth=0.5;
+    graphics.fillStyle=colour;
+    graphics.translate(9,1);
+    graphics.rotate(Math.PI/5)
+    graphics.fillRect(0,0,2,6);
+    graphics.restore();
+
+    //Draws the line and triangle
+    graphics.save();
+    graphics.translate(translate_x,translate_y);
+    drawLine(3,11,6.4,6.4,'#464646');
+    graphics.translate(4.1,9.5);
+    graphics.rotate(Math.PI/5)
+    graphics.scale(0.1,0.2);
+    drawTriangle('#464646')
+    graphics.restore();
+  }
+
+  //draws the shovel
+  function drawShovel(translate_x,translate_y,colour){
+    //Draw the rectangle
+    graphics.save();
+    graphics.translate(translate_x,translate_y);
+    graphics.lineWidth=0.5;
+    graphics.fillStyle=colour;
+    graphics.translate(7,1);
+    graphics.rotate(Math.PI/4.75)
+    graphics.fillRect(0,0,6,1.25);
+    graphics.restore();
+
+    //Draws the line and shovel base
+    graphics.save();
+    graphics.translate(translate_x,translate_y);
+    drawLine(3,11,8.7,3.7,'#464646');
+    graphics.translate(13,5);
+    graphics.rotate(-1.3*Math.PI);
+    graphics.scale(1.2,0.8);
+    drawShovelBase(colour);
+    graphics.restore();
+  }
+
+  function drawSecretBook(translate_x,translate_y,colour){
+    graphics.save();
+    graphics.translate(translate_x,translate_y);
+    
+    //Draw the book
+    graphics.fillStyle=colour;
+    graphics.fillRect(2.75,1.75,7.5,7.75);
+    graphics.fillStyle="white";
+    graphics.fillRect(2.875,2,7.1,8);
+    graphics.fillStyle=colour;
+    graphics.fillRect(2.5,2.25,7,8.25);
+
+    //Draw the book decoration
+    graphics.strokeStyle="rgb(241,196,15)";
+    graphics.lineWidth=0.5;
+    graphics.moveTo(6,6.25);
+    graphics.arc(6,6.25,2,0,2*Math.PI)
+    graphics.stroke();
+    graphics.restore();
+  }
+
+  //Draws the icon based off the inventory number passed through
   function drawIcon(item_num,translate_x,translate_y,width){
+    //Icon is the bathroom key
     if(item_num==1){
       drawKey(translate_x,translate_y,width,"rgb(0,216,255)");
-      return "Bathroom Key";
+      return ["Bathroom Key","rgb(0,216,255)"];
+    }
+    //Icon is the closet key
+    else if(item_num==2){
+      drawKey(translate_x,translate_y,width,"rgb(75,122,71)");
+      return ["Closet Key","rgb(75,122,71)"];
+    }
+    //Icon is the screw driver
+    else if(item_num==3){
+      drawScrewdriver(translate_x,translate_y,"red");
+      return ["Screw driver","red"];
+    }
+    //Icon is the shovel
+    else if(item_num==4){
+      drawShovel(translate_x,translate_y,"blue");
+      return ["Shovel","blue"];
+    }
+    //Icon is the goal key
+    else if(item_num==5){
+      drawKey(translate_x,translate_y,width,"#A32CC4");
+      return ["Goal key","#A32CC4"];
+    }
+    //Icon is the library key
+    else if(item_num==6){
+      drawKey(translate_x,translate_y,width,"rgb(39,174,96)");
+      return ["Library Key","rgb(39,174,96)"];
+    }
+    //Icon is the secret book
+    else if(item_num==7){
+      drawSecretBook(translate_x,translate_y,"rgb(26,188,156)");
+      return ["Secret Book","rgb(26,188,156)"];
     }
   }
 
   //Writes the name of the item that they have currently selected so that they know what it is for
   function writeItem(word,colour){
     graphics.save();
-    if(word ==""){
-      graphics.clearRect(-50,39,100,10)
-    }
-    else{
+    graphics.clearRect(-100,39,200,10)
+    
       graphics.fillStyle=colour
       graphics.textAlign="centre";
       graphics.font = "7.5px Calibri";
       graphics.translate(-1.25*word.length,0);
       graphics.fillText(word, 0, 45);
-    }
+    
     
     graphics.restore();
 
@@ -112,11 +239,12 @@ var inventory = [];
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
   var selected_item = "";
+  var word_colour = [];
   for(var i=0;i<num_blocks;i++){
     if(inventory[i]!=-1){
-      var word = drawIcon(inventory[i],startx,starty,width)
+      word_colour = drawIcon(inventory[i],startx,starty,width)
       if(selected==i){
-        selected_item = word;
+        selected_item = word_colour[0];
       }
       else{
         selected_item="";
@@ -125,7 +253,7 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
     }
     if(i==selected){
       graphics.strokeStyle="white";
-      writeItem(selected_item,colour)
+      writeItem(selected_item,word_colour[1])
     }
 
     drawBlock(startx,starty,width,height);

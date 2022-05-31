@@ -219,10 +219,10 @@ scene.add(torchLight)
         selected+=2;
         tookDamage(1.5);
         changeInventorySelected(selected)
-        HUD(8,[-1,-1,1,-1,-1,-1,-1,-1]);
+        HUD(8,[1,2,3,4,5,6,7,-1]);
         t+=1;
       }
-      HUD(8,[-1,-1,1,-1,-1,-1,-1,-1]);
+      HUD(8,[1,2,3,4,5,6,7,-1]);
 
       
 
