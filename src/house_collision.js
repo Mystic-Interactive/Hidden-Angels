@@ -162,6 +162,9 @@ function makeSecondFloor(scene,world){
     makeCollisionCube(scene,world,[1.25,2,0.01],[-11.1,1,2.5],[0,0,0],2); //front wall small
     makeCollisionCube(scene,world,[0.1,2,2.5],[-5.5,1,4.3],[0,0,0],2); //right wall
 
+    //Goal wall
+    makeCollisionCube(scene,world,[5.5,3,0.2],[0.25,1,-11.5],[0,0,0],2); //back bathroom
+
 
     //Adding objects to the scene
         //Bathroom
