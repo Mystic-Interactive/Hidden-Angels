@@ -3,7 +3,7 @@ var hud_canvas = document.getElementById('myCanvas');
 var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
 var selected = 0;
-var inventory = []
+var inventory = [];
 
 
 //Simple functions to help with creation of the scene
@@ -17,7 +17,11 @@ var inventory = []
   }
 
   function drawBlock(startx,starty,width,height){
+    graphics.save();
+    // graphics.fillStyle="rgb(0,0,0,0.01)";
     graphics.strokeRect(startx,starty,width,height);
+    // graphics.fillRect(startx,starty,width,height);
+    graphics.restore();
   }
 
   function halfHeart(closePath){
@@ -63,11 +67,11 @@ var inventory = []
   }
 
   //draw key
-  function drawKey(translate_x,translate_y,width){
+  function drawKey(translate_x,translate_y,width,colour){
     graphics.save();
-    graphics.translate(translate_x,translate_y)
+    graphics.translate(translate_x,translate_y);
     graphics.lineWidth=0.5;
-    graphics.strokeStyle="rgb(0,216,255)"
+    graphics.strokeStyle=colour;
     graphics.beginPath();
     //graphics.moveTo(width,0);
     graphics.arc(width-3,3,1.5,0,2*Math.PI)
@@ -82,19 +86,27 @@ var inventory = []
 
   function drawIcon(item_num,translate_x,translate_y,width){
     if(item_num==1){
-      drawKey(translate_x,translate_y,width)
-      return "Key"
+      drawKey(translate_x,translate_y,width,"rgb(0,216,255)");
+      return "Bathroom Key";
     }
   }
 
   //Writes the name of the item that they have currently selected so that they know what it is for
   function writeItem(word,colour){
     graphics.save();
-    graphics.fillStyle=colour
-    graphics.textAlign="center";
-    graphics.font = "7.5px Calibri";
-    graphics.fillText(word, 0, 45);
+    if(word ==""){
+      graphics.clearRect(-50,39,100,10)
+    }
+    else{
+      graphics.fillStyle=colour
+      graphics.textAlign="centre";
+      graphics.font = "7.5px Calibri";
+      graphics.translate(-1.25*word.length,0);
+      graphics.fillText(word, 0, 45);
+    }
+    
     graphics.restore();
+
   }
  //Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
@@ -105,6 +117,9 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
       var word = drawIcon(inventory[i],startx,starty,width)
       if(selected==i){
         selected_item = word;
+      }
+      else{
+        selected_item="";
       }
       
     }
@@ -193,11 +208,13 @@ function HUD(inventory_slots,_inventory){
   healthIndicator(); 
   drawHealthBar(-140,-65);
   drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
+  // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }
 
 //Decreases the amount of hearts to draw on the screen
 function tookDamage(damageTaken){
+  graphics.save();
   hearts-=damageTaken;
   if(hearts<1){
     console.log("You have died");
@@ -209,7 +226,7 @@ function tookDamage(damageTaken){
 }
 
 function changeInventorySelected(_change){
-  selected=_change
+  selected=_change-1
 }
 
 export{HUD,tookDamage,changeInventorySelected}

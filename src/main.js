@@ -214,7 +214,7 @@ scene.add(torchLight)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
-      console.log(d.getMinutes())
+      // console.log(d.getMinutes())
       if(d.getMinutes()==t){
         selected+=2;
         tookDamage(1.5);
@@ -314,8 +314,40 @@ scene.add(torchLight)
 
   document.addEventListener('keydown',(e)=>{
     if(e.code=='Escape'){
-      console.log("Bring up menu")
+      console.log("Bring up menu");
       paused = true;
+    }
+    else if(e.code=='Digit1'|| e.code =="Numpad1"){
+      console.log("Pressed 1")
+      changeInventorySelected(1);
+    }
+    else if(e.code=='Digit2'|| e.code =="Numpad2"){
+      console.log("Pressed 2")
+      changeInventorySelected(2);
+    }
+    else if(e.code=='Digit3'|| e.code =="Numpad3"){
+      console.log("Pressed 3")
+      changeInventorySelected(3);
+    }
+    else if(e.code=='Digit4'|| e.code =="Numpad4"){
+      console.log("Pressed 4")
+      changeInventorySelected(4);
+    }
+    else if(e.code=='Digit5'|| e.code =="Numpad5"){
+      console.log("Pressed 5")
+      changeInventorySelected(5);
+    }
+    else if(e.code=='Digit6'|| e.code =="Numpad6"){
+      console.log("Pressed 6")
+      changeInventorySelected(6);
+    }
+    else if(e.code=='Digit7'|| e.code =="Numpad7"){
+      console.log("Pressed 7")
+      changeInventorySelected(7);
+    }
+    else if (e.code=='Digit8'|| e.code =="Numpad8"){
+      console.log("Pressed 8")
+      changeInventorySelected(8);
     }
   })
   
