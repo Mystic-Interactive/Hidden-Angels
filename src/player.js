@@ -3,6 +3,10 @@ import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
 import { can_see } from './sight.js'
 
+
+const contains = (item, list) => {
+    return(list.indexOf(item) > -1)
+}
 export default class Player extends THREE.Group {
     constructor(scene, world, camera, init_pos, monsters) {
         super()
@@ -13,11 +17,10 @@ export default class Player extends THREE.Group {
         this.init_pos = init_pos
         this.view = 0
         this.init_()
-        this.vision_limit = 2
+        this.vision_limit = 10
         this.monsters = monsters
 
-        this.h_angle = Math.PI/6
-        this.v_angle = Math.PI/9
+        this.angle = Math.PI/12
     }
 
    init_() {
@@ -61,7 +64,7 @@ export default class Player extends THREE.Group {
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
-        this.player_controlls = new PlayerController(this, this.animation_manager)
+        this.player_controls = new PlayerController(this, this.animation_manager)
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
@@ -86,16 +89,24 @@ export default class Player extends THREE.Group {
     }
     
     looking_at(other) {
-        return can_see(this, other, this.vision_limit, this.h_angle, this.v_angle)
+        return can_see(this, other, this.vision_limit, this.angle)
     } 
 
     update = (delta) =>{
         //guards
         if(delta == 0) return
         if(!this.loaded) return
-        this.player_controlls.update(delta)
+        this.player_controls.update(delta)
         //interpolation functions (logorithmic)
-        if(["walk", "crouch_walk", "left", "right"].indexOf(this.current_state.action) > -1){
+        var found = false
+        const list = ["walk", "crouch_walk", "left", "right"]
+        list.forEach(element => {
+            if(contains(element, this.current_state.action)) {
+                found = true
+            } 
+        })
+
+        if(found){
             this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (10)
         }
         
@@ -105,8 +116,8 @@ export default class Player extends THREE.Group {
             this.updateTransform(delta)
             //this.looking_at()
                 
-            this.monsters.forEach(element => {
-                console.log(this.looking_at(element))
+            this.monsters.forEach(monster => {
+                monster.set_looked_at(this.looking_at(monster))
             });
         } catch(e) {
             console.error(e.stack)
@@ -122,15 +133,38 @@ export default class Player extends THREE.Group {
     }
 
     updateTransform(delta) {
-
-        if(this.current_state.action == "jump"){
+        const state = this.current_state
+        
+        const controls = this.player_controls
+        if(contains("jump", state.action)){
             this.body.applyForce(new CANNON.Vec3(0, 100 * 20, 0))
-        } else if (this.current_state.action == "walk" || this.current_state.action == "crouch-walk"){
+        } else if ((contains("walk", state.action) || contains("crouch-walk", state.action)) && !(controls.left || controls.right)){
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y) * delta
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y) * delta
-        } else if (this.current_state.action == "left" || this.current_state.action == "right"){
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
+        } else if ((controls.left || controls.right) && !(controls.forward || controls.backward)){
+            var x_dir = 1
+            if(controls.right){
+                x_dir = -1
+            }
+            
+            this.body.velocity.x = - x_dir * this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
+            this.body.velocity.z = - x_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
+        } else if ((controls.left || controls.right) && (controls.backward || controls.forward)){
+            var y_dir = -1
+            var x_dir = 1
+            if(controls.forward){
+                y_dir = 1
+            }
+
+            if (controls.right){
+                x_dir = -1
+            }
+
+            console.log(this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + x_dir * Math.PI/4))
+            console.log(-y_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + x_dir * Math.PI/4))
+            
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
         }
 
         this.position.copy(this.body.position)

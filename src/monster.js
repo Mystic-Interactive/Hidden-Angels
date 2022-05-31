@@ -60,8 +60,8 @@ export default class Monster extends THREE.Group {
         //Getting the animations from the mesh
         const actions = [
             {name : "basic_attack",       action : mixer.clipAction( animations[ 0 ] )},
-            {name : "walk",       action : mixer.clipAction( animations[ 1 ] )},
-            {name : "roar",       action : mixer.clipAction( animations[ 2 ] )}
+            {name : "idle",       action : mixer.clipAction( animations[ 1 ] )},
+            {name : "walk",       action : mixer.clipAction( animations[ 2 ] )}
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
@@ -104,22 +104,31 @@ export default class Monster extends THREE.Group {
         this.translateY(-this.body.boundingRadius)
     }
 
+    set_looked_at(bool){
+        this.being_looked_at = bool
+    }
+
     update( delta ){
         if(!this.loaded) return
         try{
             this.play_direction = 1 
             this.desired_action = "walk"
-            if(this.position.distanceTo(this.enemy.position) < 2){
-                if(!this.hitting) {
-                    tookDamage()
+            if(this.being_looked_at != true){
+                if(this.position.distanceTo(this.enemy.position) < 2){
+                    this.body.velocity = new CANNON.Vec3(0, 0, 0)
+                    if(!this.hitting) {
+                        tookDamage()
+                    }
+                    this.desired_action = "basic_attack"
+                } else { 
+                    this.hitting = false;
+                    this.updateTransform(delta)
                 }
-                this.desired_action = "basic_attack"
-            } else { 
-                this.hitting = false;
-                //this.updateTransform(delta)
+                this.animation_manager.update( delta, this.desired_action, this.play_direction )
+            } else {
+                this.body.velocity = new CANNON.Vec3(0, 0, 0)
             }
             
-            this.animation_manager.update( delta, this.desired_action, this.play_direction )
             
         }catch(e){
             console.error(e.stack)

@@ -135,7 +135,7 @@ var init = function(){
  // const fpCamera = new FirstPersonCamera(camera);
   //var monster_v2 = new monster_ai(scene,player);
   const light = new THREE.AmbientLight();
-  light.intensity=0.1;
+  light.intensity=0.5;
   scene.add(light);
 
   const timestep = 1/60

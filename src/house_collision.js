@@ -318,9 +318,9 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
 function removeFloor(scene,world,floor){
 
     //removes all the lights in the scene
-    for(var i=0;i<lights.length;i++){
+    /*for(var i=0;i<lights.length;i++){
         scene.remove(lights[i]);
-    }
+    }*/
     removeMeshes(scene);
 
     if(floor==1){
