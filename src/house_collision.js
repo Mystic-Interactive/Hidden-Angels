@@ -198,6 +198,9 @@ function makeSecondFloor(scene,world){
         
         //storage room
         InteriorWallLightCreator(scene,[-6,1,4],[0,3*Math.PI/2,0],2);
+
+        //rubble
+        makeObject(scene,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],2,null) //bedroom 2
 }
 
 function makeBasement(scene,world){
