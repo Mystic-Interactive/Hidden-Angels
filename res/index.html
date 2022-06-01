@@ -1,64 +1,66 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>Game</title>
-    <style>
-      body{
-        margin: 0;
-      }
-      canvas{
-        width: 100%;
-        height: 100%;
-      }
-      .progress-bar-container{
-        position: relative;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        width: 100%;
-        height: 100%;
-        background-color: rgba(20, 20, 22, 1);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          body{
+            margin: 0;
+          }
+          canvas{
+            width: 100%;
+            height: 100%;
+          }
+           .progress-bar-container{
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(20, 20, 22, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          }
 
-      #progress-bar{
-        width: 30%;
-        margin-top: 30%;
-        height: 2%;
-        align-items: center;
-      }
+          #progress-bar{
+            width: 30%;
+            margin-top: 30%;
+            height: 2%;
+            align-items: center;
+          }
 
-      label{
-        color: white;
-        font-size: 2rem;
-      }
-    </style>
-  </head>
-  
-  <body onload="init();">
-    <div class="progress-bar-container">
-      <label for="progress-bar">Loading...</label>`
-      <progress id="progress-bar" value="0" max = "100"></progress>
-    </div>
-    <script src='../lib/three.js'></script>
-    <script src='../lib/GLTFLoader.js'></script>
-    <script src="../lib/stats.js"></script>
-    <script type='module' src="../lib/cannon-es.js"></script>
-    <script type="module" src="../src/playerControls.js"></script>
-    <script type="module" src="../src/misc.js"></script>
-    <script type='module' src="../src/animationManager.js"></script>
-    <script type ="module" src = "../src/PointerLockControls.js"></script>
-    <script type="module" src="../src/player.js"></script>
-    <script type='module' src='../src/sky.js'></script>
-    <script type='module' src='../src/main.js'></script>
-    <canvas id="myCanvas" style="display:block;position:absolute;cursor:pointer"></canvas>
-  </body>
-  
+          label{
+            color: white;
+            font-size: 2rem;
+          }
+        </style>
+        <title>Welcome to Hidden Angels</title>
+        <link rel='stylesheet' href="landingPage.css"></link>
+    </head>
+    <body onload = "init()">
+        <br><br><br>
+        <h1>Hidden Angels</h1>
+        <button onclick="location.href = './game.html'">Start</button>
+        <br><br>
+        <button onclick="location.href = './aboutGame.html'">About the Game</button>
+        <div class="progress-bar-container">
+          <label for="progress-bar">Loading...</label>`
+          <progress id="progress-bar" value="0" max = "100"></progress>
+        </div>
+        <script src='../lib/three.js'></script>
+        <script src='../lib/GLTFLoader.js'></script>
+        <script src="../lib/stats.js"></script>
+        <script type='module' src="../lib/cannon-es.js"></script>
+        <script type="module" src="../src/playerControls.js"></script>
+        <script type="module" src="../src/misc.js"></script>
+        <script type='module' src="../src/animationManager.js"></script>
+        <script type ="module" src = "../src/PointerLockControls.js"></script>
+        <script type="module" src="../src/player.js"></script>
+        <script type='module' src='../src/sky.js'></script>
+        <script type='module' src='../src/main.js'></script>
+        <canvas id="myCanvas" style="display:block;position:absolute;cursor:pointer"></canvas>
+        </body>
 </html>

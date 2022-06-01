@@ -9,9 +9,10 @@ function pointLightCreator(colour,intensity,distance,decay,bias){
     return [pointLight,pLightHelper,pLightShadowHelper];
 }
 
-function moonCreator(colour,intensity,distance,decay,bias){
 
-    var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
+function moonCreator(colour,intensity,distance,decay){
+
+    var pLightObject = pointLightCreator(colour,intensity,distance,decay);
     var moonLight = pLightObject[0];
     moonLight.castShadow=true; //allows the light to cast shadows
     moonLight.shadow.bias = 0.001;

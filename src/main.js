@@ -3,10 +3,12 @@ import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
 
-import { moonCreator, addSphereMoon,torch } from './lights.js';
+import  monster_ai  from '../src/monster_ai.js'
+import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
+import { Reflector } from '../lib/Reflector.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -15,7 +17,13 @@ var lvl1_uuid = "";
 var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
+
+
+
+// Class to make the world's surface 
+
 class Ground extends THREE.Group{
+  // Constructor to get scene and camera and place plane in world
   constructor(scene, world){
     super();
     this.scene = scene;
@@ -23,7 +31,7 @@ class Ground extends THREE.Group{
     this.define()
   }
   
-  define(){
+  define(){ // Create plane with ground textures and add it to world
     const textLoader = new THREE.TextureLoader();
     let baseColor = textLoader.load("./textures/forrest_ground_01_diff_1k.jpg");
     let normalColor = textLoader.load("./textures/forrest_ground_01_disp_1k.jpg");
@@ -31,8 +39,9 @@ class Ground extends THREE.Group{
     let roughnessColor = textLoader.load("./textures/forrest_ground_01_rough_1k.jpg");
     let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
 
+    // Create plane with ground textures
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 512, 512), 
-      new THREE.MeshLambertMaterial({
+      new THREE.MeshLambertMaterial({ // Lambert Material used so shadows look smooth
         map: baseColor,
         normalMap: normalColor,
         displacementMap: heightColor,
@@ -42,25 +51,27 @@ class Ground extends THREE.Group{
       })
     );
     ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
-    this.add(ground)
-    this.body = new CANNON.Body({
-      shape: new CANNON.Box(new CANNON.Vec3(60, 60, 0.1)),
-      type: CANNON.Body.STATIC,
+
+    this.body = new CANNON.Body({ // create physics body for plane
+      shape: new CANNON.Box(new CANNON.Vec3(60, 60, 0.1)), // Cannon.js planes are infinite so use a cube instead
+      type: CANNON.Body.STATIC,// Isn't affected by gravity
       material: new CANNON.Material()
     })
 
+    // Enable shadows on surface
     this.body.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     ground.receiveShadow = true;
     ground.castShadow = true;
 
-    this.body.position.y = -1
+    this.body.position.y = -1 
     
+    // Add both body and plane to world
+    this.add(ground)
     this.scene.add(this)
     this.world.addBody(this.body)
-
   }
   
-  update(){
+  update(){ // link the physics body to the plane
     try{
       this.position.copy(this.body.position)
       this.quaternion.copy(this.body.quaternion)
@@ -71,9 +82,8 @@ class Ground extends THREE.Group{
   }
 }
 
+// Initialization of game (world, level, HUD, etc.)
 var init = function(){
-
-
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
@@ -100,7 +110,6 @@ var init = function(){
   document.body.appendChild(renderer.domElement);
 
   const mousePos = new THREE.Vector2();
-
   
   //Setting up the moon
   var moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
@@ -123,9 +132,9 @@ var init = function(){
     new THREE.Vector3(-10, 0, 0)
   ]
   
-  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
+ // const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
  // const fpCamera = new FirstPersonCamera(camera);
-
+  var monster_v2 = new monster_ai(scene,guy);
   const light = new THREE.AmbientLight();
   // light.intensity=0.02;
   light.intensity=1;
@@ -206,6 +215,7 @@ var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
     if(!paused){
+      monster_v2.update();
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time
@@ -368,14 +378,57 @@ scene.add(torchLight)
         makeFirstFloor(scene,world);
       }
     }
-    if(lvl==2){
-      console.log("Current level: ",curr_lvl)
-      if(curr_lvl!=2){
-        removeFloor(scene,world,curr_lvl);
-        curr_lvl=2;
-        makeSecondFloor(scene,world);
+
+    if(lvl==null|lvl==2){
+      removeFloor(scene,world,curr_lvl);
+      curr_lvl=2;
+      makeSecondFloor(scene,world);
+
+      const mirrorOptions = {
+        clipBias: 0.000,
+        textureWidth: window.innerWidth * window.devicePixelRatio,
+        textureHeight: window.innerHeight * window.devicePixelRatio,
+        color: 0x808080,
+        multisample: 4,
       }
-      
+
+      const mirrorGeo = new THREE.PlaneGeometry(1, 1);
+      const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      mainBathroomMirror.rotation.y = -Math.PI/2
+      mainBathroomMirror.position.set(4.85, 0.85, 2);
+      bedroomBathroomMirror.rotation.y = Math.PI/2
+      bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
+      scene.add(mainBathroomMirror);
+      scene.add(bedroomBathroomMirror);
+
+      const loader = new THREE.GLTFLoader()
+      let mainMirrorFrame;
+      let bedroomMirrorFrame
+
+      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        bedroomMirrorFrame = gltf.scene;
+        bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
+        bedroomMirrorFrame.rotation.y = -Math.PI/2
+        bedroomMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(bedroomMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
+
+      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        mainMirrorFrame = gltf.scene;
+        mainMirrorFrame.position.set(4.85, 0.3, 2);
+        mainMirrorFrame.rotation.y = -Math.PI/2
+        mainMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(mainMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
     }
     if(lvl==3){
       console.log("Current level: ",curr_lvl)

@@ -1,5 +1,3 @@
-
-
 export default class AnimationManager{
     /**
      * @param {[]} actions : all possible animations

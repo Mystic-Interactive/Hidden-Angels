@@ -1,46 +1,46 @@
 import * as CANNON from '../lib/cannon-es.js'
 
-    var first_floor_objects = [];
-    var first_floor_collisions= [];
+var first_floor_objects = [];
+var first_floor_collisions= [];
 
-    var second_floor_objects= [];
-    var second_floor_collisions= [];
+var second_floor_objects= [];
+var second_floor_collisions= [];
 
-    var third_floor_objects= [];
-    var third_floor_collisions= [];
+var third_floor_objects= [];
+var third_floor_collisions= [];
 
-    var fourth_floor_objects= [];
-    var fourth_floor_collisions= [];
+var fourth_floor_objects= [];
+var fourth_floor_collisions= [];
 
-    const loadingManager = new THREE.LoadingManager();
-    const progressBar = document.getElementById('progress-bar')
-    const progressBarContainer = document.querySelector('.progress-bar-container')
+const loadingManager = new THREE.LoadingManager();
+const progressBar = document.getElementById('progress-bar')
+const progressBarContainer = document.querySelector('.progress-bar-container')
 
-    // Method to do things when we starting loading 
-    loadingManager.onStart = function(url,item,total){
-        progressBarContainer.style.display = 'block';
-        progressBarContainer.style.position = 'absolute';
+ // Method to do things when we starting loading 
+ loadingManager.onStart = function(url,item,total){
+      progressBarContainer.style.display = 'block';
+      progressBarContainer.style.position = 'absolute';
 
-        console.log(`Started loading: ${url}`)
-    }
+      console.log(`Started loading: ${url}`)
+  }
     
-    // Method called when the loading is under progress
-    loadingManager.onProgress = function(url,loaded,total){
-        progressBar.value = (loaded/total)*100;
-    }
+  // Method called when the loading is under progress
+  loadingManager.onProgress = function(url,loaded,total){
+      progressBar.value = (loaded/total)*100;
+  }
 
     
-    // Method called called when the loading of the assest has finished
-    loadingManager.onLoad = function(){
-        progressBarContainer.style.display = 'none';
-    }
+  // Method called called when the loading of the assest has finished
+  loadingManager.onLoad = function(){
+      progressBarContainer.style.display = 'none';
+  }
 
-    // Method called when there is an error
-    loadingManager.onError = function(url){
-        console.error(`Problem loading ${url}`)
-    }
+  // Method called when there is an error
+  loadingManager.onError = function(url){
+      console.error(`Problem loading ${url}`)
+  }
 
-    const gltfLoader = new THREE.GLTFLoader(loadingManager);
+  const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
 function makeFirstFloor(scene,world){
     //Make first floor blender model
@@ -156,6 +156,7 @@ function makeSecondFloor(scene,world){
     //toilet
     makeCollisionCube(scene,world,[3,2,0.1],[3,1,1],[0,0,0],2); //door
     makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0],2); //wall
+
 
     //storage room
     makeCollisionCube(scene,world,[3.25,2,0.01],[-7.3,1,2.5],[0,0,0],2); //front wall big
@@ -300,6 +301,9 @@ function makeFourthFloor(scene,world){
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
 
+
+    makeToilet(scene,world);
+
 }
 
 function makeFirstFloorStairs(scene,world,translate){
@@ -307,10 +311,10 @@ function makeFirstFloorStairs(scene,world,translate){
     const translate_y =translate[1] 
     const translate_z =translate[2] 
 
+
     //Make stairs blender model
     makeObject(scene,'../res/meshes/FirstFloor/FirstFloorStairs.glb',[1,1,1],[translate_x,-0.9+translate_y,-4+translate_z],[0,0,0],1,null)
-
-
+  
   //blocks
   makeCollisionCube(scene,world,[1.25,2,1.25],[-3.25+translate_x,0.5+translate_y,-4.5+translate_z],[0,0,0],1); //right big
   makeCollisionCube(scene,world,[1.25,2,1.25],[3.25+translate_x,0.5+translate_y,-4.5+translate_z],[0,0,0],1); //left big
@@ -345,6 +349,7 @@ function makeObject(scene,path,scale,translate,rotation,floor,material){
         obj.scale.set(scale[0],scale[1],scale[2])
         obj.rotation.set(rotation[0],rotation[1],rotation[2])
         // var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
+
             //Creating shadows for each child mesh
             gltf.scene.traverse(function(node){
                 if(node.type === 'Mesh'){     
@@ -494,3 +499,4 @@ function removeFloor(scene,world,floor){
 }
 
 export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}
+
