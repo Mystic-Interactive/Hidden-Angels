@@ -210,7 +210,12 @@ var init = function(){
 
 var t =41;
 var selected = 0;
-      
+const pointer = new THREE.Vector2();
+pointer.x = window.innerWidth/2;
+pointer.y = window.innerHeight/2;
+const rayCaster = new THREE.Raycaster();
+rayCaster.setFromCamera(pointer,camera);
+
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
@@ -264,37 +269,40 @@ scene.add(torchLight)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
 
-      
+      //Raycaster for object selection
+
+      const intersects = rayCaster.intersectObjects(scene.children);
+      console.log(intersects)
 
 
 
       //stats.end()
     }
     else{
-    const rayCaster = new THREE.Raycaster();
-    rayCaster.setFromCamera(mousePos,cameraHUD);
-    const intersects = rayCaster.intersectObjects(sceneHUD.children);
-    if(intersects.length==0){
-      console.log("Nothing selected")
-      lvl = null;
-    }
-    else if(intersects[0].object.uuid === lvl1_uuid){
-      console.log("Level 1 Highlighted")
-      lvl = 1;
-    }
-    else if(intersects[0].object.uuid === lvl2_uuid){
-      console.log("Level 2 Highlighted")
-      lvl = 2;
-    }
-    else if(intersects[0].object.uuid === lvl3_uuid){
-      console.log("Level 3 Highlighted")
-      lvl = 3;
-    }
-    else{
-      console.log("Level 4 Highlighted")
-      lvl = 4;
-    }
-
+      //Raycaster for level selector
+        const rayCasterHUD = new THREE.Raycaster();
+        rayCasterHUD.setFromCamera(mousePos,cameraHUD);
+        const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
+        if(intersectsHUD.length==0){
+          console.log("Nothing selected")
+          lvl = null;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl1_uuid){
+          console.log("Level 1 Highlighted")
+          lvl = 1;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl2_uuid){
+          console.log("Level 2 Highlighted")
+          lvl = 2;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl3_uuid){
+          console.log("Level 3 Highlighted")
+          lvl = 3;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl4_uuid){
+          console.log("Level 4 Highlighted")
+          lvl = 4;
+        }
     }
     
   };
@@ -320,6 +328,8 @@ scene.add(torchLight)
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
+    pointer.x = window.innerWidth/2;
+    pointer.y = window.innerHeight/2;
   })
 
   document.addEventListener('keydown',(e)=>{
@@ -380,55 +390,12 @@ scene.add(torchLight)
     }
 
     if(lvl==2){
-      removeFloor(scene,world,curr_lvl);
-      curr_lvl=2;
-      makeSecondFloor(scene,world);
-
-      const mirrorOptions = {
-        clipBias: 0.000,
-        textureWidth: window.innerWidth * window.devicePixelRatio,
-        textureHeight: window.innerHeight * window.devicePixelRatio,
-        color: 0x808080,
-        multisample: 4,
+      if(curr_lvl!=2){
+        removeFloor(scene,world,curr_lvl);
+        curr_lvl=2;
+        makeSecondFloor(scene,world);
       }
-
-      const mirrorGeo = new THREE.PlaneGeometry(1, 1);
-      const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
-      const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
-      mainBathroomMirror.rotation.y = -Math.PI/2
-      mainBathroomMirror.position.set(4.85, 0.85, 2);
-      bedroomBathroomMirror.rotation.y = Math.PI/2
-      bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
-      scene.add(mainBathroomMirror);
-      scene.add(bedroomBathroomMirror);
-
-      const loader = new THREE.GLTFLoader()
-      let mainMirrorFrame;
-      let bedroomMirrorFrame
-
-      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
-        bedroomMirrorFrame = gltf.scene;
-        bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
-        bedroomMirrorFrame.rotation.y = -Math.PI/2
-        bedroomMirrorFrame.scale.set(0.55, 0.55);
-        scene.add(bedroomMirrorFrame);
-      }, (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      }, (error) => {
-        console.log(error);
-      });
-
-      loader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
-        mainMirrorFrame = gltf.scene;
-        mainMirrorFrame.position.set(4.85, 0.3, 2);
-        mainMirrorFrame.rotation.y = -Math.PI/2
-        mainMirrorFrame.scale.set(0.55, 0.55);
-        scene.add(mainMirrorFrame);
-      }, (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      }, (error) => {
-        console.log(error);
-      });
+      
     }
     if(lvl==3){
       console.log("Current level: ",curr_lvl)
