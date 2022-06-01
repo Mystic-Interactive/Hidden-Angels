@@ -131,6 +131,7 @@ export default class Player extends THREE.Group {
             this.rotation.y = _euler.y + Math.PI * 2
         }
         this.camera.translateY(-0.5)
+
         //this.camera.translateZ(5)
     }
 
