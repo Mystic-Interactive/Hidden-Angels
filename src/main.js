@@ -379,7 +379,7 @@ scene.add(torchLight)
       }
     }
 
-    if(lvl==null|lvl==2){
+    if(lvl==2){
       removeFloor(scene,world,curr_lvl);
       curr_lvl=2;
       makeSecondFloor(scene,world);
