@@ -8,7 +8,6 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
-import { Reflector } from '../lib/Reflector.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -210,11 +209,6 @@ var init = function(){
 
 var t =41;
 var selected = 0;
-const pointer = new THREE.Vector2();
-pointer.x = window.innerWidth/2;
-pointer.y = window.innerHeight/2;
-const rayCaster = new THREE.Raycaster();
-rayCaster.setFromCamera(pointer,camera);
 
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
@@ -269,10 +263,6 @@ scene.add(torchLight)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
 
-      //Raycaster for object selection
-
-      const intersects = rayCaster.intersectObjects(scene.children);
-      console.log(intersects)
 
 
 
@@ -328,8 +318,6 @@ scene.add(torchLight)
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-    pointer.x = window.innerWidth/2;
-    pointer.y = window.innerHeight/2;
   })
 
   document.addEventListener('keydown',(e)=>{
