@@ -1,5 +1,6 @@
 import * as CANNON from '../lib/cannon-es.js'
 import { Reflector } from '../lib/Reflector.js'
+import  {makeDynamicObject}  from '../src/house_dynamic.js'
 
 var first_floor_objects = [];
 var first_floor_collisions= [];
@@ -208,12 +209,16 @@ function makeSecondFloor(scene,world){
         makeMirrors(scene)
 
         //Placing level items
-        makeObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],2,null); //Bathroom key
+        makeDynamicObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
 }
 
 function makeBasement(scene,world){
     //Make basement blender model
     makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],3,null)
+
+    //nests
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[-11,-0.83,4.5],[0,0,0],3,null)
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[11.25,-0.83,-12.75],[0,0,0],3,null)
 
   //Collision boxes
     //exterior walls
@@ -238,6 +243,10 @@ function makeBasement(scene,world){
 
     //ladder
     makeCollisionCube(scene,world,[0.01,5,0.5],[10,1.5,4.75],[0,0,-Math.PI/4],3);
+
+    //meshes
+    makeCollisionCube(scene,world,[1.2,4,1.5],[-11,0,4.75],[0,0,0],3);
+    makeCollisionCube(scene,world,[1.2,4,1.5],[11,0,-12.5],[0,0,0],3);
 }
 
 function makeFourthFloor(scene,world){
@@ -557,5 +566,5 @@ function removeFloor(scene,world,floor){
     }
 }
 
-export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}
+export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor,makeObject,makeCollisionCube}
 

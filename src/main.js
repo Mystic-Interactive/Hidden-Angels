@@ -8,6 +8,7 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
+import {removeObjectFromScene} from './house_dynamic.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -356,6 +357,13 @@ scene.add(torchLight)
     else if (e.code=='Digit8'|| e.code =="Numpad8"){
       console.log("Pressed 8")
       changeInventorySelected(8);
+    }
+    else if(e.code=='KeyE'){
+      console.log("Pressed E")
+      if(curr_lvl==2){
+        console.log("Is on level 2")
+        removeObjectFromScene(scene,1)
+      }
     }
   })
   
