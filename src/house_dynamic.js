@@ -6,6 +6,8 @@ var goalKey = null;
 var libraryKey = null;
 var secretBook = null;
 
+let obj_positions = []
+
 function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
     var obj;
 
@@ -47,6 +49,7 @@ function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
             else if(object_num == 7 && secretBook==null){
                 secretBook=obj;
             }
+            obj_positions.push([obj.position, object_num])
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -85,4 +88,24 @@ function removeObjectFromScene(scene,object_num){
     }
 }
 
-export {makeDynamicObject,removeObjectFromScene}
+function detectObjects(player, scene){
+    let distances = []
+    for (var i = 0; i < obj_positions.length; i++){
+        distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
+    }
+
+    for (var i = 0 ; i < distances.length; i++){
+        if (distances[i][0] <= 2){
+            console.log('press \"e\" to interact')
+            let num = distances[i][1]
+            document.addEventListener('keydown',(e)=>{
+                if(e.code=='KeyE'){
+                    console.log("Pressed E")
+                    removeObjectFromScene(scene, num)
+                }
+            })
+        }
+    }
+}
+
+export {makeDynamicObject,removeObjectFromScene, detectObjects}
