@@ -8,7 +8,7 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
-import {removeObjectFromScene, detectObjects} from './house_dynamic.js'
+import {removeObjectFromScene, detectObjects, removeAllDyamics} from './house_dynamic.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -389,6 +389,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
         removeFloor(scene,world,curr_lvl)
+        removeAllDyamics(scene);
         curr_lvl=1;
         makeFirstFloor(scene,world);
       }
@@ -397,6 +398,7 @@ scene.add(torchLight)
     if(lvl==2){
       if(curr_lvl!=2){
         removeFloor(scene,world,curr_lvl);
+        removeAllDyamics(scene);
         curr_lvl=2;
         makeSecondFloor(scene,world);
       }
@@ -406,6 +408,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3){
         removeFloor(scene,world,curr_lvl);
+        removeAllDyamics(scene);
         curr_lvl=3;
         makeBasement(scene,world);
       }
@@ -415,6 +418,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4){
         removeFloor(scene,world,curr_lvl);
+        removeAllDyamics(scene);
         curr_lvl=4;
         makeFourthFloor(scene,world);
       }

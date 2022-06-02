@@ -6,7 +6,7 @@ var goalKey = null;
 var libraryKey = null;
 var secretBook = null;
 
-let obj_positions = []
+let obj_positions = [[null],[null],[null],[null],[null],[null],[null]]
 
 var spriteMaterialItem = new THREE.SpriteMaterial({map:
     THREE.ImageUtils.loadTexture(
@@ -37,26 +37,33 @@ function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
             scene.add(obj);
             if(object_num==1 && bathroomKey==null){ //Second check to make sure we dont add multiple of the same objects per level
                 bathroomKey=obj;
+                obj_positions[0] = [obj.position, object_num]
             }
             else if(object_num == 2 && closetKey==null){
                 closetKey=obj;
+                obj_positions[1] = [obj.position, object_num]
             }
             else if(object_num == 3 && screwdriver==null){
                 screwdriver=obj;
+                obj_positions[2] = [obj.position, object_num]
             }
             else if(object_num == 4 && shovel==null){
                 shovel=obj;
+                obj_positions[3] = [obj.position, object_num]
             }
             else if(object_num == 5 && goalKey==null){
                 goalKey=obj;
+                obj_positions[4] = [obj.position, object_num]
             }
             else if(object_num == 6 && libraryKey==null){
                 libraryKey=obj;
+                obj_positions[5] = [obj.position, object_num]
             }
             else if(object_num == 7 && secretBook==null){
                 secretBook=obj;
+                obj_positions[6] = [obj.position, object_num]
             }
-            obj_positions.push([obj.position, object_num])
+            // obj_positions.push([obj.position, object_num])
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -64,9 +71,12 @@ function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
   });
 }
 
-function removeObjectFromScene(scene,object_num){
+function removeObjectFromScene(scene,object_num,check){
     if(object_num==1 && bathroomKey!=null){ 
+        bathroomKey.removeFromParent();
+        // bathroomKey.geometry.dispose();
         scene.remove(bathroomKey);
+        
         bathroomKey=null;
     }
     else if(object_num == 2 && closetKey!=null){
@@ -93,30 +103,92 @@ function removeObjectFromScene(scene,object_num){
         scene.remove(secretBook);
         secretBook=null;
     }
+
+    if(check){
+       obj_positions[object_num-1][0] = null; 
+    }
+    
 }
+
+function distanceTo(object_pos, playerPos){
+    // console.log("Player at positions: ",playerPos[0],",",playerPos[1],",",playerPos[2])
+    var x = object_pos.x - playerPos.x;
+    var y = object_pos.y - playerPos.y;
+    var z = object_pos.z - playerPos.z;
+
+    var distance = Math.sqrt(x * x + y * y + z * z);
+    return distance
+}
+
 
 function detectObjects(player, scene, sceneHUD){
     let distances = []
+    var pso = false;
     for (var i = 0; i < obj_positions.length; i++){
-        distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
+        // if(obj_positions[i]!=[null]){
+        //     // distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
+        //     // console.log(obj_positions[i][0])
+        //     // console.log(player.position)
+        //     console.log("Hello",obj_positions[i])
+        // }
+        if(obj_positions[i][0]!=null){
+            // console.log(obj_positions[i][0])
+            distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1]])
+        }
+        // console.log("Distance length: ",distances.length)
     }
-    for (var i = 0 ; i < distances.length; i++){
-        if (distances[i][0] <= 2){            
+    
+    for (var j = 0 ; j < distances.length; j++){
+        // console.log(distances[j][0])
+        if (distances[j][0] <= 2){    
             console.log('press \"e\" to interact')
             sceneHUD.add(spriteItem)
-            let num = distances[i][1]
+            let num = distances[j][1]
+            // obj_positions[j][0] = null;
             document.addEventListener('keydown',(e)=>{
                 if(e.code=='KeyE'){
                     console.log("Pressed E")
-                    removeObjectFromScene(scene, num)
-                    objFix(i)
+                    // changeObjPos(j)
+                    removeObjectFromScene(scene, num,true)
+                    pso = true
+                    
+                    sceneHUD.remove(spriteItem)
                 }
                 else{
                     sceneHUD.remove(spriteItem)
                 }
             })
+        if(pso){
+            obj_positions[j][0] = new THREE.Vector3(1000,1000,1000);
+            console.log("Object positions: ",obj_positions)
+        }
         }  
     }
+
+    // for (var j = 0 ; j < distances.length; j++){  
+    //     if (distances[j][0] <= 2){    
+    //         console.log('press \"e\" to interact')
+    //         sceneHUD.add(spriteItem)
+    //         let num = distances[j][1]
+    //         document.addEventListener('keydown',(e)=>{
+    //             if(e.code=='KeyE'){
+    //                 console.log("Pressed E")
+    //                 removeObjectFromScene(scene, num)
+    //             }
+    //             else{
+    //                 sceneHUD.remove(spriteItem)
+    //             }
+    //         })
+    //     }  
+    // }
 }
 
-export {makeDynamicObject,removeObjectFromScene, detectObjects}
+
+function removeAllDyamics(scene){
+    for(var i = 0; i<8;i++){
+        removeObjectFromScene(scene,i,false)
+    }
+        
+}
+
+export {makeDynamicObject,removeObjectFromScene, detectObjects,removeAllDyamics}
