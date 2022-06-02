@@ -210,6 +210,7 @@ function makeSecondFloor(scene,world){
 
         //Placing level items
         makeDynamicObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
+        makeDynamicObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
 }
 
 function makeBasement(scene,world){
