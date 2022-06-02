@@ -196,27 +196,16 @@ var init = function(){
            var sprite4 = new THREE.Sprite(spriteMaterial4);
            sprite4.position.set(250,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-        
-        var spriteMaterialItem = new THREE.SpriteMaterial({map:
-            THREE.ImageUtils.loadTexture(
-            "../res/textures/pause_menu/pick_up_item.png")});
-            var spriteItem = new THREE.Sprite(spriteMaterialItem);
-            spriteItem.position.set(0,-window.innerHeight/8,0);
-            spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
-        
+                
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
       lvl4_uuid = sprite4.uuid
 
-      // sceneHUD.add(sprite);
-      // sceneHUD.add(sprite2);
-      // sceneHUD.add(sprite3);
-      // sceneHUD.add(sprite4);
 
 
-var t =41;
+var t =60;
 var selected = 0;
 
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
@@ -229,7 +218,7 @@ scene.add(torchLight)
       time = new_time
       guy.update(delta)
       g.update()
-      detectObjects(guy, scene)
+      detectObjects(guy, scene,sceneHUD)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
@@ -315,7 +304,7 @@ scene.add(torchLight)
       sceneHUD.add(sprite2);
       sceneHUD.add(sprite3);
       sceneHUD.add(sprite4);
-      sceneHUD.add(spriteItem)
+      // sceneHUD.add(spriteItem)
     }
     else{
       sceneHUD.remove(sprite);
