@@ -8,6 +8,13 @@ var secretBook = null;
 
 let obj_positions = []
 
+var spriteMaterialItem = new THREE.SpriteMaterial({map:
+    THREE.ImageUtils.loadTexture(
+    "../res/textures/pause_menu/pick_up_item.png")});
+    var spriteItem = new THREE.Sprite(spriteMaterialItem);
+    spriteItem.position.set(0,-window.innerHeight/8,0);
+    spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
+
 function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
     var obj;
 
@@ -88,23 +95,27 @@ function removeObjectFromScene(scene,object_num){
     }
 }
 
-function detectObjects(player, scene){
+function detectObjects(player, scene, sceneHUD){
     let distances = []
     for (var i = 0; i < obj_positions.length; i++){
         distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
     }
-
     for (var i = 0 ; i < distances.length; i++){
-        if (distances[i][0] <= 2){
+        if (distances[i][0] <= 2){            
             console.log('press \"e\" to interact')
+            sceneHUD.add(spriteItem)
             let num = distances[i][1]
             document.addEventListener('keydown',(e)=>{
                 if(e.code=='KeyE'){
                     console.log("Pressed E")
                     removeObjectFromScene(scene, num)
+                    objFix(i)
+                }
+                else{
+                    sceneHUD.remove(spriteItem)
                 }
             })
-        }
+        }  
     }
 }
 
