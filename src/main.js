@@ -196,16 +196,24 @@ var init = function(){
            var sprite4 = new THREE.Sprite(spriteMaterial4);
            sprite4.position.set(250,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+        
+        var spriteMaterialItem = new THREE.SpriteMaterial({map:
+            THREE.ImageUtils.loadTexture(
+            "../res/textures/pause_menu/pick_up_item.png")});
+            var spriteItem = new THREE.Sprite(spriteMaterialItem);
+            spriteItem.position.set(0,-window.innerHeight/8,0);
+            spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
+        
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
       lvl4_uuid = sprite4.uuid
 
-      sceneHUD.add(sprite);
-      sceneHUD.add(sprite2);
-      sceneHUD.add(sprite3);
-      sceneHUD.add(sprite4);
+      // sceneHUD.add(sprite);
+      // sceneHUD.add(sprite2);
+      // sceneHUD.add(sprite3);
+      // sceneHUD.add(sprite4);
 
 
 var t =41;
@@ -302,9 +310,19 @@ scene.add(torchLight)
     renderer.render(scene, camera);
     if(paused){
       //renderer.clearDepth();
-      renderer.render(sceneHUD, cameraHUD); 
+      sceneHUD.add(sprite);
+      sceneHUD.add(sprite2);
+      sceneHUD.add(sprite3);
+      sceneHUD.add(sprite4);
+      sceneHUD.add(spriteItem)
     }
-    
+    else{
+      sceneHUD.remove(sprite);
+      sceneHUD.remove(sprite2);
+      sceneHUD.remove(sprite3);
+      sceneHUD.remove(sprite4);
+    }
+    renderer.render(sceneHUD, cameraHUD); 
   };
 
   var GameLoop = function(){//run game loop(update, render, repeat)
@@ -363,6 +381,7 @@ scene.add(torchLight)
       if(curr_lvl==2){
         console.log("Is on level 2")
         removeObjectFromScene(scene,1)
+        sceneHUD.remove(spriteItem)
       }
     }
   })
