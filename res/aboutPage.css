@@ -48,3 +48,53 @@ h3{
     background-color: black;
     justify-content: left;
 }
+
+.BasicMonster{
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-right: auto;
+}
+
+.LargeMonster{
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-left: auto;
+}
+
+.SmallMonster{
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-right: auto;
+}
+
+.references{
+    text-align: center;
+}
+
+a:link {
+    color: wheat;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: gray;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightsteelblue;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    text-align: center;
+    color: tan;
+    background-color: transparent;
+    text-decoration: underline;
+}
