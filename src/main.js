@@ -123,18 +123,21 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
 
-  const guy = new Player(scene, world, camera)
 
 
 
   var path = [
-    new THREE.Vector3(10, 0, 0), 
-    new THREE.Vector3(-10, 0, 0)
+    new THREE.Vector3(2, 0, 2), 
+    new THREE.Vector3(2, 0, -2),
+    new THREE.Vector3(-2, 0, -2),
+    new THREE.Vector3(-2, 0, 2)
   ]
-  
- // const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
+  const monsters = []
+  const player = new Player(scene, world, camera, initial_position, monsters)
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
+  monsters.push(monster)
  // const fpCamera = new FirstPersonCamera(camera);
-  var monster_v2 = new monster_ai(scene,guy);
+  //var monster_v2 = new monster_ai(scene,player);
   const light = new THREE.AmbientLight();
   // light.intensity=0.02;
   light.intensity=1;
@@ -215,11 +218,12 @@ var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
     if(!paused){
-      monster_v2.update();
+      monster.update( delta );
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time
-      guy.update(delta)
+      player.update(delta)
+      //monster.update(delta)
       g.update()
 
       //Showing that we can decrease the visible hearts on the fly
@@ -262,7 +266,7 @@ scene.add(torchLight)
 
       world.step(timestep)
       // console.log(camera.position)
-      torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
+      torchLight.position.set(player.position.x,player.position.y,player.position.z)
 
       
 
