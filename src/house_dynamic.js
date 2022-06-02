@@ -6,7 +6,15 @@ var goalKey = null;
 var libraryKey = null;
 var secretBook = null;
 
-let obj_positions = [[null],[null],[null],[null],[null],[null],[null]]
+var bathroomDoor = null;
+var bedroom1Door = null;
+var bedroom2Door = null;
+var closetDoor = null;
+var goalDoor = null;
+var libraryDoor = null;
+var secretBookCase = null;
+
+let obj_positions = [[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null]]
 
 var spriteMaterialItem = new THREE.SpriteMaterial({map:
     THREE.ImageUtils.loadTexture(
@@ -14,6 +22,13 @@ var spriteMaterialItem = new THREE.SpriteMaterial({map:
     var spriteItem = new THREE.Sprite(spriteMaterialItem);
     spriteItem.position.set(0,-window.innerHeight/8,0);
     spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
+
+var spriteMaterialInteraction = new THREE.SpriteMaterial({map:
+    THREE.ImageUtils.loadTexture(
+    "../res/textures/pause_menu/interact.png")});
+    var spriteInteraction = new THREE.Sprite(spriteMaterialInteraction);
+    spriteInteraction.position.set(0,-window.innerHeight/8,0);
+    spriteInteraction.scale.set(window.innerHeight/2,window.innerWidth/75,1);
 
 function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
     var obj;
@@ -37,33 +52,61 @@ function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
             scene.add(obj);
             if(object_num==1 && bathroomKey==null){ //Second check to make sure we dont add multiple of the same objects per level
                 bathroomKey=obj;
-                obj_positions[0] = [obj.position, object_num]
+                obj_positions[0] = [obj.position, object_num,false]
             }
             else if(object_num == 2 && closetKey==null){
                 closetKey=obj;
-                obj_positions[1] = [obj.position, object_num]
+                obj_positions[1] = [obj.position, object_num,false]
             }
             else if(object_num == 3 && screwdriver==null){
                 screwdriver=obj;
-                obj_positions[2] = [obj.position, object_num]
+                obj_positions[2] = [obj.position, object_num,false]
             }
             else if(object_num == 4 && shovel==null){
                 shovel=obj;
-                obj_positions[3] = [obj.position, object_num]
+                obj_positions[3] = [obj.position, object_num,false]
             }
             else if(object_num == 5 && goalKey==null){
                 goalKey=obj;
-                obj_positions[4] = [obj.position, object_num]
+                obj_positions[4] = [obj.position, object_num,false]
             }
             else if(object_num == 6 && libraryKey==null){
                 libraryKey=obj;
-                obj_positions[5] = [obj.position, object_num]
+                obj_positions[5] = [obj.position, object_num,false]
             }
             else if(object_num == 7 && secretBook==null){
                 secretBook=obj;
-                obj_positions[6] = [obj.position, object_num]
+                obj_positions[6] = [obj.position, object_num,false]
             }
-            // obj_positions.push([obj.position, object_num])
+            else if(object_num == 8 && bathroomDoor==null){
+                bathroomDoor=obj;
+                obj_positions[7] = [obj.position, object_num,true]
+            }
+            else if(object_num == 9 && bedroom1Door==null){
+                bedroom1Door=obj;
+                obj_positions[8] = [obj.position, object_num,true]
+            }
+            else if(object_num == 10 && bedroom2Door==null){
+                bedroom2Door=obj;
+                obj_positions[9] = [obj.position, object_num,true]
+            }
+            else if(object_num == 11 && closetDoor==null){
+                closetDoor=obj;
+                obj_positions[10] = [obj.position, object_num,true]
+            }
+            else if(object_num == 12 && goalDoor==null){
+                goalDoor=obj;
+                obj_positions[11] = [obj.position, object_num,true]
+            }
+            else if(object_num == 13 && libraryDoor==null){
+                libraryDoor=obj;
+                obj_positions[12] = [obj.position, object_num,true]
+            }
+            else if(object_num == 14 && secretBookCase==null){
+                secretBookCase=obj;
+                obj_positions[13] = [obj.position, object_num,true]
+            }
+
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
   }, (error) => {
@@ -73,35 +116,60 @@ function makeDynamicObject(scene,path,scale,translate,rotation,object_num){
 
 function removeObjectFromScene(scene,object_num,check){
     if(object_num==1 && bathroomKey!=null){ 
-        bathroomKey.removeFromParent();
-        // bathroomKey.geometry.dispose();
         scene.remove(bathroomKey);
-        
         bathroomKey=null;
     }
     else if(object_num == 2 && closetKey!=null){
         scene.remove(closetKey);
         closetKey=null;
     }
-    else if(object_num == 3 && screwdriver==null){
+    else if(object_num == 3 && screwdriver!=null){
         scene.remove(screwdriver);
         screwdriver=null;
     }
-    else if(object_num == 4 && shovel==null){
+    else if(object_num == 4 && shovel!=null){
         scene.remove(shovel);
         shovel=null;
     }
-    else if(object_num == 5 && goalKey==null){
+    else if(object_num == 5 && goalKey!=null){
         scene.remove(goalKey);
         goalKey=null;
     }
-    else if(object_num == 6 && libraryKey==null){
+    else if(object_num == 6 && libraryKey!=null){
         scene.remove(libraryKey);
         libraryKey=null;
     }
-    else if(object_num == 7 && secretBook==null){
+    else if(object_num == 7 && secretBook!=null){
         scene.remove(secretBook);
         secretBook=null;
+    }
+    else if(object_num == 8 && bathroomDoor!=null){
+        scene.remove(bathroomDoor);
+        bathroomDoor=null;
+    }
+    else if(object_num == 9 && bedroom1Door!=null){
+        scene.remove(bedroom1Door);
+        bedroom1Door=null;
+    }
+    else if(object_num == 10 && bedroom2Door!=null){
+        scene.remove(bedroom2Door);
+        bedroom2Door=null;
+    }
+    else if(object_num == 11 && closetDoor!=null){
+        scene.remove(closetDoor);
+        closetDoor=null;
+    }
+    else if(object_num == 12 && goalDoor!=null){
+        scene.remove(goalDoor);
+        goalDoor=null;
+    }
+    else if(object_num == 13 && libraryDoor!=null){
+        scene.remove(libraryDoor);
+        libraryDoor=null;
+    }
+    else if(object_num == 14 && secretBookCase!=null){
+        scene.remove(secretBookCase);
+        secretBookCase=null;
     }
 
     if(check){
@@ -109,6 +177,7 @@ function removeObjectFromScene(scene,object_num,check){
     }
     
 }
+
 
 function distanceTo(object_pos, playerPos){
     // console.log("Player at positions: ",playerPos[0],",",playerPos[1],",",playerPos[2])
@@ -133,7 +202,7 @@ function detectObjects(player, scene, sceneHUD){
         // }
         if(obj_positions[i][0]!=null){
             // console.log(obj_positions[i][0])
-            distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1]])
+            distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1],obj_positions[i][2]])
         }
         // console.log("Distance length: ",distances.length)
     }
@@ -142,26 +211,41 @@ function detectObjects(player, scene, sceneHUD){
         // console.log(distances[j][0])
         if (distances[j][0] <= 2){    
             console.log('press \"e\" to interact')
-            sceneHUD.add(spriteItem)
-            let num = distances[j][1]
-            // obj_positions[j][0] = null;
-            document.addEventListener('keydown',(e)=>{
-                if(e.code=='KeyE'){
-                    console.log("Pressed E")
-                    // changeObjPos(j)
-                    removeObjectFromScene(scene, num,true)
-                    pso = true
+
+            //Object is a pickable item
+            if(distances[j][2]==false){
+                sceneHUD.add(spriteItem)
+                let num = distances[j][1]
+                document.addEventListener('keydown',(e)=>{
+                    if(e.code=='KeyE'){
+                        console.log("Pressed E")
+                        removeObjectFromScene(scene, num,true)
                     
-                    sceneHUD.remove(spriteItem)
-                }
-                else{
-                    sceneHUD.remove(spriteItem)
-                }
-            })
-        if(pso){
-            obj_positions[j][0] = new THREE.Vector3(1000,1000,1000);
-            console.log("Object positions: ",obj_positions)
-        }
+                        sceneHUD.remove(spriteItem)
+                    }
+                    else{
+                        sceneHUD.remove(spriteItem)
+                    }
+                })
+            }
+            else{
+                //Object is an interactable object
+                sceneHUD.add(spriteInteraction)
+                let num = distances[j][1]
+                console.log("num: ",num)
+                document.addEventListener('keydown',(e)=>{
+                    if(e.code=='KeyE'){
+                        console.log("Pressed E")
+                        removeObjectFromScene(scene, num,true)
+                    
+                        sceneHUD.remove(spriteInteraction)
+                    }
+                    else{
+                        sceneHUD.remove(spriteInteraction)
+                    }
+                })
+            }
+            
         }  
     }
 
@@ -182,7 +266,6 @@ function detectObjects(player, scene, sceneHUD){
     //     }  
     // }
 }
-
 
 function removeAllDyamics(scene){
     for(var i = 0; i<8;i++){

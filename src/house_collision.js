@@ -202,8 +202,7 @@ function makeSecondFloor(scene,world){
         //storage room
         InteriorWallLightCreator(scene,[-6,1,4],[0,3*Math.PI/2,0],2);
 
-        //rubble
-        makeObject(scene,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],2,null) //bedroom 2
+        
 
         //Mirrors
         makeMirrors(scene)
@@ -211,6 +210,7 @@ function makeSecondFloor(scene,world){
         //Placing level items
         makeDynamicObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
         makeDynamicObject(scene,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
+        makeDynamicObject(scene,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],9) //bedroom 2
 }
 
 function makeBasement(scene,world){
