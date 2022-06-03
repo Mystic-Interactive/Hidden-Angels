@@ -131,6 +131,7 @@ function makeFirstFloor(scene,world){
     makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,5],[Math.PI/2,0,0],7) //secretbook
 
     //Placing interactable objects
+    makeDynamicObject(scene,world,'../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
     makeDynamicObject(scene,world,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
 
 
