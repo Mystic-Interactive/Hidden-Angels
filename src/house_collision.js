@@ -126,6 +126,8 @@ function makeFirstFloor(scene,world){
         
         //dining room
             ChandelierCreator(scene,[8,1.8,-8],[0,Math.PI,0],1);
+    
+    //adding interactables
 
 }
 
@@ -209,10 +211,10 @@ function makeSecondFloor(scene,world){
 
         //Placing level items
         makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[4.5,-0.75,5.25],[0,0,0],2) //Closet Key
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Screwdriver.glb',[0.5,0.5,0.5],[-11.5,-0.75,4.75],[Math.PI/2,Math.PI/2,0],3) //Screw driver
+        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,5],[0,0,0],2) //Closet Key
+        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Screwdriver.glb',[0.5,0.5,0.5],[5,-0.8,5.5],[Math.PI/2,0,Math.PI/2],3) //Screw driver
         makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Shovel.glb',[0.5,0.25,0.3],[11.5,-0.75,-13.25],[0,Math.PI/2,-Math.PI/6],4) //Shovel
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,5],[0,0,0],5) //GoalKey
+        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,4.75],[0,0,0],5) //GoalKey
 
         //Placing interactable objects
         makeDynamicObject(scene,world,'../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
