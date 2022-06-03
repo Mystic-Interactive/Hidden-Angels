@@ -172,28 +172,28 @@ var init = function(){
       THREE.ImageUtils.loadTexture(
       "../res/textures/pause_menu/level-1.png")});
       var sprite = new THREE.Sprite(spriteMaterial);
-      sprite.position.set(0,window.innerHeight/3,0);
+      sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
       sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
       var spriteMaterial2 = new THREE.SpriteMaterial({map:
         THREE.ImageUtils.loadTexture(
         "../res/textures/pause_menu/level-2.png")});
         var sprite2 = new THREE.Sprite(spriteMaterial2);
-        sprite2.position.set(0,window.innerHeight/12,0);
+        sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
         sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
         var spriteMaterial3 = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
           "../res/textures/pause_menu/level-3.png")});
           var sprite3 = new THREE.Sprite(spriteMaterial3);
-          sprite3.position.set(0,-window.innerHeight/6,0);
+          sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
           sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
         var spriteMaterial4 = new THREE.SpriteMaterial({map:
            THREE.ImageUtils.loadTexture(
            "../res/textures/pause_menu/level-4.png")});
            var sprite4 = new THREE.Sprite(spriteMaterial4);
-           sprite4.position.set(250,-window.innerHeight/8,0);
+           sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
                 
       
@@ -327,6 +327,11 @@ scene.add(torchLight)
     renderer.setSize(0.98*window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
+
+    sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
+    sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
+    sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
+    sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
   })
 
   document.addEventListener('keydown',(e)=>{
