@@ -218,7 +218,7 @@ scene.add(torchLight)
       time = new_time
       guy.update(delta)
       g.update()
-      detectObjects(guy, scene,sceneHUD)
+      detectObjects(guy, scene,sceneHUD,world)
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
@@ -418,7 +418,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4){
         removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene);
+        removeAllDyamics(scene,world);
         curr_lvl=4;
         makeFourthFloor(scene,world);
       }
