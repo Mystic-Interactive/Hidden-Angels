@@ -209,7 +209,7 @@ function makeSecondFloor(scene,world){
 
         //Placing level items
         makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
+        makeDynamicObject(scene,world,'../res/meshes/PsuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
 
         //Placing interactable objects
         makeDynamicObject(scene,world,'../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
