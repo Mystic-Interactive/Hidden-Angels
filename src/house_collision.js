@@ -93,7 +93,6 @@ function makeFirstFloor(scene,world){
         makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
-        makeBookShelf(scene,[-10,-0.8,-7.5],[0,0,0]);
             makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
 
         //Oven
@@ -127,7 +126,13 @@ function makeFirstFloor(scene,world){
         //dining room
             ChandelierCreator(scene,[8,1.8,-8],[0,Math.PI,0],1);
     
-    //adding interactables
+    //Placing level items
+    makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],6) //Library key
+    makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,5],[Math.PI/2,0,0],7) //secretbook
+
+    //Placing interactable objects
+    makeDynamicObject(scene,world,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
+
 
 }
 

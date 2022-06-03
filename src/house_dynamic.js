@@ -134,11 +134,13 @@ function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num)
                 obj_positions[11] = [obj.position, object_num,true]
             }
             else if(object_num == 13){
-                libraryDoor=obj;
+                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                libraryDoor=[obj,collision];
                 obj_positions[12] = [obj.position, object_num,true]
             }
             else if(object_num == 14){
-                secretBookCase=obj;
+                var collision =makeDynamicCollision(scene,world,[2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
+                secretBookCase=[obj,collision];
                 obj_positions[13] = [obj.position, object_num,true]
             }
 
@@ -240,11 +242,6 @@ function removeObjectFromScene(scene,world,object_num,check){
         
         secretBookCase = [null, null];
     }
-
-    
-
-
-
 
     if(check){
        obj_positions[object_num-1][0] = null; 
