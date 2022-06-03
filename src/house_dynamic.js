@@ -116,7 +116,7 @@ function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num)
                 obj_positions[8] = [obj.position, object_num,true]
             }
             else if(object_num == 10){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]-1],rotation)
                 bedroom2Door=[obj,collision];
                 obj_positions[9] = [obj.position, object_num,true]
             }
@@ -191,8 +191,8 @@ function removeObjectFromScene(scene,world,object_num,check){
     }
     else if(object_num == 10 && bedroom2Door!=null){
         scene.remove(bedroom2Door[0]);
-        if(bedroom1Door[1]!=null){
-            world.removeBody(bedroom1Door[1])
+        if(bedroom2Door[1]!=null){
+            world.removeBody(bedroom2Door[1])
         }
         bedroom2Door=[null,null];
     }
@@ -201,22 +201,22 @@ function removeObjectFromScene(scene,world,object_num,check){
         if(closetDoor[1]!=null){
             world.removeBody(closetDoor[1])
         }
-        closetDoor=null;
+        closetDoor=[null,null];
     }
     else if(object_num == 12 && goalDoor!=null){
         scene.remove(goalDoor[0]);
         if(goalDoor[1]!=null){
             world.removeBody(goalDoor[1])
         }
-        goalDoor=null;
+        goalDoor=[null,null];
     }
     else if(object_num == 13 && libraryDoor!=null){
         scene.remove(libraryDoor);
-        libraryDoor=null;
+        libraryDoor=[null,null];
     }
     else if(object_num == 14 && secretBookCase!=null){
         scene.remove(secretBookCase);
-        secretBookCase=null;
+        secretBookCase=[null,null];
     }
 
     if(check){

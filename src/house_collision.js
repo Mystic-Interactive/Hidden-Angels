@@ -209,12 +209,12 @@ function makeSecondFloor(scene,world){
 
         //Placing level items
         makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
-        makeDynamicObject(scene,world,'../res/meshes/PsuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
+        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],2) //Test Key
 
         //Placing interactable objects
         makeDynamicObject(scene,world,'../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
         makeDynamicObject(scene,world,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],9) //bedroom 1 door
-        // makeDynamicObject(scene,world,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],9) //bedroom 2 door
+        makeDynamicObject(scene,world,'../res/meshes/Rubble.glb',[0.5,0.75,1],[11.5,-0.75,-1],[0,0,0],10) //bedroom 2 door
         makeDynamicObject(scene,world,'../res/meshes/Door.glb',[1,1,1],[-9.75,-0.75,2.5],[0,0,0],11) //closet door
         makeDynamicObject(scene,world,'../res/meshes/Door.glb',[1.1,1,1],[4.1,-0.75,-11.5],[0,0,0],12) //goal door
 }
