@@ -34,19 +34,12 @@ class Ground extends THREE.Group{
   define(){ // Create plane with ground textures and add it to world
     const textLoader = new THREE.TextureLoader();
     let baseColor = textLoader.load("./textures/forrest_ground_01_diff_1k.jpg");
-    let normalColor = textLoader.load("./textures/forrest_ground_01_disp_1k.jpg");
-    let heightColor = textLoader.load("./textures/forrest_ground_01_nor_gl_1k.jpg");
-    let roughnessColor = textLoader.load("./textures/forrest_ground_01_rough_1k.jpg");
     let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
 
     // Create plane with ground textures
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 512, 512), 
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), 
       new THREE.MeshLambertMaterial({ // Lambert Material used so shadows look smooth
         map: baseColor,
-        normalMap: normalColor,
-        displacementMap: heightColor,
-        displacementScale: 0.2,
-        roughnessMap: roughnessColor,
         aoMap: aoColor,
       })
     );
@@ -90,7 +83,7 @@ var init = function(){
 
 
   const world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -98.1, 0)
+    gravity: new CANNON.Vec3(0, -9.81, 0)
   })
 
   var scene = new THREE.Scene();
@@ -121,7 +114,7 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
 
-  const initial_position = new CANNON.Vec3(0, 0, 5)
+  const initial_position = new CANNON.Vec3(0, 1, 5)
 
 
 
@@ -380,14 +373,17 @@ scene.add(torchLight)
         removeFloor(scene,world,curr_lvl)
         curr_lvl=1;
         makeFirstFloor(scene,world);
+        player.body.position.set(-11.5,0,-13)
       }
     }
 
     if(lvl==2){
-      removeFloor(scene,world,curr_lvl);
-      curr_lvl=2;
-      makeSecondFloor(scene,world);
-
+      if(curr_lvl!=2){
+        removeFloor(scene,world,curr_lvl);
+        curr_lvl=2;
+        makeSecondFloor(scene,world);
+        player.body.position.set(-10.5,1,-1)
+      }
       const mirrorOptions = {
         clipBias: 0.000,
         textureWidth: window.innerWidth * window.devicePixelRatio,
@@ -440,8 +436,8 @@ scene.add(torchLight)
         removeFloor(scene,world,curr_lvl);
         curr_lvl=3;
         makeBasement(scene,world);
+        player.body.position.set(-10.5,-0.75,-12)
       }
-      
     }
     if(lvl==4){
       console.log("Current level: ",curr_lvl)
@@ -449,8 +445,8 @@ scene.add(torchLight)
         removeFloor(scene,world,curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
+        player.body.position.set(-11.5,0,-13)
       }
-      
     }
   })
 

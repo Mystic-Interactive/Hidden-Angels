@@ -448,7 +448,7 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
 }
 
 function InteriorWallLightCreator(scene,position,rotation,floor){
-    makeObject(scene,'../res/meshes/InteriorWallLight.glb',[1,1,1],position,rotation,floor,null)
+    makeObject(scene,'../res/meshes/InteriorWallLight.glb',[0.5,0.5,0.5],position,rotation,floor,null)
 }
 
 function BedroomLightCreator(scene,position,rotation,floor){

@@ -17,7 +17,7 @@ export default class Player extends THREE.Group {
         this.init_pos = init_pos
         this.view = 0
         this.init_()
-        this.vision_limit = 10
+        this.vision_limit = 4
         this.monsters = monsters
 
         this.angle = Math.PI/12

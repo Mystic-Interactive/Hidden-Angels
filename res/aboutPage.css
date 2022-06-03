@@ -20,6 +20,11 @@ h3{
     color: gainsboro;
 }
 
+h4{
+    text-align: center;
+    color: rgb(244, 255, 212);
+}
+
 .Description{
     color: wheat;
     text-align: center;
@@ -49,11 +54,17 @@ h3{
     justify-content: left;
 }
 
-.BasicMonster{
+.design{
+    height: 400px;
+    width: 500px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.BasicMonster{
     height: 300px;
     width: 300px;
-    margin-right: auto;
 }
 
 .LargeMonster{
@@ -68,6 +79,11 @@ h3{
     height: 300px;
     width: 300px;
     margin-right: auto;
+}
+
+.Monsters{
+    color: wheat;
+    text-align: center;
 }
 
 .references{
