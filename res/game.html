@@ -13,25 +13,26 @@
         width: 100%;
         height: 100%;
       }
-       .progress-bar-container{
-        position: relative;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
+        .progress-bar-container{
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(20, 20, 22, 1);
+        background-color: rgb(21, 21, 24);
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
         text-align: center;
+        margin: auto;
       }
 
       #progress-bar{
         width: 30%;
-        margin-top: 30%;
-        height: 2%;
+        margin-left: 5%;
         align-items: center;
       }
 

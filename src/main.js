@@ -18,6 +18,22 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 
+function resizeCanvasToDisplaySize() {
+  const canvas = renderer.domElement;
+  // look up the size the canvas is being displayed
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  // adjust displayBuffer size to match
+  if (canvas.width !== width || canvas.height !== height) {
+    // you must pass false here or three.js sadly fights the browser
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    // update any render target sizes here
+  }
+}
 
 
 // Class to make the world's surface 
@@ -87,7 +103,9 @@ var init = function(){
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
-
+  
+  const progressBarContainer = document.querySelector('.progress-bar-container')
+  progressBarContainer.style.display = 'none';
 
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -98.1, 0)
@@ -103,7 +121,7 @@ var init = function(){
   );
   
   var renderer = new THREE.WebGLRenderer({maxLights: 8});
-  renderer.setSize(window.innerWidth, window.innerHeight,);
+  renderer.setSize(0.999*window.innerWidth,0.999* window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear=false;
   
@@ -297,7 +315,9 @@ scene.add(torchLight)
   };
 
   var render = function(){//draw scene
+    resizeCanvasToDisplaySize();
     renderer.render(scene, camera);
+    
     if(paused){
       //renderer.clearDepth();
       sceneHUD.add(sprite);
@@ -324,7 +344,7 @@ scene.add(torchLight)
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
-    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setSize(0.98*window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   })
@@ -379,6 +399,9 @@ scene.add(torchLight)
   window.addEventListener('mousemove',(e)=>{
     mousePos.x = (e.clientX/window.innerWidth)*2-1;
     mousePos.y = - (e.clientY/window.innerHeight)*2+1;
+    if(curr_lvl==null){
+      console.log("No current level")
+    }
   })
 
   window.addEventListener('mousedown',(e)=>{
