@@ -16,6 +16,8 @@ var goalDoor = [null,null];
 var libraryDoor = [null,null];
 var secretBookCase = [null,null];
 
+var collisions = []
+
 let obj_positions = [[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null]]
 
 var spriteMaterialItem = new THREE.SpriteMaterial({map:
@@ -53,6 +55,7 @@ function makeDynamicCollision(scene,world,boxGeoSize,boxPos,rotationArr){
     boxBody.position.copy(box.position); //Copy position
     boxBody.quaternion.copy(box.quaternion); //Copy orientation
     
+    collisions.push(boxBody);
     return boxBody;
 }    
 function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num){
@@ -175,56 +178,79 @@ function removeObjectFromScene(scene,world,object_num,check){
         scene.remove(secretBook);
         secretBook=null;
     }
-    else if(object_num == 8 && bathroomDoor!=null){
+    
+    //Interactables
+    else if(object_num == 8 && bathroomDoor[0]!=null){
         scene.remove(bathroomDoor[0]);
-        if(bathroomDoor[1]!=null){
-            world.removeBody(bathroomDoor[1])
+        if(check){
+            world.removeBody(bathroomDoor[1]);
         }
-        bathroomDoor=[null,null];
+        
+        bathroomDoor = [null, null];
     }
-    else if(object_num == 9){
+    else if(object_num == 9 && bedroom1Door[0]!=null){
         scene.remove(bedroom1Door[0]);
-        if(bedroom1Door[1]!=null){
-            world.removeBody(bedroom1Door[1])
+        if(check){
+            world.removeBody(bedroom1Door[1]);
         }
-        bedroom1Door=[null,null];
+        
+        bedroom1Door = [null, null];
     }
-    else if(object_num == 10 && bedroom2Door!=null){
+    else if(object_num == 10 && bedroom2Door[0]!=null){
         scene.remove(bedroom2Door[0]);
-        if(bedroom2Door[1]!=null){
-            world.removeBody(bedroom2Door[1])
+        if(check){
+            world.removeBody(bedroom2Door[1]);
         }
-        bedroom2Door=[null,null];
+        
+        bedroom2Door = [null, null];
     }
-    else if(object_num == 11 && closetDoor!=null){
+
+    else if(object_num == 11 && closetDoor[0]!=null){
         scene.remove(closetDoor[0]);
-        if(closetDoor[1]!=null){
-            world.removeBody(closetDoor[1])
+        if(check){
+            world.removeBody(closetDoor[1]);
         }
-        closetDoor=[null,null];
+        
+        closetDoor = [null, null];
     }
-    else if(object_num == 12 && goalDoor!=null){
+
+    else if(object_num == 12 && goalDoor[0]!=null){
         scene.remove(goalDoor[0]);
-        if(goalDoor[1]!=null){
-            world.removeBody(goalDoor[1])
+        if(check){
+            world.removeBody(goalDoor[1]);
         }
-        goalDoor=[null,null];
+        
+        goalDoor = [null, null];
     }
-    else if(object_num == 13 && libraryDoor!=null){
-        scene.remove(libraryDoor);
-        libraryDoor=[null,null];
+
+    else if(object_num == 13 && libraryDoor[0]!=null){
+        scene.remove(libraryDoor[0]);
+        if(check){
+            world.removeBody(libraryDoor[1]);
+        }
+        
+        libraryDoor = [null, null];
     }
-    else if(object_num == 14 && secretBookCase!=null){
-        scene.remove(secretBookCase);
-        secretBookCase=[null,null];
+
+    else if(object_num == 14 && secretBookCase[0]!=null){
+        scene.remove(secretBookCase[0]);
+        if(check){
+            world.removeBody(secretBookCase[1]);
+        }
+        
+        secretBookCase = [null, null];
     }
+
+    
+
+
+
 
     if(check){
        obj_positions[object_num-1][0] = null; 
     }
     
 }
-
 
 function distanceTo(object_pos, playerPos){
     // console.log("Player at positions: ",playerPos[0],",",playerPos[1],",",playerPos[2])
@@ -315,9 +341,14 @@ function detectObjects(player, scene, sceneHUD,world){
 }
 
 function removeAllDyamics(scene,world){
-    for(var i = 0; i<14;i++){
+    for(var i = 1; i<=obj_positions.length;i++){
         removeObjectFromScene(scene,world,i,false)
+        obj_positions[i-1][0]=null;
     }
+    for(var i =0;i<collisions.length;i++){
+        world.removeBody(collisions[i])
+    }
+    collisions = []
         
 }
 

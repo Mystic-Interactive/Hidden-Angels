@@ -18,26 +18,7 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 
-function resizeCanvasToDisplaySize() {
-  const canvas = renderer.domElement;
-  // look up the size the canvas is being displayed
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-
-  // adjust displayBuffer size to match
-  if (canvas.width !== width || canvas.height !== height) {
-    // you must pass false here or three.js sadly fights the browser
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    // update any render target sizes here
-  }
-}
-
-
 // Class to make the world's surface 
-
 class Ground extends THREE.Group{
   // Constructor to get scene and camera and place plane in world
   constructor(scene, world){
@@ -315,7 +296,6 @@ scene.add(torchLight)
   };
 
   var render = function(){//draw scene
-    resizeCanvasToDisplaySize();
     renderer.render(scene, camera);
     
     if(paused){
@@ -412,7 +392,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
         removeFloor(scene,world,curr_lvl)
-        removeAllDyamics(scene);
+        removeAllDyamics(scene,world);
         curr_lvl=1;
         makeFirstFloor(scene,world);
       }
@@ -421,7 +401,7 @@ scene.add(torchLight)
     if(lvl==2){
       if(curr_lvl!=2){
         removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene);
+        removeAllDyamics(scene,world);
         curr_lvl=2;
         makeSecondFloor(scene,world);
       }
@@ -431,7 +411,7 @@ scene.add(torchLight)
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3){
         removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene);
+        removeAllDyamics(scene,world);
         curr_lvl=3;
         makeBasement(scene,world);
       }
