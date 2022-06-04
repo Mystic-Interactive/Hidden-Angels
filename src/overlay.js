@@ -344,7 +344,7 @@ function HUD(inventory_slots,_inventory){
 function tookDamage(damageTaken){
   graphics.save();
   hearts-=damageTaken;
-  if(hearts<1){
+  if(hearts == 0){
     console.log("You have died");
   }
   graphics.save();

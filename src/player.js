@@ -69,7 +69,7 @@ export default class Player extends THREE.Group {
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
             position : this.init_pos,
-            mass : 20
+            mass : 60
         })
         this.body.linearDamping = 0.5
 

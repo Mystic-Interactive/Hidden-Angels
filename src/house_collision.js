@@ -300,10 +300,6 @@ function makeFourthFloor(scene,world){
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-13],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
-
-
-    makeToilet(scene,world);
-
 }
 
 function makeFirstFloorStairs(scene,world,translate){

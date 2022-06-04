@@ -11,11 +11,13 @@ import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import { Reflector } from '../lib/Reflector.js'
 
+// variables to set up scene with camera
 var  camera;
 var scene;
 var renderer;
 var world;
 
+// control variables to time actions correctly
 const timestep = 1/60
 var delta = 0
 var time = new Date().getTime()
@@ -23,6 +25,7 @@ var speed = 0
 var t = 41;
 var selected = 0;
 
+// HUD control variables
 var paused = false;
 var curr_lvl = null;
 var lvl = null;
@@ -34,22 +37,26 @@ var sceneHUD;
 var cameraHUD;
 var mousePos;
 
+// items added to scene
 var player;
 var monster;
 var ground;
 var moonLight;
 var moonSphere;
-var torchLight
+var torchLight;
+var skybox;
 
 
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
   let world_canvas = document.getElementById('MainWorld');
   var hud_canvas = document.getElementById('myCanvas');
-  world_canvas.width = window.innerWidth;
-  world_canvas.height = window.innerHeight;
+  const progressBarContainer = document.querySelector('.progress-bar-container');
+  world_canvas.width = window.innerWidth - 20;
+  world_canvas.height = window.innerHeight - 20;
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
+  progressBarContainer.style.display = 'none'; //hide loading screen
 
 
   world = new CANNON.World({
@@ -77,20 +84,20 @@ var init = function(){
 
   mousePos = new THREE.Vector2();
 
-  //Create and add ground mesh to world
+  //Create and add ground mesh to scene
   ground = new Ground(scene, world)
   
-  //Setting up the moon
+  //Setting up the moon. The moon contains a directional light, a mesh and a texture
   moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
   scene.add(moonLight);
   moonSphere = addSphereMoon(2);
-  scene.add(moonSphere)
+  scene.add(moonSphere);
   
-  //Added skybox
-  const skybox = sky()
-  scene.add(skybox)
+  //Creates and dds skybox to scene
+  skybox = sky();
+  scene.add(skybox);
 
-  const initial_position = new CANNON.Vec3(0, 1, 5)
+  const initial_position = new CANNON.Vec3(0, 1, 0); //Initial player position for opening sandbox exploration
 
   var path = [
     new THREE.Vector3(2, 0, 2), 
@@ -99,29 +106,31 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
 
-  const monsters = []
-  player = new Player(scene, world, camera, initial_position, monsters)
-  monster = new Monster(scene, world,new THREE.Vector3(1, 0, -6), path, player)
-  monsters.push(monster)
+  const monsters = [];
+  player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
+  monster = new Monster(scene, world,new THREE.Vector3(-2, 1, -6), path, player); //Create and add monster to scene and physics world
+  monsters.push(monster);
+
 
   //var monster_v2 = new monster_ai(scene,player);
+
+  // create and add ambient light to scene
   const light = new THREE.AmbientLight();
-  // light.intensity=0.02;
-  light.intensity=1;
+  light.intensity = 0.4; //dim light for atmosphere
   scene.add(light);
 
-  const PointerLock = new PointerLockControls(camera,document.body);
-  const blocker = document.getElementById( 'myCanvas' );
-  blocker.addEventListener('click', function (){
+  const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
+  hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
 	  PointerLock.lock();
 	});
 
-  createMenu()
-      
-  torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
-  scene.add(torchLight)
+  createMenu()//create menu screen overlay (level selection)
+  
+  //Create and add spotlight tos scene (acts as player torch)
+  torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
+  scene.add(torchLight);
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', () => { //keep playing area relative to the scene
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
     renderer.setSize(window.innerWidth,window.innerHeight);
@@ -130,70 +139,71 @@ var init = function(){
   })
 
   document.addEventListener('keydown',(e)=>{
-    if(e.code=='Escape'){
-      console.log("Bring up menu");
+    if(e.key=='`'){//open menu and pause game
       paused = true;
+      PointerLock.unlock();
     }
-    else if(e.code=='Digit1'|| e.code =="Numpad1"){
+    else if(e.code=='Digit1'|| e.code =="Numpad1"){//change to 1st item in inventory
       console.log("Pressed 1")
       changeInventorySelected(1);
     }
-    else if(e.code=='Digit2'|| e.code =="Numpad2"){
+    else if(e.code=='Digit2'|| e.code =="Numpad2"){//change to 2nd item in inventory
       console.log("Pressed 2")
       changeInventorySelected(2);
     }
-    else if(e.code=='Digit3'|| e.code =="Numpad3"){
+    else if(e.code=='Digit3'|| e.code =="Numpad3"){//change to 3rd item in inventory
       console.log("Pressed 3")
+      console.log(player.position)
       changeInventorySelected(3);
     }
-    else if(e.code=='Digit4'|| e.code =="Numpad4"){
+    else if(e.code=='Digit4'|| e.code =="Numpad4"){//change to 4th item in inventory
       console.log("Pressed 4")
       changeInventorySelected(4);
     }
-    else if(e.code=='Digit5'|| e.code =="Numpad5"){
+    else if(e.code=='Digit5'|| e.code =="Numpad5"){//change to 5th item in inventory
       console.log("Pressed 5")
       changeInventorySelected(5);
     }
-    else if(e.code=='Digit6'|| e.code =="Numpad6"){
+    else if(e.code=='Digit6'|| e.code =="Numpad6"){//change to 6th item in inventory
       console.log("Pressed 6")
       changeInventorySelected(6);
     }
-    else if(e.code=='Digit7'|| e.code =="Numpad7"){
+    else if(e.code=='Digit7'|| e.code =="Numpad7"){//change to 7th item in inventory
       console.log("Pressed 7")
       changeInventorySelected(7);
     }
-    else if (e.code=='Digit8'|| e.code =="Numpad8"){
+    else if (e.code=='Digit8'|| e.code =="Numpad8"){//change to 8th item in inventory
       console.log("Pressed 8")
       changeInventorySelected(8);
     }
   })
   
-  window.addEventListener('mousemove',(e)=>{
-    mousePos.x = (e.clientX/window.innerWidth)*2-1;
-    mousePos.y = - (e.clientY/window.innerHeight)*2+1;
+  window.addEventListener('mousemove',(e)=>{//Track mouse position with respect to play area
+    mousePos.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
   })
 
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
     console.log("Level: ",lvl)
-    paused=false;
+    
     if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
         removeFloor(scene,world,curr_lvl)
         curr_lvl=1;
         makeFirstFloor(scene,world);
-        player.body.position.set(-11.5,0,-13)
+        player.body.position.set(0,2,-13)
       }
     }
-
-    if(lvl==2){
+    else if(lvl==2){
       if(curr_lvl!=2){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=2;
         makeSecondFloor(scene,world);
         player.body.position.set(-10.5,1,-1)
       }
+
       const mirrorOptions = {
         clipBias: 0.000,
         textureWidth: window.innerWidth * window.devicePixelRatio,
@@ -240,44 +250,43 @@ var init = function(){
         console.log(error);
       });
     }
-    if(lvl==3){
+    else if(lvl==3){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=3;
         makeBasement(scene,world);
-        player.body.position.set(-10.5,-0.75,-12)
+        player.body.position.set(-10.5,1,-12)
       }
     }
-    if(lvl==4){
+    else if(lvl==4){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4){
         removeFloor(scene,world,curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
-        player.body.position.set(-11.5,0,-13)
+        player.body.position.set(-11.5,1,13)
       }
     }
+    paused = false;
   })
 
 
   GameLoop()
 };
 
-function update(){//game logic
-  if(!paused){
-    monster.update( delta );
-    const new_time = new Date().getTime()
-    delta = new_time - time
-    time = new_time
+function update(){ //Game Logic
+  if(!paused){ // Run Game if not paused
+    const new_time = new Date().getTime();
+    delta = new_time - time;
+    time = new_time;
+    monster.update(delta);
     player.update(delta)
-    //monster.update(delta)
     ground.update()
 
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
-    // console.log(d.getMinutes())
-    if(d.getMinutes()==t){
+    if(d.getMinutes() == t){
       selected+=2;
       tookDamage(1.5);
       changeInventorySelected(selected)
@@ -288,16 +297,16 @@ function update(){//game logic
 
 
     //Move the moon and skybox only when you can see them to reduce the compuation needed
-    if(curr_lvl==4){
+    if(curr_lvl == 4){
       //Rotates and moves the moon
-      speed+=0.001
-      moonLight.position.y = 20*(Math.sin(speed))+50;
-      moonLight.position.z = 10*(Math.cos(speed));
-      moonSphere.position.y = 20*(Math.sin(speed))+50;
-      moonSphere.position.z = 10*(Math.cos(speed));
-      moonSphere.rotation.x+=0.005;
-      moonSphere.rotation.y+=0.005;
-      moonSphere.rotation.z+=0.005;
+      speed += 0.001
+      moonLight.position.y = 20 * (Math.sin(speed)) + 50;
+      moonLight.position.z = 10 * (Math.cos(speed));
+      moonSphere.position.y = 20 * (Math.sin(speed)) + 50;
+      moonSphere.position.z = 10 * (Math.cos(speed));
+      moonSphere.rotation.x += 0.005;
+      moonSphere.rotation.y += 0.005;
+      moonSphere.rotation.z += 0.005;
       
       //Rotates the skybox
       skybox.rotation.x+=0.0005;
@@ -310,7 +319,6 @@ function update(){//game logic
     }
     
     world.step(timestep)
-    // console.log(camera.position)
     torchLight.position.set(player.position.x,player.position.y,player.position.z)
   }
   else{
@@ -340,7 +348,7 @@ function update(){//game logic
   }
 };
 
-function render(){//draw scene
+function render(){// Draw scene
   renderer.render(scene, camera);
   if(paused){
     //renderer.clearDepth();
@@ -348,8 +356,7 @@ function render(){//draw scene
   }
 };
 
-function createMenu(){
-  //Creating the pause menu
+function createMenu(){ //Creating the pause menu
   var container = document.createElement('canvas');
 
   container.setAttribute("style","width:1px; height:1px","position:absolute");
@@ -406,7 +413,7 @@ function createMenu(){
   sceneHUD.add(sprite4);
 }
 
-function GameLoop(){//run game loop(update, render, repeat)
+function GameLoop(){ //Run game loop(update -> render -> repeat)
   update();
   render();
   requestAnimationFrame(GameLoop);
