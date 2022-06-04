@@ -368,7 +368,7 @@ function detectObject(player){
 
 function UI(){
     if(closest!=null){
-        if(closest[0][2]){
+        if(closest[2]){
             HUD.add(spriteInteraction)
         }
         else{
