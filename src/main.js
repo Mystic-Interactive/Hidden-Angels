@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelected,clearInventory} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {removeObjectFromScene, detectObjects, removeAllDyamics} from './house_dynamic.js'
 
@@ -226,10 +226,10 @@ scene.add(torchLight)
         selected+=2;
         tookDamage(1.5);
         changeInventorySelected(selected)
-        HUD(8,[1,2,3,4,5,6,7,-1]);
+        HUD();
         t+=1;
       }
-      HUD(8,[1,2,3,4,5,6,7,-1]);
+      HUD();
 
       
 
@@ -321,6 +321,12 @@ scene.add(torchLight)
     requestAnimationFrame(GameLoop);
   };
 
+  function lvlChange(curr_lvl){
+    removeFloor(scene,world,curr_lvl)
+    removeAllDyamics(scene,world);
+    clearInventory();
+  }
+
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
@@ -396,8 +402,7 @@ scene.add(torchLight)
     if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
-        removeFloor(scene,world,curr_lvl)
-        removeAllDyamics(scene,world);
+        lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
       }
@@ -405,8 +410,7 @@ scene.add(torchLight)
 
     if(lvl==2){
       if(curr_lvl!=2){
-        removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene,world);
+        lvlChange(curr_lvl);
         curr_lvl=2;
         makeSecondFloor(scene,world);
       }
@@ -415,8 +419,7 @@ scene.add(torchLight)
     if(lvl==3){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3){
-        removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene,world);
+        lvlChange(curr_lvl);
         curr_lvl=3;
         makeBasement(scene,world);
       }
@@ -425,8 +428,7 @@ scene.add(torchLight)
     if(lvl==4){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4){
-        removeFloor(scene,world,curr_lvl);
-        removeAllDyamics(scene,world);
+        lvlChange(curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
       }

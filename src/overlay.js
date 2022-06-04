@@ -236,30 +236,64 @@ var inventory = [];
 
   }
  //Draws the inventory bar 
-function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
+function drawInventoryBar(startx,starty,width,height,colour){
   graphics.strokeStyle=colour;
+  graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
   var selected_item = "";
   var word_colour = [];
-  for(var i=0;i<num_blocks;i++){
-    if(inventory[i]!=-1){
-      word_colour = drawIcon(inventory[i],startx,starty,width)
-      if(selected==i){
-        selected_item = word_colour[0];
+  console.log(inventory)
+  for(var i = 0;i<8;i++){
+    try {
+      if(inventory[i]!=null){
+        word_colour = drawIcon(inventory[i],startx,starty,width)
+        if(selected==i){
+          selected_item = word_colour[0];
+        }
+        else{
+          selected_item="";
+        }
       }
-      else{
-        selected_item="";
-      }
-      
     }
+    catch(err) {
+     console.log("No item in this slot")
+    }
+    
     if(i==selected){
       graphics.strokeStyle="white";
-      writeItem(selected_item,word_colour[1])
+      try{
+        writeItem(selected_item,word_colour[1])
+      }
+      catch(err){
+        writeItem(selected_item,"")
+      }
+      
     }
 
     drawBlock(startx,starty,width,height);
     graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
+
   }
+  // for(var i=0;i<8;i++){
+  //   if(inventory[i]!=-1){
+  //     word_colour = drawIcon(inventory[i],startx,starty,width)
+  //     if(selected==i){
+  //       selected_item = word_colour[0];
+  //     }
+  //     else{
+  //       selected_item="";
+  //     }
+      
+  //   }
+  //   if(i==selected){
+  //     graphics.strokeStyle="white";
+  //     writeItem(selected_item,word_colour[1])
+  //   }
+
+  //   drawBlock(startx,starty,width,height);
+  //   graphics.strokeStyle=colour;
+  //   startx+=width+graphics.lineWidth+0.5;
+  // }
 }
 
 //Draws the health bar
@@ -324,18 +358,37 @@ function healthIndicator(){
   graphics.restore();
 }
 
+//
+function addToInventory(item_num){
+  inventory.push(item_num)
+  inventory = [...new Set(inventory)];
+}
+
+function clearInventory(){
+  inventory = [];
+}
+
+function getItemSelected(){
+  try{
+    return inventory[selected]
+  }
+  catch(error){
+    return -1
+  }
+  
+}
+
 //Draws the HUD on the screen
-function HUD(inventory_slots,_inventory){
+function HUD(){
   graphics.save();
   graphics.translate(hud_canvas.width/2, hud_canvas.height/2);
   graphics.scale(hud_canvas.width/300,  hud_canvas.height/150);
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   
-  inventory=_inventory
-  var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
+  var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
+  drawInventoryBar(begin,50,12.5,12.5,"rgba(255,100,50,1)");
   // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }
@@ -357,4 +410,4 @@ function changeInventorySelected(_change){
   selected=_change-1
 }
 
-export{HUD,tookDamage,changeInventorySelected}
+export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected}

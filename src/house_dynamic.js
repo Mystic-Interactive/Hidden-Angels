@@ -1,4 +1,5 @@
 import * as CANNON from '../lib/cannon-es.js'
+import { addToInventory,getItemSelected } from './overlay.js';
 
 var bathroomKey = null;
 var closetKey = null;
@@ -183,10 +184,13 @@ function removeObjectFromScene(scene,world,object_num,check){
     
     //Interactables
     else if(object_num == 8 && bathroomDoor[0]!=null){
-        scene.remove(bathroomDoor[0]);
-        if(check){
-            world.removeBody(bathroomDoor[1]);
+        if(getItemSelected()==0){
+          scene.remove(bathroomDoor[0]);
+            if(check){
+                world.removeBody(bathroomDoor[1]);
+            }  
         }
+        
         
         bathroomDoor = [null, null];
     }
@@ -259,29 +263,28 @@ function distanceTo(object_pos, playerPos){
     return distance
 }
 
+function printDistances(distances){
+    for(var i =0; i<distances.length;i++){
+        console.log(i,": ",distances[i])
+    }
+}
 
 function detectObjects(player, scene, sceneHUD,world){
     let distances = []
-    var pso = false;
     for (var i = 0; i < obj_positions.length; i++){
-        // if(obj_positions[i]!=[null]){
-        //     // distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
-        //     // console.log(obj_positions[i][0])
-        //     // console.log(player.position)
-        //     console.log("Hello",obj_positions[i])
-        // }
+
         if(obj_positions[i][0]!=null){
             // console.log(obj_positions[i][0])
             distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1],obj_positions[i][2]])
         }
-        // console.log("Distance length: ",distances.length)
     }
+
+    printDistances(distances)
     
     for (var j = 0 ; j < distances.length; j++){
         // console.log(distances[j][0])
         if (distances[j][0] <= 2){    
             console.log('press \"e\" to interact')
-
             //Object is a pickable item
             if(distances[j][2]==false){
                 sceneHUD.add(spriteItem)
@@ -290,6 +293,7 @@ function detectObjects(player, scene, sceneHUD,world){
                     if(e.code=='KeyE'){
                         console.log("Pressed E")
                         removeObjectFromScene(scene,world,num,true)
+                        addToInventory(num)
                     
                         sceneHUD.remove(spriteItem)
                     }
@@ -305,7 +309,7 @@ function detectObjects(player, scene, sceneHUD,world){
                 document.addEventListener('keydown',(e)=>{
                     if(e.code=='KeyE'){
                         console.log("Pressed E")
-                        console.log("num: ",num)
+                        
                         removeObjectFromScene(scene,world,num,true)
                     
                         sceneHUD.remove(spriteInteraction)
@@ -318,23 +322,7 @@ function detectObjects(player, scene, sceneHUD,world){
             
         }  
     }
-
-    // for (var j = 0 ; j < distances.length; j++){  
-    //     if (distances[j][0] <= 2){    
-    //         console.log('press \"e\" to interact')
-    //         sceneHUD.add(spriteItem)
-    //         let num = distances[j][1]
-    //         document.addEventListener('keydown',(e)=>{
-    //             if(e.code=='KeyE'){
-    //                 console.log("Pressed E")
-    //                 removeObjectFromScene(scene, num)
-    //             }
-    //             else{
-    //                 sceneHUD.remove(spriteItem)
-    //             }
-    //         })
-    //     }  
-    // }
+    
 }
 
 function removeAllDyamics(scene,world){
