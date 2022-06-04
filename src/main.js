@@ -8,7 +8,7 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
-import {removeObjectFromScene, detectObjects, removeAllDyamics} from './house_dynamic.js'
+import {removeObjectFromScene, detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -84,7 +84,7 @@ var init = function(){
   var hud_canvas = document.getElementById('myCanvas');
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
-  
+
   const progressBarContainer = document.querySelector('.progress-bar-container')
   progressBarContainer.style.display = 'none';
 
@@ -203,7 +203,7 @@ var init = function(){
       lvl4_uuid = sprite4.uuid
 
 
-
+initialiseDynamics(scene, sceneHUD, world)
 var t =60;
 var selected = 0;
 
@@ -217,7 +217,9 @@ scene.add(torchLight)
       time = new_time
       guy.update(delta)
       g.update()
-      detectObjects(guy, scene,sceneHUD,world)
+
+      detectObject(guy)
+      UI()
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();

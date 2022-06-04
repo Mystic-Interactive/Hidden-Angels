@@ -102,8 +102,8 @@ function makeFirstFloor(scene,world){
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[4.1,1,1],[8.2,-0.7,5.4],[0,Math.PI,0],1,null)
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.6,1,1],[11.75,-0.7,3.1],[0,Math.PI/2,0],1,null)
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.15,1,1],[11.75,-0.7,-0.8],[0,Math.PI/2,0],1,null)
-            makeCollisionCube(scene,world,[8,0.75,0.5],[8,0.5,5],[0,0,0],1);
-            makeCollisionCube(scene,world,[0.5,0.75,6],[12,0.5,1],[0,0,0],1);
+            makeCollisionCube(scene,world,[8,0.75,0.125],[8,0.25,5],[0,0,0],1);
+            makeCollisionCube(scene,world,[0.125,0.25,6],[12,0.5,1],[0,0,0],1);
 
 
     //adding lights
@@ -127,12 +127,12 @@ function makeFirstFloor(scene,world){
             ChandelierCreator(scene,[8,1.8,-8],[0,Math.PI,0],1);
     
     //Placing level items
-    makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],6) //Library key
-    makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,5],[Math.PI/2,0,0],7) //secretbook
+    makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],6) //Library key
+    makeDynamicObject('../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,4.75],[Math.PI/2,0,0],7) //secretbook
 
     //Placing interactable objects
-    makeDynamicObject(scene,world,'../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
-    makeDynamicObject(scene,world,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
+    makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
+    makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
 
 
 }
@@ -216,18 +216,18 @@ function makeSecondFloor(scene,world){
         makeMirrors(scene)
 
         //Placing level items
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,5],[0,0,0],2) //Closet Key
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Screwdriver.glb',[0.5,0.5,0.5],[5,-0.8,5.5],[Math.PI/2,0,Math.PI/2],3) //Screw driver
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Shovel.glb',[0.5,0.25,0.3],[11.5,-0.75,-13.25],[0,Math.PI/2,-Math.PI/6],4) //Shovel
-        makeDynamicObject(scene,world,'../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,4.75],[0,0,0],5) //GoalKey
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,5],[0,0,0],2) //Closet Key
+        makeDynamicObject('../res/meshes/PuzzleItems/Screwdriver.glb',[0.5,0.5,0.5],[5,-0.8,5.5],[Math.PI/2,0,Math.PI/2],3) //Screw driver
+        makeDynamicObject('../res/meshes/PuzzleItems/Shovel.glb',[0.5,0.25,0.3],[11.5,-0.75,-13.25],[0,Math.PI/2,-Math.PI/6],4) //Shovel
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,4.75],[0,0,0],5) //GoalKey
 
         //Placing interactable objects
-        makeDynamicObject(scene,world,'../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
-        makeDynamicObject(scene,world,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],9) //bedroom 1 door
-        makeDynamicObject(scene,world,'../res/meshes/Rubble.glb',[0.5,0.75,1],[11.5,-0.75,-1],[0,0,0],10) //bedroom 2 door
-        makeDynamicObject(scene,world,'../res/meshes/Door.glb',[1,1,1],[-9.75,-0.75,2.5],[0,0,0],11) //closet door
-        makeDynamicObject(scene,world,'../res/meshes/Door.glb',[1.1,1,1],[4.1,-0.75,-11.5],[0,0,0],12) //goal door
+        makeDynamicObject('../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
+        makeDynamicObject('../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],10) //bedroom 1 door
+        makeDynamicObject('../res/meshes/Rubble.glb',[0.5,0.75,0.75],[11.5,-0.75,-1],[0,0,0],11) //bedroom 2 door
+        makeDynamicObject('../res/meshes/Door.glb',[1,1,1],[-9.75,-0.75,2.5],[0,0,0],9) //closet door
+        makeDynamicObject('../res/meshes/Door.glb',[1.1,1,1],[4.1,-0.75,-11.5],[0,0,0],12) //goal door
 }
 
 function makeBasement(scene,world){

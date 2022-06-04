@@ -241,7 +241,6 @@ function drawInventoryBar(startx,starty,width,height,colour){
   graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
   var selected_item = "";
   var word_colour = [];
-  console.log(inventory)
   for(var i = 0;i<8;i++){
     try {
       if(inventory[i]!=null){
@@ -410,4 +409,8 @@ function changeInventorySelected(_change){
   selected=_change-1
 }
 
-export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected}
+function clearItem(){
+  inventory.splice(selected,1)
+}
+
+export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem}

@@ -1,5 +1,5 @@
 import * as CANNON from '../lib/cannon-es.js'
-import { addToInventory } from './overlay.js';
+import { addToInventory, getItemSelected, clearItem } from './overlay.js';
 
 var bathroomKey = null;
 var closetKey = null;
@@ -18,24 +18,36 @@ var libraryDoor = [null,null];
 var secretBookCase = [null,null];
 
 var collisions = []
-
+var closest = null
 let obj_positions = [[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null]]
+var spriteItem = null;
+var spriteInteraction = null;
+var scene = null;
+var HUD = null;
+var world = null;
 
-var spriteMaterialItem = new THREE.SpriteMaterial({map:
-    THREE.ImageUtils.loadTexture(
-    "../res/textures/pause_menu/pick_up_item.png")});
-    var spriteItem = new THREE.Sprite(spriteMaterialItem);
+function initialiseDynamics(scene_, HUD_, world_){
+    scene = scene_
+    HUD = HUD_
+    world = world_
+
+    var spriteMaterialItem = new THREE.SpriteMaterial({map:
+        THREE.ImageUtils.loadTexture(
+        "../res/textures/pause_menu/pick_up_item.png")});
+    spriteItem = new THREE.Sprite(spriteMaterialItem);
     spriteItem.position.set(0,-window.innerHeight/8,0);
     spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
 
-var spriteMaterialInteraction = new THREE.SpriteMaterial({map:
-    THREE.ImageUtils.loadTexture(
-    "../res/textures/pause_menu/interact.png")});
-    var spriteInteraction = new THREE.Sprite(spriteMaterialInteraction);
+    var spriteMaterialInteraction = new THREE.SpriteMaterial({map:
+        THREE.ImageUtils.loadTexture(
+        "../res/textures/pause_menu/interact.png")});
+    spriteInteraction = new THREE.Sprite(spriteMaterialInteraction);
     spriteInteraction.position.set(0,-window.innerHeight/8,0);
     spriteInteraction.scale.set(window.innerHeight/2,window.innerWidth/75,1);
+}
 
-function makeDynamicCollision(scene,world,boxGeoSize,boxPos,rotationArr){
+
+function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
     const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
     const boxMat = new THREE.MeshBasicMaterial({
        color: 0xffffff,
@@ -59,7 +71,7 @@ function makeDynamicCollision(scene,world,boxGeoSize,boxPos,rotationArr){
     collisions.push(boxBody);
     return boxBody;
 }    
-function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num){
+function makeDynamicObject(path,scale,translate,rotation,object_num){
     var obj;
 
     const loader = new THREE.GLTFLoader();
@@ -110,37 +122,37 @@ function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num)
 
             //Collision and interactable objects
             else if(object_num == 8){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
                 bathroomDoor=[obj,collision];
                 obj_positions[7] = [obj.position, object_num,true]
             }
             else if(object_num == 9){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                bedroom1Door=[obj,collision];
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                closetDoor=[obj,collision];
                 obj_positions[8] = [obj.position, object_num,true]
             }
             else if(object_num == 10){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]-1],rotation)
-                bedroom2Door=[obj,collision];
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]-0.5],rotation)
+                bedroom1Door=[obj,collision];
                 obj_positions[9] = [obj.position, object_num,true]
             }
             else if(object_num == 11){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                closetDoor=[obj,collision];
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                bedroom2Door=[obj,collision];
                 obj_positions[10] = [obj.position, object_num,true]
             }
             else if(object_num == 12){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
                 goalDoor=[obj,collision];
                 obj_positions[11] = [obj.position, object_num,true]
             }
             else if(object_num == 13){
-                var collision =makeDynamicCollision(scene,world,[1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
                 libraryDoor=[obj,collision];
                 obj_positions[12] = [obj.position, object_num,true]
             }
             else if(object_num == 14){
-                var collision =makeDynamicCollision(scene,world,[2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
+                var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
                 secretBookCase=[obj,collision];
                 obj_positions[13] = [obj.position, object_num,true]
             }
@@ -152,7 +164,7 @@ function makeDynamicObject(scene,world,path,scale,translate,rotation,object_num)
   });
 }
 
-function removeObjectFromScene(scene,world,object_num,check){
+function removeObjectFromScene(object_num,check){
     if(object_num==1 && bathroomKey!=null){ 
         scene.remove(bathroomKey);
         bathroomKey=null;
@@ -191,7 +203,15 @@ function removeObjectFromScene(scene,world,object_num,check){
         
         bathroomDoor = [null, null];
     }
-    else if(object_num == 9 && bedroom1Door[0]!=null){
+    else if(object_num == 9 && closetDoor[0]!=null){
+        scene.remove(closetDoor[0]);
+        if(check){
+            world.removeBody(closetDoor[1]);
+        }
+        
+        closetDoor = [null, null];
+    }
+    else if(object_num == 10 && bedroom1Door[0]!=null){
         scene.remove(bedroom1Door[0]);
         if(check){
             world.removeBody(bedroom1Door[1]);
@@ -199,22 +219,14 @@ function removeObjectFromScene(scene,world,object_num,check){
         
         bedroom1Door = [null, null];
     }
-    else if(object_num == 10 && bedroom2Door[0]!=null){
+
+    else if(object_num == 11 && bedroom2Door[0]!=null){
         scene.remove(bedroom2Door[0]);
         if(check){
             world.removeBody(bedroom2Door[1]);
         }
         
         bedroom2Door = [null, null];
-    }
-
-    else if(object_num == 11 && closetDoor[0]!=null){
-        scene.remove(closetDoor[0]);
-        if(check){
-            world.removeBody(closetDoor[1]);
-        }
-        
-        closetDoor = [null, null];
     }
 
     else if(object_num == 12 && goalDoor[0]!=null){
@@ -261,87 +273,119 @@ function distanceTo(object_pos, playerPos){
 }
 
 
-function detectObjects(player, scene, sceneHUD,world){
-    let distances = []
-    var pso = false;
-    for (var i = 0; i < obj_positions.length; i++){
-        // if(obj_positions[i]!=[null]){
-        //     // distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
-        //     // console.log(obj_positions[i][0])
-        //     // console.log(player.position)
-        //     console.log("Hello",obj_positions[i])
-        // }
-        if(obj_positions[i][0]!=null){
-            // console.log(obj_positions[i][0])
-            distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1],obj_positions[i][2]])
-        }
-        // console.log("Distance length: ",distances.length)
-    }
+// function detectObjects(player, scene, sceneHUD,world){
+//     let distances = []
+//     var pso = false;
+//     for (var i = 0; i < obj_positions.length; i++){
+//         // if(obj_positions[i]!=[null]){
+//         //     // distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
+//         //     // console.log(obj_positions[i][0])
+//         //     // console.log(player.position)
+//         //     console.log("Hello",obj_positions[i])
+//         // }
+//         if(obj_positions[i][0]!=null){
+//             // console.log(obj_positions[i][0])
+//             distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1],obj_positions[i][2]])
+//         }
+//         // console.log("Distance length: ",distances.length)
+//     }
     
-    for (var j = 0 ; j < distances.length; j++){
-        // console.log(distances[j][0])
-        if (distances[j][0] <= 2){    
-            console.log('press \"e\" to interact')
+//     for (var j = 0 ; j < distances.length; j++){
+//         // console.log(distances[j][0])
+//         if (distances[j][0] <= 2){    
+//             console.log('press \"e\" to interact')
 
-            //Object is a pickable item
-            if(distances[j][2]==false){
-                sceneHUD.add(spriteItem)
-                let num = distances[j][1]
-                document.addEventListener('keydown',(e)=>{
-                    if(e.code=='KeyE'){
-                        console.log("Pressed E")
-                        removeObjectFromScene(scene,world,num,true)
-                        addToInventory(num)
+//             //Object is a pickable item
+//             if(distances[j][2]==false){
+//                 sceneHUD.add(spriteItem)
+//                 let num = distances[j][1]
+//                 document.addEventListener('keydown',(e)=>{
+//                     if(e.code=='KeyE'){
+//                         console.log("Pressed E")
+//                         removeObjectFromScene(scene,world,num,true)
+//                         addToInventory(num)
                     
-                        sceneHUD.remove(spriteItem)
-                    }
-                    else{
-                        sceneHUD.remove(spriteItem)
-                    }
-                })
-            }
-            else{
-                //Object is an interactable object
-                sceneHUD.add(spriteInteraction)
-                let num = distances[j][1]
-                document.addEventListener('keydown',(e)=>{
-                    if(e.code=='KeyE'){
-                        console.log("Pressed E")
-                        console.log("num: ",num)
-                        removeObjectFromScene(scene,world,num,true)
+//                         sceneHUD.remove(spriteItem)
+//                     }
+//                     else{
+//                         sceneHUD.remove(spriteItem)
+//                     }
+//                 })
+//             }
+//             else{
+//                 //Object is an interactable object
+//                 sceneHUD.add(spriteInteraction)
+//                 let num = distances[j][1]
+//                 document.addEventListener('keydown',(e)=>{
+//                     if(e.code=='KeyE'){
+//                         console.log("Pressed E")
+//                         console.log("num: ",num)
+//                         removeObjectFromScene(scene,world,num,true)
                     
-                        sceneHUD.remove(spriteInteraction)
-                    }
-                    else{
-                        sceneHUD.remove(spriteInteraction)
-                    }
-                })
+//                         sceneHUD.remove(spriteInteraction)
+//                     }
+//                     else{
+//                         sceneHUD.remove(spriteInteraction)
+//                     }
+//                 })
+//             }
+            
+//         }  
+//     }
+
+//     // for (var j = 0 ; j < distances.length; j++){  
+//     //     if (distances[j][0] <= 2){    
+//     //         console.log('press \"e\" to interact')
+//     //         sceneHUD.add(spriteItem)
+//     //         let num = distances[j][1]
+//     //         document.addEventListener('keydown',(e)=>{
+//     //             if(e.code=='KeyE'){
+//     //                 console.log("Pressed E")
+//     //                 removeObjectFromScene(scene, num)
+//     //             }
+//     //             else{
+//     //                 sceneHUD.remove(spriteItem)
+//     //             }
+//     //         })
+//     //     }  
+//     // }
+// }
+
+function detectObject(player){
+    closest = null
+    for(var i=0;i<obj_positions.length;i++){
+        if(obj_positions[i][0]!=null){
+            //Check that we only add to the array if dealing with the objects in that scene
+            if(distanceTo(obj_positions[i][0],player.position)<1.5){
+                closest = obj_positions[i] //Get the object that we are closest to
             }
             
-        }  
+        }
+        
     }
-
-    // for (var j = 0 ; j < distances.length; j++){  
-    //     if (distances[j][0] <= 2){    
-    //         console.log('press \"e\" to interact')
-    //         sceneHUD.add(spriteItem)
-    //         let num = distances[j][1]
-    //         document.addEventListener('keydown',(e)=>{
-    //             if(e.code=='KeyE'){
-    //                 console.log("Pressed E")
-    //                 removeObjectFromScene(scene, num)
-    //             }
-    //             else{
-    //                 sceneHUD.remove(spriteItem)
-    //             }
-    //         })
-    //     }  
-    // }
+    console.log("```````````````````````````")
 }
 
-function removeAllDyamics(scene,world){
+function UI(){
+    if(closest!=null){
+        if(closest[0][2]){
+            HUD.add(spriteInteraction)
+        }
+        else{
+            HUD.add(spriteItem)
+        }
+    }
+    else{
+        HUD.remove(spriteInteraction)
+        HUD.remove(spriteItem)
+    }
+    
+}
+
+
+function removeAllDyamics(){
     for(var i = 1; i<=obj_positions.length;i++){
-        removeObjectFromScene(scene,world,i,false)
+        removeObjectFromScene(i,false)
         obj_positions[i-1][0]=null;
     }
     for(var i =0;i<collisions.length;i++){
@@ -351,4 +395,28 @@ function removeAllDyamics(scene,world){
         
 }
 
-export {makeDynamicObject,removeObjectFromScene, detectObjects,removeAllDyamics}
+document.addEventListener('keydown',(e)=>{
+    if(e.code=='KeyE'){
+        if(closest!=null){
+            console.log("Pressed E ",closest)
+            if(closest[2]==false){ //check for if the object is pickupable
+                addToInventory(closest[1])
+                removeObjectFromScene(closest[1],true)
+            }
+            else{
+                if(getItemSelected()==closest[1]-7){
+                    removeObjectFromScene(closest[1],true)
+                    clearItem();
+                }
+                console.log("Item selected: ", getItemSelected())
+                console.log("Item in scene: ", closest[1])
+            }
+            
+            
+            
+        }
+        
+    }
+})
+
+export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDyamics,UI,initialiseDynamics}
