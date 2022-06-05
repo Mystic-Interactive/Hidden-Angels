@@ -25,8 +25,11 @@ var spriteInteraction = null;
 var scene = null;
 var HUD = null;
 var world = null;
+var goalPosition = null;
+var spriteGoal = null;
 
-function initialiseDynamics(scene_, HUD_, world_){
+
+function initialiseDynamics(scene_, HUD_,world_){
     scene = scene_
     HUD = HUD_
     world = world_
@@ -45,7 +48,6 @@ function initialiseDynamics(scene_, HUD_, world_){
     spriteInteraction.position.set(0,-window.innerHeight/8,0);
     spriteInteraction.scale.set(window.innerHeight/2,window.innerWidth/75,1);
 }
-
 
 function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
     const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
@@ -71,6 +73,7 @@ function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
     collisions.push(boxBody);
     return boxBody;
 }    
+
 function makeDynamicObject(path,scale,translate,rotation,object_num){
     var obj;
 
@@ -261,6 +264,9 @@ function removeObjectFromScene(object_num,check){
     }
     
 }
+function setGoalPosition(position){
+    goalPosition = position;
+}
 
 function distanceTo(object_pos, playerPos){
     // console.log("Player at positions: ",playerPos[0],",",playerPos[1],",",playerPos[2])
@@ -272,102 +278,39 @@ function distanceTo(object_pos, playerPos){
     return distance
 }
 
-
-// function detectObjects(player, scene, sceneHUD,world){
-//     let distances = []
-//     var pso = false;
-//     for (var i = 0; i < obj_positions.length; i++){
-//         // if(obj_positions[i]!=[null]){
-//         //     // distances.push([obj_positions[i][0].distanceTo(player.position), obj_positions[i][1]])
-//         //     // console.log(obj_positions[i][0])
-//         //     // console.log(player.position)
-//         //     console.log("Hello",obj_positions[i])
-//         // }
-//         if(obj_positions[i][0]!=null){
-//             // console.log(obj_positions[i][0])
-//             distances.push([distanceTo(obj_positions[i][0],player.position), obj_positions[i][1],obj_positions[i][2]])
-//         }
-//         // console.log("Distance length: ",distances.length)
-//     }
-    
-//     for (var j = 0 ; j < distances.length; j++){
-//         // console.log(distances[j][0])
-//         if (distances[j][0] <= 2){    
-//             console.log('press \"e\" to interact')
-
-//             //Object is a pickable item
-//             if(distances[j][2]==false){
-//                 sceneHUD.add(spriteItem)
-//                 let num = distances[j][1]
-//                 document.addEventListener('keydown',(e)=>{
-//                     if(e.code=='KeyE'){
-//                         console.log("Pressed E")
-//                         removeObjectFromScene(scene,world,num,true)
-//                         addToInventory(num)
-                    
-//                         sceneHUD.remove(spriteItem)
-//                     }
-//                     else{
-//                         sceneHUD.remove(spriteItem)
-//                     }
-//                 })
-//             }
-//             else{
-//                 //Object is an interactable object
-//                 sceneHUD.add(spriteInteraction)
-//                 let num = distances[j][1]
-//                 document.addEventListener('keydown',(e)=>{
-//                     if(e.code=='KeyE'){
-//                         console.log("Pressed E")
-//                         console.log("num: ",num)
-//                         removeObjectFromScene(scene,world,num,true)
-                    
-//                         sceneHUD.remove(spriteInteraction)
-//                     }
-//                     else{
-//                         sceneHUD.remove(spriteInteraction)
-//                     }
-//                 })
-//             }
-            
-//         }  
-//     }
-
-//     // for (var j = 0 ; j < distances.length; j++){  
-//     //     if (distances[j][0] <= 2){    
-//     //         console.log('press \"e\" to interact')
-//     //         sceneHUD.add(spriteItem)
-//     //         let num = distances[j][1]
-//     //         document.addEventListener('keydown',(e)=>{
-//     //             if(e.code=='KeyE'){
-//     //                 console.log("Pressed E")
-//     //                 removeObjectFromScene(scene, num)
-//     //             }
-//     //             else{
-//     //                 sceneHUD.remove(spriteItem)
-//     //             }
-//     //         })
-//     //     }  
-//     // }
-// }
-
 function detectObject(player){
     closest = null
+    var old_distance = 100;
     for(var i=0;i<obj_positions.length;i++){
         if(obj_positions[i][0]!=null){
+            var distance = distanceTo(obj_positions[i][0],player.position)
             //Check that we only add to the array if dealing with the objects in that scene
-            if(distanceTo(obj_positions[i][0],player.position)<1.5){
+            if(distance<1.5 && old_distance>distance){
                 closest = obj_positions[i] //Get the object that we are closest to
-            }
-            
+                old_distance=distance
+            }            
+    
         }
-        
     }
-    console.log("```````````````````````````")
+    // //Check that the closest object is the goal
+    // if(distanceTo(goalPosition,player.position)<2){
+    //     console.log("Close to goal")
+    // }
+    if(goalPosition!=null){ //check for the loading level
+        if(distanceTo(goalPosition,player.position)<2){
+            closest = 1 
+        }
+    }
 }
+    
+
 
 function UI(){
-    if(closest!=null){
+    if(closest==1){
+        console.log("Close to goal")
+    }
+    else if(closest!=null){
+
         if(closest[2]){
             HUD.add(spriteInteraction)
         }
@@ -378,6 +321,7 @@ function UI(){
     else{
         HUD.remove(spriteInteraction)
         HUD.remove(spriteItem)
+        HUD.remove(spriteGoal)
     }
     
 }
@@ -419,4 +363,4 @@ document.addEventListener('keydown',(e)=>{
     }
 })
 
-export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDyamics,UI,initialiseDynamics}
+export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDyamics,UI,initialiseDynamics,setGoalPosition}

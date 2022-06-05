@@ -8,7 +8,7 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
-import {removeObjectFromScene, detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
+import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
 var paused = false;
 var curr_lvl = null;
@@ -195,7 +195,7 @@ var init = function(){
            var sprite4 = new THREE.Sprite(spriteMaterial4);
            sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-                
+                       
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
@@ -306,7 +306,6 @@ scene.add(torchLight)
       sceneHUD.add(sprite2);
       sceneHUD.add(sprite3);
       sceneHUD.add(sprite4);
-      // sceneHUD.add(spriteItem)
     }
     else{
       sceneHUD.remove(sprite);
@@ -401,7 +400,7 @@ scene.add(torchLight)
     console.log("clicked")
     console.log("Level: ",lvl)
     paused=false;
-    if(lvl==1){
+      if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
         lvlChange(curr_lvl);
@@ -435,7 +434,9 @@ scene.add(torchLight)
         makeFourthFloor(scene,world);
       }
       
+    
     }
+
   })
 
 

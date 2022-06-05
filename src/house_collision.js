@@ -1,6 +1,6 @@
 import * as CANNON from '../lib/cannon-es.js'
 import { Reflector } from '../lib/Reflector.js'
-import  {makeDynamicObject}  from '../src/house_dynamic.js'
+import  {makeDynamicObject,setGoalPosition}  from '../src/house_dynamic.js'
 
 var first_floor_objects = [];
 var first_floor_collisions= [];
@@ -134,6 +134,8 @@ function makeFirstFloor(scene,world){
     makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
     makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
 
+    //setting the goal position
+
 
 }
 
@@ -228,6 +230,10 @@ function makeSecondFloor(scene,world){
         makeDynamicObject('../res/meshes/Rubble.glb',[0.5,0.75,0.75],[11.5,-0.75,-1],[0,0,0],11) //bedroom 2 door
         makeDynamicObject('../res/meshes/Door.glb',[1,1,1],[-9.75,-0.75,2.5],[0,0,0],9) //closet door
         makeDynamicObject('../res/meshes/Door.glb',[1.1,1,1],[4.1,-0.75,-11.5],[0,0,0],12) //goal door
+
+        //make goal position
+        setGoalPosition(new THREE.Vector3(0,-0.75,-13))
+        makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[0,-0.75,-13],[0,-Math.PI,0],2,null)
 }
 
 function makeBasement(scene,world){
