@@ -179,28 +179,28 @@ var init = function(){
 
     var spriteMaterial = new THREE.SpriteMaterial({map:
       THREE.ImageUtils.loadTexture(
-      "../res/textures/pause_menu/level-1.png")});
+      "../res/textures/pause_menu/Level1.jpg")});
       var sprite = new THREE.Sprite(spriteMaterial);
       sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
       sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
       var spriteMaterial2 = new THREE.SpriteMaterial({map:
         THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/level-2.png")});
+        "../res/textures/pause_menu/Level2.jpg")});
         var sprite2 = new THREE.Sprite(spriteMaterial2);
         sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
         sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
         var spriteMaterial3 = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
-          "../res/textures/pause_menu/level-3.png")});
+          "../res/textures/pause_menu/Level3.jpg")});
           var sprite3 = new THREE.Sprite(spriteMaterial3);
           sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
           sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
         var spriteMaterial4 = new THREE.SpriteMaterial({map:
            THREE.ImageUtils.loadTexture(
-           "../res/textures/pause_menu/level-4.png")});
+           "../res/textures/pause_menu/Level4.jpg")});
            var sprite4 = new THREE.Sprite(spriteMaterial4);
            sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
