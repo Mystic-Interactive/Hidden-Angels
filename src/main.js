@@ -17,6 +17,7 @@ var lvl1_uuid = "";
 var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
+var next_uuid = "";
 
 // Class to make the world's surface 
 class Ground extends THREE.Group{
@@ -195,21 +196,36 @@ var init = function(){
            var sprite4 = new THREE.Sprite(spriteMaterial4);
            sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+        
+          var spriteNextMaterial = new THREE.SpriteMaterial({map:
+            THREE.ImageUtils.loadTexture(
+            "../res/textures/pause_menu/next_level.png")});
+            var spriteNext = new THREE.Sprite(spriteNextMaterial);
+            spriteNext.position.set(0,50,0);
+            spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+                        
                        
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
       lvl4_uuid = sprite4.uuid
+      next_uuid = spriteNext.uuid
 
 
-initialiseDynamics(scene, sceneHUD, world)
+initialiseDynamics(scene, sceneHUD, world, spriteNext)
 var t =60;
 var selected = 0;
 
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
+
+    //Raycaster for level selector
+    const rayCasterHUD = new THREE.Raycaster();
+    rayCasterHUD.setFromCamera(mousePos,cameraHUD);
+    const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
+    
     if(!paused){
       monster_v2.update();
       const new_time = new Date().getTime()
@@ -263,16 +279,21 @@ scene.add(torchLight)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
 
-
+            //Raycaster for level selector
+        const rayCasterHUD = new THREE.Raycaster();
+        rayCasterHUD.setFromCamera(mousePos,cameraHUD);
+        const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
+        
+        if(intersectsHUD.length>0 && intersectsHUD[0].object.uuid === next_uuid){
+          console.log("Next level Highlighted")
+          lvl = ((lvl+1)%4)
+          console.log(lvl)
+        }
 
 
       //stats.end()
     }
     else{
-      //Raycaster for level selector
-        const rayCasterHUD = new THREE.Raycaster();
-        rayCasterHUD.setFromCamera(mousePos,cameraHUD);
-        const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
         if(intersectsHUD.length==0){
           console.log("Nothing selected")
           lvl = null;

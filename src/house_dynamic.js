@@ -29,10 +29,11 @@ var goalPosition = null;
 var spriteGoal = null;
 
 
-function initialiseDynamics(scene_, HUD_,world_){
+function initialiseDynamics(scene_, HUD_,world_, spriteGoal_){
     scene = scene_
     HUD = HUD_
     world = world_
+    spriteGoal=spriteGoal_
 
     var spriteMaterialItem = new THREE.SpriteMaterial({map:
         THREE.ImageUtils.loadTexture(
@@ -308,6 +309,7 @@ function detectObject(player){
 function UI(){
     if(closest==1){
         console.log("Close to goal")
+        HUD.add(spriteGoal)
     }
     else if(closest!=null){
 
