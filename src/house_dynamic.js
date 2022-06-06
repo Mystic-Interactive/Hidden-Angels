@@ -366,4 +366,4 @@ document.addEventListener('keydown',(e)=>{
     }
 })
 
-export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDyamics,UI,initialiseDynamics,setGoalPosition}
+export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDynamics,UI,initialiseDynamics,setGoalPosition}
