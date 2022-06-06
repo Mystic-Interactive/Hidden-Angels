@@ -329,7 +329,7 @@ function UI(){
 }
 
 
-function removeAllDyamics(){
+function removeAllDynamics(){
     for(var i = 1; i<=obj_positions.length;i++){
         removeObjectFromScene(i,false)
         obj_positions[i-1][0]=null;

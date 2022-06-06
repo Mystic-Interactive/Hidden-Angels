@@ -9,7 +9,7 @@ import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
-import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
+import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
 
 // variables to set up scene with camera
 var  camera;
@@ -39,17 +39,10 @@ var goToNext = false;
 var deathScreen = false;
 var restart = false;
 
-
-function getNextLevel(){
-  if(lvl<4){
-    return lvl+1;
-  }
-  return -1
-}
-
 var sceneHUD;
 var cameraHUD;
 var mousePos;
+var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext;
 
 // items added to scene
 var player;
@@ -74,7 +67,7 @@ var init = function(){
 
 
   world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
+    gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   scene = new THREE.Scene();
@@ -90,6 +83,7 @@ var init = function(){
     maxLights: 8,
     canvas: world_canvas,
   });
+
   renderer.setSize(window.innerWidth, window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear = false;
@@ -107,7 +101,7 @@ var init = function(){
   moonSphere = addSphereMoon(2);
   scene.add(moonSphere);
   
-  //Creates and dds skybox to scene
+  //Creates and adds skybox to scene
   skybox = sky();
   scene.add(skybox);
 
@@ -144,220 +138,8 @@ var init = function(){
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
-  var delta = 0
-  var time = new Date().getTime()
-  var speed = 0
-
-
-  //Creating the pause menu
-  var container = document.createElement('canvas');
-  container.setAttribute(
-    "style","width:1px; height:1px","position:absolute");
-    document.body.appendChild( container );
-    var cameraHUD = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2,window.innerHeight / - 2, - 500, 1000 );
-      cameraHUD.position.x = 0;
-      cameraHUD.position.y = 0;
-      cameraHUD.position.z = 0;
-    
-    var sceneHUD = new THREE.Scene();
-
-    var spriteMaterial = new THREE.SpriteMaterial({map:
-      THREE.ImageUtils.loadTexture(
-      "../res/textures/pause_menu/Level1.jpg")});
-      var sprite = new THREE.Sprite(spriteMaterial);
-      sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
-      sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-
-      var spriteMaterial2 = new THREE.SpriteMaterial({map:
-        THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/Level2.jpg")});
-        var sprite2 = new THREE.Sprite(spriteMaterial2);
-        sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
-        sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-
-        var spriteMaterial3 = new THREE.SpriteMaterial({map:
-          THREE.ImageUtils.loadTexture(
-          "../res/textures/pause_menu/Level3.jpg")});
-          var sprite3 = new THREE.Sprite(spriteMaterial3);
-          sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
-          sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-
-        var spriteMaterial4 = new THREE.SpriteMaterial({map:
-           THREE.ImageUtils.loadTexture(
-           "../res/textures/pause_menu/Level4.jpg")});
-           var sprite4 = new THREE.Sprite(spriteMaterial4);
-           sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
-           sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
-        
-        var spriteNextMaterial = new THREE.SpriteMaterial({map:
-          THREE.ImageUtils.loadTexture(
-          "../res/textures/pause_menu/next_level.jpg")});
-          var spriteNext = new THREE.Sprite(spriteNextMaterial);
-          spriteNext.position.set(0,0,0);
-          spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
-          
-          var spriteDeathMaterial = new THREE.SpriteMaterial({map:
-            THREE.ImageUtils.loadTexture(
-            "../res/textures/pause_menu/GameOver.jpg")});
-            var spriteDeath = new THREE.Sprite(spriteDeathMaterial);
-            spriteDeath.position.set(0,0,0);
-            spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
-                        
-                       
-      
-      lvl1_uuid = sprite.uuid;
-      lvl2_uuid = sprite2.uuid;
-      lvl3_uuid = sprite3.uuid;
-      lvl4_uuid = sprite4.uuid;
-      next_uuid = spriteNext.uuid;
-      death_uuid = spriteDeath.uuid;
-
-
-initialiseDynamics(scene, sceneHUD, world, spriteNext)
-setDeathScreen(spriteDeath,sceneHUD)
-
-var t =1;
-var selected = 0;
-
-// var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
-// scene.add(torchLight)
-  var update = function(){//game logic
-
-    //Raycaster for level selector
-    const rayCasterHUD = new THREE.Raycaster();
-    rayCasterHUD.setFromCamera(mousePos,cameraHUD);
-    const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
-
-
-
-    if(!paused){
-      // monster_v2.update();
-      const new_time = new Date().getTime()
-      delta = new_time - time
-      time = new_time
-      player.update(delta)
-      ground.update()
-
-      detectObject(player)
-      UI()
-
-      //Showing that we can decrease the visible hearts on the fly
-      const d = new Date();
-      // console.log(d.getMinutes())
-      if(d.getMinutes()==t){
-        selected+=2;
-        tookDamage(3);
-        changeInventorySelected(selected)
-        HUD();
-        t+=1;
-      }
-      HUD();
-
-      
-
-      //Move the moon and skybox only when you can see them to reduce the compuation needed
-      if(curr_lvl==4){
-        //Rotates and moves the moon
-        speed+=0.001
-        moonLight.position.y = 20*(Math.sin(speed))+50;
-        moonLight.position.z = 10*(Math.cos(speed));
-        moonSphere.position.y = 20*(Math.sin(speed))+50;
-        moonSphere.position.z = 10*(Math.cos(speed));
-        moonSphere.rotation.x+=0.005;
-        moonSphere.rotation.y+=0.005;
-        moonSphere.rotation.z+=0.005;
-        
-        //Rotates the skybox
-        skybox.rotation.x+=0.0005;
-        skybox.rotation.y+=0.0005;
-        skybox.rotation.z+=0.0005;
-      }
-      else{
-        moonLight.position.set(0,10,0);
-        moonSphere.position.set(0,10,0);
-      }
-      
-      
-
-      world.step(timestep)
-      // console.log(camera.position)
-      torchLight.position.set(player.position.x,player.position.y,player.position.z)
-        
-      if(intersectsHUD.length>0){
-        if(intersectsHUD[0].object.uuid === next_uuid){
-          console.log("Next level Highlighted")
-          goToNext = true;
-        }
-        else if(intersectsHUD[0].object.uuid === death_uuid){
-          console.log("DeathSelected");
-          restart = true;
-        }
-      }
-      else{
-        goToNext = false;
-        restart = false;
-      }
-
-
-      //stats.end()
-    }
-    else{
-        if(intersectsHUD.length==0){
-          console.log("Nothing selected")
-          lvl = null;
-        }
-        else if(intersectsHUD[0].object.uuid === lvl1_uuid){
-          console.log("Level 1 Highlighted")
-          lvl = 1;
-        }
-        else if(intersectsHUD[0].object.uuid === lvl2_uuid){
-          console.log("Level 2 Highlighted")
-          lvl = 2;
-        }
-        else if(intersectsHUD[0].object.uuid === lvl3_uuid){
-          console.log("Level 3 Highlighted")
-          lvl = 3;
-        }
-        else if(intersectsHUD[0].object.uuid === lvl4_uuid){
-          console.log("Level 4 Highlighted")
-          lvl = 4;
-        }
-    }
-    
-  };
-
-  var render = function(){//draw scene
-    renderer.render(scene, camera);
-    
-    if(paused){
-      //renderer.clearDepth();
-      sceneHUD.add(sprite);
-      sceneHUD.add(sprite2);
-      sceneHUD.add(sprite3);
-      sceneHUD.add(sprite4);
-    }
-    else{
-      sceneHUD.remove(sprite);
-      sceneHUD.remove(sprite2);
-      sceneHUD.remove(sprite3);
-      sceneHUD.remove(sprite4);
-    }
-    renderer.render(sceneHUD, cameraHUD); 
-  };
-
-  var GameLoop = function(){//run game loop(update, render, repeat)
-    update();
-    render();
-    requestAnimationFrame(GameLoop);
-  };
-
-  function lvlChange(curr_lvl){
-    removeFloor(scene,world,curr_lvl)
-    removeAllDyamics(scene,world);
-    clearInventory();
-    resetHealth();
-    player.body.position.set(0,1,-1);
-  }
+  initialiseDynamics(scene, sceneHUD, world, spriteNext)
+  setDeathScreen(spriteDeath,sceneHUD)
 
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
@@ -365,11 +147,6 @@ var selected = 0;
     renderer.setSize(0.98*window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-
-    // sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
-    // sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
-    // sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
-    // sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
   })
 
   document.addEventListener('keydown',(e)=>{
@@ -410,14 +187,6 @@ var selected = 0;
       console.log("Pressed 8")
       changeInventorySelected(8);
     }
-    /*else if(e.code=='KeyE'){
-      console.log("Pressed E")
-      if(curr_lvl==2){
-        console.log("Is on level 2")
-        removeObjectFromScene(scene,1)
-        sceneHUD.remove(spriteItem)
-      }
-    }*/
   })
   
   window.addEventListener('mousemove',(e)=>{//Track mouse position with respect to play area
@@ -437,7 +206,7 @@ var selected = 0;
       goToNext = false;
     }
 
-      if(lvl==1){
+    if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1 || restart){
         lvlChange(curr_lvl);
@@ -452,6 +221,7 @@ var selected = 0;
         lvlChange(curr_lvl);
         curr_lvl=2;
         makeSecondFloor(scene,world);
+        player.body.position.set(-10.5,1,-1)
       }
       
     }
@@ -472,52 +242,61 @@ var selected = 0;
         makeFourthFloor(scene,world);
       }  
     }
+
     if(lvl==-1){
       window.location.href='../res/index.html'
     }
+
     if(restart){
       resetHealth();
       sceneHUD.remove(spriteDeath)
     }
     restart = false;
-
   })
-
 
   GameLoop()
 };
 
 function update(){ //Game Logic
-  if(!paused){ // Run Game if not paused
-    const new_time = new Date().getTime();
-    delta = new_time - time;
-    time = new_time;
-    monster.update(delta);
+  //Raycaster for level selector
+  const rayCasterHUD = new THREE.Raycaster();
+  rayCasterHUD.setFromCamera(mousePos,cameraHUD);
+  const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
+
+  if(!paused){
+    // monster_v2.update();
+    const new_time = new Date().getTime()
+    delta = new_time - time
+    time = new_time
     player.update(delta)
     ground.update()
 
+    detectObject(player)
+    UI()
+
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
-    if(d.getMinutes() == t){
+
+    if(d.getMinutes()==t){
       selected+=2;
+      tookDamage(3);
       changeInventorySelected(selected)
-      HUD(8,[1,2,3,4,5,6,7,-1]);
+      HUD();
       t+=1;
     }
-    HUD(8,[1,2,3,4,5,6,7,-1]);
-
+    HUD();
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
-    if(curr_lvl == 4){
+    if(curr_lvl==4){
       //Rotates and moves the moon
-      speed += 0.001
-      moonLight.position.y = 20 * (Math.sin(speed)) + 50;
-      moonLight.position.z = 10 * (Math.cos(speed));
-      moonSphere.position.y = 20 * (Math.sin(speed)) + 50;
-      moonSphere.position.z = 10 * (Math.cos(speed));
-      moonSphere.rotation.x += 0.005;
-      moonSphere.rotation.y += 0.005;
-      moonSphere.rotation.z += 0.005;
+      speed+=0.001
+      moonLight.position.y = 20*(Math.sin(speed))+50;
+      moonLight.position.z = 10*(Math.cos(speed));
+      moonSphere.position.y = 20*(Math.sin(speed))+50;
+      moonSphere.position.z = 10*(Math.cos(speed));
+      moonSphere.rotation.x+=0.005;
+      moonSphere.rotation.y+=0.005;
+      moonSphere.rotation.z+=0.005;
       
       //Rotates the skybox
       skybox.rotation.x+=0.0005;
@@ -528,31 +307,44 @@ function update(){ //Game Logic
       moonLight.position.set(0,10,0);
       moonSphere.position.set(0,10,0);
     }
-    
+
     world.step(timestep)
+
     torchLight.position.set(player.position.x,player.position.y,player.position.z)
+      
+    if(intersectsHUD.length>0){
+      if(intersectsHUD[0].object.uuid === next_uuid){
+        console.log("Next level Highlighted")
+        goToNext = true;
+      }
+      else if(intersectsHUD[0].object.uuid === death_uuid){
+        console.log("DeathSelected");
+        restart = true;
+      }
+    }
+    else{
+      goToNext = false;
+      restart = false;
+    }
   }
   else{
-    const rayCaster = new THREE.Raycaster();
-    rayCaster.setFromCamera(mousePos,cameraHUD);
-    const intersects = rayCaster.intersectObjects(sceneHUD.children);
-    if(intersects.length==0){
+    if(intersectsHUD.length==0){
       console.log("Nothing selected")
       lvl = null;
     }
-    else if(intersects[0].object.uuid === lvl1_uuid){
+    else if(intersectsHUD[0].object.uuid === lvl1_uuid){
       console.log("Level 1 Highlighted")
       lvl = 1;
     }
-    else if(intersects[0].object.uuid === lvl2_uuid){
+    else if(intersectsHUD[0].object.uuid === lvl2_uuid){
       console.log("Level 2 Highlighted")
       lvl = 2;
     }
-    else if(intersects[0].object.uuid === lvl3_uuid){
+    else if(intersectsHUD[0].object.uuid === lvl3_uuid){
       console.log("Level 3 Highlighted")
       lvl = 3;
     }
-    else{
+    else if(intersectsHUD[0].object.uuid === lvl4_uuid){
       console.log("Level 4 Highlighted")
       lvl = 4;
     }
@@ -561,11 +353,37 @@ function update(){ //Game Logic
 
 function render(){// Draw scene
   renderer.render(scene, camera);
+
   if(paused){
-    //renderer.clearDepth();
-    renderer.render(sceneHUD, cameraHUD); 
+    sceneHUD.add(sprite);
+    sceneHUD.add(sprite2);
+    sceneHUD.add(sprite3);
+    sceneHUD.add(sprite4);
   }
+  else{
+    sceneHUD.remove(sprite);
+    sceneHUD.remove(sprite2);
+    sceneHUD.remove(sprite3);
+    sceneHUD.remove(sprite4);
+  }
+
+  renderer.render(sceneHUD, cameraHUD); 
 };
+
+function lvlChange(curr_lvl){
+  removeFloor(scene,world,curr_lvl)
+  removeAllDynamics(scene,world);
+  clearInventory();
+  resetHealth();
+  player.body.position.set(0,1,-1);
+}
+
+function getNextLevel(){
+  if(lvl<4){
+    return lvl + 1;
+  }
+  return -1
+}
 
 function createMenu(){ //Creating the pause menu
   var container = document.createElement('canvas');
@@ -585,7 +403,7 @@ function createMenu(){ //Creating the pause menu
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level1.jpg")
   });
 
-  var sprite = new THREE.Sprite(spriteMaterial);
+  sprite = new THREE.Sprite(spriteMaterial);
   sprite.position.set(-window.innerWidth / 4, window.innerHeight / 4, 0);
   sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
@@ -593,7 +411,7 @@ function createMenu(){ //Creating the pause menu
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level2.jpg")
   });
 
-  var sprite2 = new THREE.Sprite(spriteMaterial2);
+  sprite2 = new THREE.Sprite(spriteMaterial2);
   sprite2.position.set(window.innerWidth / 4, window.innerHeight / 4, 0);
   sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
@@ -601,7 +419,7 @@ function createMenu(){ //Creating the pause menu
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level3.jpg")
   });
 
-  var sprite3 = new THREE.Sprite(spriteMaterial3);
+  sprite3 = new THREE.Sprite(spriteMaterial3);
   sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 4, 0);
   sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
@@ -609,14 +427,33 @@ function createMenu(){ //Creating the pause menu
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level4.jpg")
   });
 
-  var sprite4 = new THREE.Sprite(spriteMaterial4);
+  sprite4 = new THREE.Sprite(spriteMaterial4);
   sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 4, 0);
   sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
+
+  var spriteNextMaterial = new THREE.SpriteMaterial({
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/next_level.jpg")
+  });
+
+  spriteNext = new THREE.Sprite(spriteNextMaterial);
+  spriteNext.position.set(0,0,0);
+  spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+    
+  var spriteDeathMaterial = new THREE.SpriteMaterial({
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameOver.jpg")
+  });
+
+  spriteDeath = new THREE.Sprite(spriteDeathMaterial);
+  spriteDeath.position.set(0,0,0);
+  spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
+                  
   
   lvl1_uuid = sprite.uuid;
   lvl2_uuid = sprite2.uuid;
   lvl3_uuid = sprite3.uuid;
-  lvl4_uuid = sprite4.uuid
+  lvl4_uuid = sprite4.uuid;
+  next_uuid = spriteNext.uuid;
+  death_uuid = spriteDeath.uuid;
 
   sceneHUD.add(sprite);
   sceneHUD.add(sprite2);
