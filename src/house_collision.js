@@ -239,12 +239,16 @@ function makeSecondFloor(scene,world){
 }
 
 function makeBasement(scene,world){
+   
+    //making the phing shading for the nests
+    const nestMat = new THREE.MeshPhongMaterial({flatShading:true,color:0x3CD070,specular:0x636e72})
+
     //Make basement blender model
     makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],3,null)
 
     //nests
-    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[-11,-0.83,4.5],[0,0,0],3,null)
-    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[11.25,-0.83,-12.75],[0,0,0],3,null)
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[-11,-0.83,4.5],[0,0,0],3,nestMat)
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[11.25,-0.83,-12.75],[0,0,0],3,nestMat)
 
   //Collision boxes
     //exterior walls
