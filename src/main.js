@@ -81,6 +81,10 @@ class Ground extends THREE.Group{
   }
 }
 
+function getNextLevel(){
+  return lvl+1;
+}
+
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
   var hud_canvas = document.getElementById('myCanvas');
@@ -282,8 +286,7 @@ scene.add(torchLight)
         
         if(intersectsHUD.length>0 && intersectsHUD[0].object.uuid === next_uuid){
           console.log("Next level Highlighted")
-          lvl = ((lvl+1)%4)
-          console.log(lvl)
+          goToNext = true;
         }
 
 
