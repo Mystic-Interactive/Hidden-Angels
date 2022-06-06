@@ -26,14 +26,16 @@ var scene = null;
 var HUD = null;
 var world = null;
 var goalPosition = null;
-var spriteGoal = null;
+var spriteNext = null;
+var spriteFinish = null;
 
 
-function initialiseDynamics(scene_, HUD_,world_, spriteGoal_){
+function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_){
     scene = scene_
     HUD = HUD_
     world = world_
-    spriteGoal=spriteGoal_
+    spriteNext = spriteNext_
+    spriteFinish = spriteFinish_
 
     var spriteMaterialItem = new THREE.SpriteMaterial({map:
         THREE.ImageUtils.loadTexture(
@@ -265,6 +267,7 @@ function removeObjectFromScene(object_num,check){
     }
     
 }
+
 function setGoalPosition(position){
     goalPosition = position;
 }
@@ -306,10 +309,18 @@ function detectObject(player){
     
 
 
-function UI(){
+function UI(lvl){
+    console.log(lvl)
     if(closest==1){
-        console.log("Close to goal")
-        HUD.add(spriteGoal)
+        // console.log("Close to goal")
+        console.log(lvl)
+        if(lvl==4){
+            HUD.add(spriteFinish)
+            console.log(spriteFinish)
+        }
+        else{
+            HUD.add(spriteNext)
+        }
     }
     else if(closest!=null){
 
@@ -323,7 +334,8 @@ function UI(){
     else{
         HUD.remove(spriteInteraction)
         HUD.remove(spriteItem)
-        HUD.remove(spriteGoal)
+        HUD.remove(spriteNext)
+        HUD.remove(spriteFinish)
     }
     
 }

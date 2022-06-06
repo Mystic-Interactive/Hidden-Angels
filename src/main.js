@@ -18,9 +18,9 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var finish_uuid = "";
 var death_uuid = "";
 var goToNext = false;
-var deathScreen = false;
 var restart = false;
 
 // Class to make the world's surface 
@@ -85,6 +85,7 @@ class Ground extends THREE.Group{
 }
 
 function getNextLevel(){
+  console.log("getNextLevel level: ", lvl)
   if(lvl<4){
     return lvl+1;
   }
@@ -217,10 +218,10 @@ var init = function(){
         
         var spriteFinishMaterial = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
-          "../res/textures/pause_menu/next_level.jpg")});
-          // var spriteFinish = new THREE.Sprite(spriteNextMaterial);
-          // spriteNext.position.set(0,0,0);
-          // spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+          "../res/textures/pause_menu/GameWon.jpg")});
+          var spriteFinish = new THREE.Sprite(spriteFinishMaterial);
+          spriteFinish.position.set(0,0,0);
+          spriteFinish.scale.set(window.innerHeight,window.innerWidth/5,1);
           
         var spriteDeathMaterial = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
@@ -236,10 +237,11 @@ var init = function(){
       lvl3_uuid = sprite3.uuid;
       lvl4_uuid = sprite4.uuid;
       next_uuid = spriteNext.uuid;
+      finish_uuid = spriteFinish.uuid;
       death_uuid = spriteDeath.uuid;
 
 
-initialiseDynamics(scene, sceneHUD, world, spriteNext)
+initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish)
 setDeathScreen(spriteDeath,sceneHUD)
 
 var t =9;
@@ -265,7 +267,8 @@ scene.add(torchLight)
       g.update()
 
       detectObject(guy)
-      UI()
+      
+      UI(lvl);
 
       //Showing that we can decrease the visible hearts on the fly
       const d = new Date();
@@ -277,7 +280,8 @@ scene.add(torchLight)
         HUD();
         t+=1;
       }
-      HUD();
+      HUD()
+      
 
       
 
@@ -310,7 +314,7 @@ scene.add(torchLight)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
         
       if(intersectsHUD.length>0){
-        if(intersectsHUD[0].object.uuid === next_uuid){
+        if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
           console.log("Next level Highlighted")
           goToNext = true;
         }
@@ -455,13 +459,13 @@ scene.add(torchLight)
 
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
-    console.log("Level: ",lvl)
+    console.log("Level check: ",lvl)
     paused=false;
 
     if(goToNext){
       console.log("Current level: ",curr_lvl)
       lvl = getNextLevel();
-      console.log(lvl);
+      console.log("Going to: ",lvl);
       goToNext = false;
     }
 
