@@ -197,7 +197,7 @@ var init = function(){
         removeFloor(scene,world,curr_lvl)
         curr_lvl=1;
         makeFirstFloor(scene,world);
-        player.body.position.set(0,2,-13)
+        player.body.position.set(0,1,-13)
       }
     }
     else if(lvl==2){
@@ -292,7 +292,6 @@ function update(){ //Game Logic
     const d = new Date();
     if(d.getMinutes() == t){
       selected+=2;
-      tookDamage(1.5);
       changeInventorySelected(selected)
       HUD(8,[1,2,3,4,5,6,7,-1]);
       t+=1;
@@ -300,7 +299,7 @@ function update(){ //Game Logic
     HUD(8,[1,2,3,4,5,6,7,-1]);
 
 
-    //Move the moon and skybox only when you can see them to reduce the compuation needed
+    //Move the moon and skybox only when you can see them to reduce the computation needed
     if(curr_lvl == 4){
       //Rotates and moves the moon
       speed += 0.001

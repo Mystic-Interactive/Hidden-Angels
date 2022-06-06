@@ -369,11 +369,11 @@ function makeObject(scene,path,scale,translate,rotation,floor,material){
             else{
                 fourth_floor_objects.push(obj)
             }
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+    }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    }, (error) => {
+        console.log(error);
+     });
 }
 
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
@@ -426,7 +426,9 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
         else if(direction>0){
             rotation[1] = -Math.PI/2
         }
-        makeCollisionCube(scene,world,boxGeoSize,boxPos,rotation,floor)
+
+        makeCollisionCube(scene,world,boxGeoSize,boxPos,rotation,floor);
+
         boxPos[1]+=0.2
         if(direction==0){
             boxPos[2]-=distance_spread
@@ -459,6 +461,7 @@ function removeFloor(scene,world,floor){
         for(var i=0;i<first_floor_collisions.length;i++){
             world.removeBody(first_floor_collisions[i]);
         }
+
         for(var i=0;i<first_floor_objects.length;i++){
             scene.remove(first_floor_objects[i]);
         }
@@ -468,6 +471,7 @@ function removeFloor(scene,world,floor){
         for(var i=0;i<second_floor_collisions.length;i++){
             world.removeBody(second_floor_collisions[i]);
         }
+
         for(var i=0;i<second_floor_objects.length;i++){
             scene.remove(second_floor_objects[i]);
         }
@@ -477,6 +481,7 @@ function removeFloor(scene,world,floor){
         for(var i=0;i<third_floor_collisions.length;i++){
             world.removeBody(third_floor_collisions[i]);
         }
+
         for(var i=0;i<third_floor_objects.length;i++){
             scene.remove(third_floor_objects[i]);
         }
@@ -486,6 +491,7 @@ function removeFloor(scene,world,floor){
         for(var i=0;i<fourth_floor_collisions.length;i++){
             world.removeBody(fourth_floor_collisions[i]);
         }
+
         for(var i=0;i<fourth_floor_objects.length;i++){
             scene.remove(fourth_floor_objects[i]);
         }

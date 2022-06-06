@@ -190,8 +190,8 @@ var inventory = [];
     }
     //Icon is the closet key
     else if(item_num==2){
-      drawKey(translate_x,translate_y,width,"rgb(75,122,71)");
-      return ["Closet Key","rgb(75,122,71)"];
+      drawKey(translate_x,translate_y,width,"lime");
+      return ["Closet Key","lime"];
     }
     //Icon is the screw driver
     else if(item_num==3){
@@ -236,7 +236,8 @@ var inventory = [];
     graphics.restore();
 
   }
- //Draws the inventory bar 
+
+//Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
   var selected_item = "";
@@ -335,7 +336,7 @@ function HUD(inventory_slots,_inventory){
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,/*"rgba(255,100,50,1)"*/"rgb(255, 230, 130)");
+  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgb(42, 42, 42)");
   // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }
