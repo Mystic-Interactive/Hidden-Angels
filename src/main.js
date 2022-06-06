@@ -214,13 +214,20 @@ var init = function(){
           var spriteNext = new THREE.Sprite(spriteNextMaterial);
           spriteNext.position.set(0,0,0);
           spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+        
+        var spriteFinishMaterial = new THREE.SpriteMaterial({map:
+          THREE.ImageUtils.loadTexture(
+          "../res/textures/pause_menu/next_level.jpg")});
+          // var spriteFinish = new THREE.Sprite(spriteNextMaterial);
+          // spriteNext.position.set(0,0,0);
+          // spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
           
-          var spriteDeathMaterial = new THREE.SpriteMaterial({map:
-            THREE.ImageUtils.loadTexture(
-            "../res/textures/pause_menu/GameOver.jpg")});
-            var spriteDeath = new THREE.Sprite(spriteDeathMaterial);
-            spriteDeath.position.set(0,0,0);
-            spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
+        var spriteDeathMaterial = new THREE.SpriteMaterial({map:
+          THREE.ImageUtils.loadTexture(
+          "../res/textures/pause_menu/GameOver.jpg")});
+          var spriteDeath = new THREE.Sprite(spriteDeathMaterial);
+          spriteDeath.position.set(0,0,0);
+          spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
                         
                        
       

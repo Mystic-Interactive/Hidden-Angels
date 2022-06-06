@@ -151,7 +151,7 @@ function makeDynamicObject(path,scale,translate,rotation,object_num){
                 obj_positions[11] = [obj.position, object_num,true]
             }
             else if(object_num == 13){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+                var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
                 libraryDoor=[obj,collision];
                 obj_positions[12] = [obj.position, object_num,true]
             }
