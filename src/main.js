@@ -233,7 +233,9 @@ scene.add(torchLight)
     const rayCasterHUD = new THREE.Raycaster();
     rayCasterHUD.setFromCamera(mousePos,cameraHUD);
     const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
-    
+
+
+
     if(!paused){
       monster_v2.update();
       const new_time = new Date().getTime()
@@ -290,6 +292,9 @@ scene.add(torchLight)
         if(intersectsHUD.length>0 && intersectsHUD[0].object.uuid === next_uuid){
           console.log("Next level Highlighted")
           goToNext = true;
+        }
+        else{
+          goToNext = false;
         }
 
 
@@ -349,7 +354,7 @@ scene.add(torchLight)
     removeFloor(scene,world,curr_lvl)
     removeAllDyamics(scene,world);
     clearInventory();
-    guy.position.set(0,10,0);
+    guy.body.position.set(0,1,-1);
   }
 
   window.addEventListener('resize', () => {
@@ -424,10 +429,14 @@ scene.add(torchLight)
     console.log("clicked")
     console.log("Level: ",lvl)
     paused=false;
+
     if(goToNext){
+      console.log("Current level: ",curr_lvl)
       lvl = getNextLevel();
+      console.log(lvl);
       goToNext = false;
     }
+
       if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
@@ -465,7 +474,7 @@ scene.add(torchLight)
     if(lvl==-1){
       window.location.href='../res/index.html'
     }
-    goToNext = false; 
+
 
   })
 

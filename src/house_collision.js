@@ -89,8 +89,8 @@ function makeFirstFloor(scene,world){
         makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0],1); //door
         
         //Bookshelves
-        makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
-        makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
+        // makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
+        // makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
             makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
@@ -134,7 +134,9 @@ function makeFirstFloor(scene,world){
     makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
     makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
 
-    //setting the goal position
+    //make goal position
+    setGoalPosition(new THREE.Vector3(-11.5,-0.75,-13))
+    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[-11.5,-0.75,-13],[0,-Math.PI,0],2,null)
 
 
 }
@@ -268,13 +270,20 @@ function makeBasement(scene,world){
     //ladder
     makeCollisionCube(scene,world,[0.01,5,0.5],[10,1.5,4.75],[0,0,-Math.PI/4],3);
 
-    //meshes
+    //egg sacks messhes
     makeCollisionCube(scene,world,[1.2,4,1.5],[-11,0,4.75],[0,0,0],3);
     makeCollisionCube(scene,world,[1.2,4,1.5],[11,0,-12.5],[0,0,0],3);
+
+    //make goal position
+    setGoalPosition(new THREE.Vector3(7.75,-0.75,4.75))
+    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[7.5,-0.75,4.5],[0,-Math.PI,0],3,null)
+
+
 }
 
 function makeFourthFloor(scene,world){
-    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4,null)
+    var mazeMat =new THREE.MeshBasicMaterial({color: 0xFF0000});
+    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4,mazeMat)
     
     //collisions
         //outer walls 
@@ -337,10 +346,14 @@ function makeFourthFloor(scene,world){
         makeCollisionCube(scene,world,[0.25,3,2.5],[-2.9,1,-10],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[-5.9,1,-8],[0,0,0],4); 
         makeCollisionCube(scene,world,[0.25,3,2.5],[0,1,-13],[0,0,0],4);
-        makeCollisionCube(scene,world,[0.25,3,3],[3,1,-10],[0,0,0],4);//
+        makeCollisionCube(scene,world,[0.25,3,3],[3,1,-10],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-13],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
+
+    //make goal position
+    setGoalPosition(new THREE.Vector3(7.75,-0.75,-16))
+    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[7.5,-0.75,-15],[0,-Math.PI,0],3,null)
 }
 
 function makeFirstFloorStairs(scene,world,translate){
