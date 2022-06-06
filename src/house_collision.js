@@ -91,9 +91,9 @@ function makeFirstFloor(scene,world){
         //Bookshelves
         // makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
         // makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
-        makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
-        makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
-            makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
+        // makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
+        // makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
+            // makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
 
         //Oven
         makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],1,null)
