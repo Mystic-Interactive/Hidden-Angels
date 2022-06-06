@@ -18,6 +18,7 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var goToNext = false;
 
 // Class to make the world's surface 
 class Ground extends THREE.Group{
@@ -278,11 +279,6 @@ scene.add(torchLight)
       world.step(timestep)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
-
-            //Raycaster for level selector
-        const rayCasterHUD = new THREE.Raycaster();
-        rayCasterHUD.setFromCamera(mousePos,cameraHUD);
-        const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
         
         if(intersectsHUD.length>0 && intersectsHUD[0].object.uuid === next_uuid){
           console.log("Next level Highlighted")
