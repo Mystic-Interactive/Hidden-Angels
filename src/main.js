@@ -228,7 +228,7 @@ var init = function(){
           "../res/textures/pause_menu/GameOver.jpg")});
           var spriteDeath = new THREE.Sprite(spriteDeathMaterial);
           spriteDeath.position.set(0,0,0);
-          spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
+          spriteDeath.scale.set(window.innerHeight,window.innerWidth/4,1);
                         
                        
       
