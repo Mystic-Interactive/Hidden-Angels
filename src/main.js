@@ -82,7 +82,10 @@ class Ground extends THREE.Group{
 }
 
 function getNextLevel(){
-  return lvl+1;
+  if(lvl<4){
+    return lvl+1;
+  }
+  return -1
 }
 
 // Initialization of game (world, level, HUD, etc.)
@@ -204,7 +207,7 @@ var init = function(){
         
           var spriteNextMaterial = new THREE.SpriteMaterial({map:
             THREE.ImageUtils.loadTexture(
-            "../res/textures/pause_menu/next_level.png")});
+            "../res/textures/pause_menu/next_level.jpg")});
             var spriteNext = new THREE.Sprite(spriteNextMaterial);
             spriteNext.position.set(0,50,0);
             spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
@@ -346,6 +349,7 @@ scene.add(torchLight)
     removeFloor(scene,world,curr_lvl)
     removeAllDyamics(scene,world);
     clearInventory();
+    guy.position.set(0,10,0);
   }
 
   window.addEventListener('resize', () => {
@@ -420,6 +424,10 @@ scene.add(torchLight)
     console.log("clicked")
     console.log("Level: ",lvl)
     paused=false;
+    if(goToNext){
+      lvl = getNextLevel();
+      goToNext = false;
+    }
       if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1){
@@ -452,10 +460,12 @@ scene.add(torchLight)
         lvlChange(curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
-      }
-      
-    
+      }  
     }
+    if(lvl==-1){
+      window.location.href='../res/index.html'
+    }
+    goToNext = false; 
 
   })
 

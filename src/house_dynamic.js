@@ -338,6 +338,7 @@ function removeAllDyamics(){
         world.removeBody(collisions[i])
     }
     collisions = []
+    goalPosition = null;
         
 }
 
