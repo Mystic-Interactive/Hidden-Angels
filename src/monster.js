@@ -2,10 +2,11 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
+import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path){
+    constructor(scene, world, position, path, player, paused){
         super()
         this.scene = scene
         this.world = world
@@ -13,11 +14,17 @@ export default class Monster extends THREE.Group {
         for (var i = 0; i < path.length; i++){
             path[i].add(path[i], this.start_pos)
         }
+        this.hitting = false
         this.path = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
         this.loaded = false
-
+        this.enemy = player
+        this.paused = paused
+        this.init()
+    }
+    
+    init(){
         const loader = new THREE.GLTFLoader()
         loader.load('../res/meshes/Characters/BasicMonster.glb', (gltf) => {
             this.gltf = gltf
@@ -54,8 +61,8 @@ export default class Monster extends THREE.Group {
         //Getting the animations from the mesh
         const actions = [
             {name : "basic_attack",       action : mixer.clipAction( animations[ 0 ] )},
-            {name : "walk",       action : mixer.clipAction( animations[ 1 ] )},
-            {name : "roar",       action : mixer.clipAction( animations[ 2 ] )}
+            {name : "idle",       action : mixer.clipAction( animations[ 1 ] )},
+            {name : "walk",       action : mixer.clipAction( animations[ 2 ] )}
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
@@ -98,13 +105,34 @@ export default class Monster extends THREE.Group {
         this.translateY(-this.body.boundingRadius)
     }
 
+    set_looked_at(bool){
+        this.being_looked_at = bool
+    }
+
     update( delta ){
         if(!this.loaded) return
         try{
+            let time = delta%10;
             this.play_direction = 1 
-            this.desired_action = "roar"
-            this.animation_manager.update( delta, this.desired_action, this.play_direction )
-            this.updateTransform(delta)
+            this.desired_action = "walk"
+            if(this.being_looked_at != true){
+                if(this.position.distanceTo(this.enemy.position) < 2){
+                    this.body.velocity = new CANNON.Vec3(0, 0, 0)
+                    if(!this.hitting && !this.paused && time == 0) {
+                        tookDamage(0.5)
+                    }
+                    this.desired_action = "basic_attack"
+                } else { 
+                    this.hitting = false;
+                    this.paused = false;
+                    this.updateTransform(delta)
+                }
+                this.animation_manager.update( delta, this.desired_action, this.play_direction )
+            } else {
+                this.body.velocity = new CANNON.Vec3(0, 0, 0)
+            }
+            
+            
         }catch(e){
             console.error(e.stack)
         }

@@ -20,6 +20,11 @@ h3{
     color: gainsboro;
 }
 
+h4{
+    text-align: center;
+    color: rgb(244, 255, 212);
+}
+
 .Description{
     color: wheat;
     text-align: center;
@@ -47,4 +52,65 @@ h3{
     height: 300px;
     background-color: black;
     justify-content: left;
+}
+
+.design{
+    height: 400px;
+    width: 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.BasicMonster{
+    height: 300px;
+    width: 300px;
+}
+
+.LargeMonster{
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-left: auto;
+}
+
+.SmallMonster{
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-right: auto;
+}
+
+.Monsters{
+    color: wheat;
+    text-align: center;
+}
+
+.references{
+    text-align: center;
+}
+
+a:link {
+    color: wheat;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: gray;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightsteelblue;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    text-align: center;
+    color: tan;
+    background-color: transparent;
+    text-decoration: underline;
 }

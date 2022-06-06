@@ -49,9 +49,9 @@ var sceneHUD = null;
 
   function drawBlock(startx,starty,width,height){
     graphics.save();
-    // graphics.fillStyle="rgb(0,0,0,0.01)";
+    //graphics.fillStyle="rgb(0,0,0,0.1)";
     graphics.strokeRect(startx,starty,width,height);
-    // graphics.fillRect(startx,starty,width,height);
+    //graphics.fillRect(startx,starty,width,height);
     graphics.restore();
   }
 
@@ -107,7 +107,7 @@ var sceneHUD = null;
     graphics.strokeStyle=colour;
     graphics.beginPath();
     //graphics.moveTo(width,0);
-    graphics.arc(width-3,3,1.5,0,2*Math.PI)
+    graphics.arc(width-3,3,1.5,0,2*Math.PI);
     graphics.moveTo(8.5,4)
     graphics.lineTo(3,9);
     graphics.lineTo(5.5,11);
@@ -194,8 +194,8 @@ var sceneHUD = null;
     }
     //Icon is the closet key
     else if(item_num==2){
-      drawKey(translate_x,translate_y,width,"rgb(75,122,71)");
-      return ["Closet Key","rgb(75,122,71)"];
+      drawKey(translate_x,translate_y,width,"lime");
+      return ["Closet Key","lime"];
     }
     //Icon is the screw driver
     else if(item_num==3){
@@ -229,9 +229,10 @@ var sceneHUD = null;
     graphics.save();
     graphics.clearRect(-100,39,200,10)
     
-      graphics.fillStyle=colour
+      graphics.fillStyle="wheat"
       graphics.textAlign="centre";
-      graphics.font = "7.5px Calibri";
+      //graphics.font = "7.5px Calibri";
+      graphics.font = "7.5px Times New Roman";
       graphics.translate(-1.25*word.length,0);
       graphics.fillText(word, 0, 45);
     
@@ -239,8 +240,9 @@ var sceneHUD = null;
     graphics.restore();
 
   }
- //Draws the inventory bar 
-function drawInventoryBar(startx,starty,width,height,colour){
+
+//Draws the inventory bar 
+function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
   graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
   var selected_item = "";
@@ -396,7 +398,7 @@ function HUD(){
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,"rgba(255,100,50,1)");
+  drawInventoryBar(begin,50,12.5,12.5,8,"rgb(42, 42, 42)");
   // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }

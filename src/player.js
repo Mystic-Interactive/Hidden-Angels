@@ -1,15 +1,26 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
+import { can_see } from './sight.js'
 
+
+const contains = (item, list) => {
+    return(list.indexOf(item) > -1)
+}
 export default class Player extends THREE.Group {
-    constructor(scene, world, camera) {
+    constructor(scene, world, camera, init_pos, monsters) {
         super()
         this.scene = scene
         this.world = world
         this.camera = camera
         this.loaded = false
+        this.init_pos = init_pos
+        this.view = 0
         this.init_()
+        this.vision_limit = 4
+        this.monsters = monsters
+
+        this.angle = Math.PI/12
     }
 
    init_() {
@@ -20,7 +31,7 @@ export default class Player extends THREE.Group {
             this.define()
         })
 
-        this.max_velocity = 10
+        this.max_velocity = 0.2
         //(backward = -1)
         //(forward  =  1)
         this.direction = 0 
@@ -35,7 +46,7 @@ export default class Player extends THREE.Group {
 
         this.updateMaterials(this.gltf.scene);
         var skeleton = new THREE.SkeletonHelper( model );
-        skeleton.visible = true;
+        skeleton.visible = false;
         this.scene.add( skeleton );
         
         const animations = this.gltf.animations;
@@ -53,12 +64,12 @@ export default class Player extends THREE.Group {
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
-        this.player_controlls = new PlayerController(this, this.animation_manager)
+        this.player_controls = new PlayerController(this, this.animation_manager)
 
         this.body = new CANNON.Body({
             shape : new CANNON.Box(new CANNON.Vec3(0.5,2,0.7)),
-            position : new CANNON.Vec3(0, 3, 20),
-            mass : 20
+            position : this.init_pos,
+            mass : 60
         })
         this.body.linearDamping = 0.5
 
@@ -76,25 +87,43 @@ export default class Player extends THREE.Group {
         this.loaded = true
         this.updateMaterials(this.model)
     }
+    
+    looking_at(other) {
+        return can_see(this, other, this.vision_limit, this.angle)
+    } 
 
     update = (delta) =>{
         //guards
         if(delta == 0) return
         if(!this.loaded) return
-        this.player_controlls.update(delta)
+        this.player_controls.update(delta)
         //interpolation functions (logorithmic)
-        if(["walk", "crouch_walk", "left", "right"].indexOf(this.current_state.action) > -1){
-            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (delta * 0.1)
+        var found = false
+        const list = ["walk", "crouch_walk", "left", "right"]
+        list.forEach(element => {
+            if(contains(element, this.current_state.action)) {
+                found = true
+            } 
+        })
+
+        if(found){
+            this.velocity_ratio += (this.current_state.direction - this.velocity_ratio) / (10)
         }
         
         try{
             //this.rotation.y = this.camera.rotation.y;
             this.body.quaternion.copy(this.quaternion);
-            this.updateTransform()
-            
+            this.updateTransform(delta)
+            //this.looking_at()
+                
+            this.monsters.forEach(monster => {
+                monster.set_looked_at(this.looking_at(monster))
+            });
         } catch(e) {
             console.error(e.stack)
         }
+
+
     }
 
     updateMaterials(model) {
@@ -103,18 +132,39 @@ export default class Player extends THREE.Group {
         });
     }
 
-    updateTransform() {
+    updateTransform(delta) {
+        const state = this.current_state
+        
+        const controls = this.player_controls
+        if(contains("jump", state.action)){
+            this.body.applyForce(new CANNON.Vec3(0, 100 * 20, 0))
+        } else if ((contains("walk", state.action) || contains("crouch-walk", state.action)) && !(controls.left || controls.right)){
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y) * delta
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y) * delta
+        } else if ((controls.left || controls.right) && !(controls.forward || controls.backward)){
+            var x_dir = 1
+            if(controls.right){
+                x_dir = -1
+            }
+            
+            this.body.velocity.x = - x_dir * this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
+            this.body.velocity.z = - x_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
+        } else if ((controls.left || controls.right) && (controls.backward || controls.forward)){
+            var y_dir = -1
+            var x_dir = 1
+            if(controls.forward){
+                y_dir = 1
+            }
 
+            if (controls.right){
+                x_dir = -1
+            }
 
-        if(this.current_state.action == "jump"){
-            this.body.applyImpulse(new CANNON.Vec3(0, 33.5, 0))
-        } else if (this.current_state.action == "walk" || this.current_state.action == "crouch-walk"){
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
-        } else if (this.current_state.action == "left" || this.current_state.action == "right"){
-            //console.log(Math.cos(this.rotation.y))
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2)
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2)
+            console.log(this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + x_dir * Math.PI/4))
+            console.log(-y_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + x_dir * Math.PI/4))
+            
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
         }
 
         this.position.copy(this.body.position)
@@ -131,8 +181,8 @@ export default class Player extends THREE.Group {
             this.rotation.y = _euler.y + Math.PI * 2
         }
         this.camera.translateY(-0.5)
-
-        //this.camera.translateZ(5)
+        
+        this.camera.translateZ(this.view)
     }
 
     dispose() {
