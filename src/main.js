@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected,clearInventory} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
@@ -18,7 +18,10 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var death_uuid = "";
 var goToNext = false;
+var deathScreen = false;
+var restart = false;
 
 // Class to make the world's surface 
 class Ground extends THREE.Group{
@@ -205,24 +208,34 @@ var init = function(){
            sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
         
-          var spriteNextMaterial = new THREE.SpriteMaterial({map:
+        var spriteNextMaterial = new THREE.SpriteMaterial({map:
+          THREE.ImageUtils.loadTexture(
+          "../res/textures/pause_menu/next_level.jpg")});
+          var spriteNext = new THREE.Sprite(spriteNextMaterial);
+          spriteNext.position.set(0,0,0);
+          spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+          
+          var spriteDeathMaterial = new THREE.SpriteMaterial({map:
             THREE.ImageUtils.loadTexture(
-            "../res/textures/pause_menu/next_level.jpg")});
-            var spriteNext = new THREE.Sprite(spriteNextMaterial);
-            spriteNext.position.set(0,50,0);
-            spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+            "../res/textures/pause_menu/GameOver.jpg")});
+            var spriteDeath = new THREE.Sprite(spriteDeathMaterial);
+            spriteDeath.position.set(0,0,0);
+            spriteDeath.scale.set(window.innerHeight,window.innerWidth/5,1);
                         
                        
       
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
-      lvl4_uuid = sprite4.uuid
-      next_uuid = spriteNext.uuid
+      lvl4_uuid = sprite4.uuid;
+      next_uuid = spriteNext.uuid;
+      death_uuid = spriteDeath.uuid;
 
 
 initialiseDynamics(scene, sceneHUD, world, spriteNext)
-var t =60;
+setDeathScreen(spriteDeath,sceneHUD)
+
+var t =9;
 var selected = 0;
 
 var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
@@ -289,13 +302,20 @@ scene.add(torchLight)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
         
-        if(intersectsHUD.length>0 && intersectsHUD[0].object.uuid === next_uuid){
+      if(intersectsHUD.length>0){
+        if(intersectsHUD[0].object.uuid === next_uuid){
           console.log("Next level Highlighted")
           goToNext = true;
         }
-        else{
-          goToNext = false;
+        else if(intersectsHUD[0].object.uuid === death_uuid){
+          console.log("DeathSelected");
+          restart = true;
         }
+      }
+      else{
+        goToNext = false;
+        restart = false;
+      }
 
 
       //stats.end()
@@ -354,6 +374,7 @@ scene.add(torchLight)
     removeFloor(scene,world,curr_lvl)
     removeAllDyamics(scene,world);
     clearInventory();
+    resetHealth();
     guy.body.position.set(0,1,-1);
   }
 
@@ -439,7 +460,7 @@ scene.add(torchLight)
 
       if(lvl==1){
       console.log("Current level: ",curr_lvl)
-      if(curr_lvl!=1){
+      if(curr_lvl!=1 || restart){
         lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
@@ -447,7 +468,7 @@ scene.add(torchLight)
     }
 
     if(lvl==2){
-      if(curr_lvl!=2){
+      if(curr_lvl!=2|| restart){
         lvlChange(curr_lvl);
         curr_lvl=2;
         makeSecondFloor(scene,world);
@@ -456,7 +477,7 @@ scene.add(torchLight)
     }
     if(lvl==3){
       console.log("Current level: ",curr_lvl)
-      if(curr_lvl!=3){
+      if(curr_lvl!=3 || restart){
         lvlChange(curr_lvl);
         curr_lvl=3;
         makeBasement(scene,world);
@@ -465,7 +486,7 @@ scene.add(torchLight)
     }
     if(lvl==4){
       console.log("Current level: ",curr_lvl)
-      if(curr_lvl!=4){
+      if(curr_lvl!=4 || restart){
         lvlChange(curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
@@ -474,7 +495,11 @@ scene.add(torchLight)
     if(lvl==-1){
       window.location.href='../res/index.html'
     }
-
+    if(restart){
+      resetHealth();
+      sceneHUD.remove(spriteDeath)
+    }
+    restart = false;
 
   })
 

@@ -4,6 +4,8 @@ var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
 var selected = 0;
 var inventory = [];
+var spriteDeath = null;
+var sceneHUD = null;
 
 
 //Simple functions to help with creation of the scene
@@ -73,6 +75,7 @@ var inventory = [];
     graphics.restore();
   }
 
+  //Draws the half heart for the health bar
   function drawHalfHeart(){
     graphics.save();
     graphics.scale(0.75,0.75);
@@ -83,6 +86,7 @@ var inventory = [];
     graphics.restore();
   }
 
+  //Draws the half heart for the health bar
   function drawHeart(){
     graphics.save();
     graphics.scale(0.75,0.75)
@@ -314,7 +318,7 @@ function healthIndicator(){
   graphics.translate(-150,-75)
   // graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
   // graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-
+  graphics.clearRect(0,0,300,150);
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
   // Ensure same dimensions
@@ -377,6 +381,11 @@ function getItemSelected(){
   
 }
 
+function setDeathScreen(spriteDeath_, HUD_){
+  spriteDeath = spriteDeath_
+  sceneHUD = HUD_
+}
+
 //Draws the HUD on the screen
 function HUD(){
   graphics.save();
@@ -397,6 +406,7 @@ function tookDamage(damageTaken){
   graphics.save();
   hearts-=damageTaken;
   if(hearts<1){
+    sceneHUD.add(spriteDeath)
     console.log("You have died");
   }
   graphics.save();
@@ -412,5 +422,8 @@ function changeInventorySelected(_change){
 function clearItem(){
   inventory.splice(selected,1)
 }
+function resetHealth(){
+  hearts = 3;
+}
 
-export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem}
+export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem, setDeathScreen, resetHealth}
