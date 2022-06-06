@@ -136,7 +136,7 @@ function makeFirstFloor(scene,world){
 
     //make goal position
     setGoalPosition(new THREE.Vector3(-11.5,-0.75,-13))
-    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[-11.5,-0.75,-13],[0,-Math.PI,0],2,null)
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[-11.5,-0.75,-13],[0,-Math.PI,0],1,null)
 
 
 }
@@ -235,7 +235,7 @@ function makeSecondFloor(scene,world){
 
         //make goal position
         setGoalPosition(new THREE.Vector3(0,-0.75,-13))
-        makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[0,-0.75,-13],[0,-Math.PI,0],2,null)
+        makeObject(scene,'../res/meshes/Flag.glb',[1,1,1],[0,-0.75,-13],[0,-Math.PI,0],2,null)
 }
 
 function makeBasement(scene,world){
@@ -276,7 +276,7 @@ function makeBasement(scene,world){
 
     //make goal position
     setGoalPosition(new THREE.Vector3(7.75,-0.75,4.75))
-    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[7.5,-0.75,4.5],[0,-Math.PI,0],3,null)
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[7.5,-0.75,4.5],[0,-Math.PI,0],3,null)
 
 
 }
@@ -353,7 +353,7 @@ function makeFourthFloor(scene,world){
 
     //make goal position
     setGoalPosition(new THREE.Vector3(7.75,-0.75,-16))
-    makeObject(scene,'../res/meshes/SecondFloor/Toilet.glb',[0.16,0.16,0.16],[7.5,-0.75,-15],[0,-Math.PI,0],3,null)
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[7.5,-0.75,-15],[0,-Math.PI,0],4,null)
 }
 
 function makeFirstFloorStairs(scene,world,translate){
