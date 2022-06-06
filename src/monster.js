@@ -6,7 +6,7 @@ import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path, player){
+    constructor(scene, world, position, path, player, paused){
         super()
         this.scene = scene
         this.world = world
@@ -20,6 +20,7 @@ export default class Monster extends THREE.Group {
         this.path_index = 1
         this.loaded = false
         this.enemy = player
+        this.paused = paused
         this.init()
     }
     
@@ -111,17 +112,19 @@ export default class Monster extends THREE.Group {
     update( delta ){
         if(!this.loaded) return
         try{
+            let time = delta%10;
             this.play_direction = 1 
             this.desired_action = "walk"
             if(this.being_looked_at != true){
                 if(this.position.distanceTo(this.enemy.position) < 2){
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
-                    if(!this.hitting) {
-                        tookDamage()
+                    if(!this.hitting && !this.paused && time == 0) {
+                        tookDamage(0.5)
                     }
                     this.desired_action = "basic_attack"
                 } else { 
                     this.hitting = false;
+                    this.paused = false;
                     this.updateTransform(delta)
                 }
                 this.animation_manager.update( delta, this.desired_action, this.play_direction )

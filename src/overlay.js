@@ -47,9 +47,9 @@ var inventory = [];
 
   function drawBlock(startx,starty,width,height){
     graphics.save();
-    // graphics.fillStyle="rgb(0,0,0,0.01)";
+    //graphics.fillStyle="rgb(0,0,0,0.1)";
     graphics.strokeRect(startx,starty,width,height);
-    // graphics.fillRect(startx,starty,width,height);
+    //graphics.fillRect(startx,starty,width,height);
     graphics.restore();
   }
 
@@ -103,7 +103,7 @@ var inventory = [];
     graphics.strokeStyle=colour;
     graphics.beginPath();
     //graphics.moveTo(width,0);
-    graphics.arc(width-3,3,1.5,0,2*Math.PI)
+    graphics.arc(width-3,3,1.5,0,2*Math.PI);
     graphics.moveTo(8.5,4)
     graphics.lineTo(3,9);
     graphics.lineTo(5.5,11);
@@ -225,9 +225,10 @@ var inventory = [];
     graphics.save();
     graphics.clearRect(-100,39,200,10)
     
-      graphics.fillStyle=colour
+      graphics.fillStyle="wheat"
       graphics.textAlign="centre";
-      graphics.font = "7.5px Calibri";
+      //graphics.font = "7.5px Calibri";
+      graphics.font = "7.5px Times New Roman";
       graphics.translate(-1.25*word.length,0);
       graphics.fillText(word, 0, 45);
     
@@ -249,7 +250,6 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
       else{
         selected_item="";
       }
-      
     }
     if(i==selected){
       graphics.strokeStyle="white";
@@ -335,7 +335,7 @@ function HUD(inventory_slots,_inventory){
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,"rgba(255,100,50,1)");
+  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,/*"rgba(255,100,50,1)"*/"rgb(255, 230, 130)");
   // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }

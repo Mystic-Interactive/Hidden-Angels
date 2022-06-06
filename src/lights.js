@@ -1,28 +1,25 @@
-function pointLightCreator(colour,intensity,distance,decay,bias){
-    const pointLight = new THREE.PointLight(colour,intensity,distance,decay);
-    pointLight.castShadow=true; //allows the light to cast shadows
-    pointLight.shadow.bias = bias;
+function pointLightCreator(colour, intensity, distance, decay, bias){
+  const pointLight = new THREE.PointLight(colour, intensity, distance, decay);
+  pointLight.castShadow = true; //allows the light to cast shadows
+  pointLight.shadow.bias = bias;
 
-    const pLightHelper = new THREE.PointLightHelper(pointLight,100);
-    const pLightShadowHelper = new THREE.CameraHelper(pointLight.shadow.camera);
+  const pLightHelper = new THREE.PointLightHelper(pointLight,100);
+  const pLightShadowHelper = new THREE.CameraHelper(pointLight.shadow.camera);
 
-    return [pointLight,pLightHelper,pLightShadowHelper];
+  return [pointLight,pLightHelper,pLightShadowHelper];
 }
 
+function moonCreator(colour, intensity, distance, decay){
+  var pLightObject = pointLightCreator(colour,intensity,distance,decay);
+  var moonLight = pLightObject[0];
+  moonLight.castShadow=true; //allows the light to cast shadows
+  moonLight.shadow.bias = 0.001;
+  moonLight.shadow.mapSize.width = 2048; 
+  moonLight.shadow.mapSize.height = 2048;
 
-function moonCreator(colour,intensity,distance,decay){
-
-    var pLightObject = pointLightCreator(colour,intensity,distance,decay);
-    var moonLight = pLightObject[0];
-    moonLight.castShadow=true; //allows the light to cast shadows
-    moonLight.shadow.bias = 0.001;
-    moonLight.shadow.mapSize.width = 2048; 
-    moonLight.shadow.mapSize.height = 2048;
-
-    var pLightHelper = pLightObject[1];
-    var pLightShadowHelper = pLightObject[2];
-    return moonLight
-        
+  var pLightHelper = pLightObject[1];
+  var pLightShadowHelper = pLightObject[2];
+  return moonLight
 }
 
 function addSphereMoon(radius){
@@ -43,7 +40,7 @@ function addSphereMoon(radius){
   return moon;
 }
 
-function torch(colour,intensity,distance,decay,bias,position){
+function torch(colour, intensity, distance, decay, bias, position){
   var pLightObject = pointLightCreator(colour,intensity,distance,decay,bias);
   var pLight = pLightObject[0];
   pLight.position.set(position[0],position[1]+0.4,position[2]);

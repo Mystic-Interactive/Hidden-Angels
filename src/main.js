@@ -108,9 +108,6 @@ var init = function(){
 
   const monsters = [];
   player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
-  monster = new Monster(scene, world,new THREE.Vector3(-2, 1, -6), path, player); //Create and add monster to scene and physics world
-  monsters.push(monster);
-
 
   //var monster_v2 = new monster_ai(scene,player);
 
@@ -118,6 +115,9 @@ var init = function(){
   const light = new THREE.AmbientLight();
   light.intensity = 0.4; //dim light for atmosphere
   scene.add(light);
+
+  monster = new Monster(scene, world,new THREE.Vector3(-11, 1, -12), path, player, true); //Create and add monster to scene and physics world
+  monsters.push(monster);
 
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
@@ -133,6 +133,10 @@ var init = function(){
   window.addEventListener('resize', () => { //keep playing area relative to the scene
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
+    /*sprite.position.set(-window.innerWidth / 4, window.innerHeight / 4, 0);
+    sprite2.position.set(window.innerWidth / 4, window.innerHeight / 4, 0);
+    sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 4, 0);
+    sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 4, 0);*/
     renderer.setSize(window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
@@ -371,35 +375,35 @@ function createMenu(){ //Creating the pause menu
   sceneHUD = new THREE.Scene();
 
   var spriteMaterial = new THREE.SpriteMaterial({
-    map: new THREE.TextureLoader().load("../res/textures/pause_menu/level-1.png")
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level1.jpg")
   });
 
   var sprite = new THREE.Sprite(spriteMaterial);
-  sprite.position.set(0,window.innerHeight/3,0);
+  sprite.position.set(-window.innerWidth / 4, window.innerHeight / 4, 0);
   sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial2 = new THREE.SpriteMaterial({
-    map: new THREE.TextureLoader().load("../res/textures/pause_menu/level-2.png")
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level2.jpg")
   });
 
   var sprite2 = new THREE.Sprite(spriteMaterial2);
-  sprite2.position.set(0,window.innerHeight/12,0);
+  sprite2.position.set(window.innerWidth / 4, window.innerHeight / 4, 0);
   sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial3 = new THREE.SpriteMaterial({
-    map: new THREE.TextureLoader().load("../res/textures/pause_menu/level-3.png")
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level3.jpg")
   });
 
   var sprite3 = new THREE.Sprite(spriteMaterial3);
-  sprite3.position.set(0,-window.innerHeight/6,0);
+  sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 4, 0);
   sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial4 = new THREE.SpriteMaterial({
-    map: new THREE.TextureLoader().load("../res/textures/pause_menu/level-4.png")
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/Level4.jpg")
   });
 
   var sprite4 = new THREE.Sprite(spriteMaterial4);
-  sprite4.position.set(250,-window.innerHeight/8,0);
+  sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 4, 0);
   sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
   
   lvl1_uuid = sprite.uuid;

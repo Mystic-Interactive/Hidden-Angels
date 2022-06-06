@@ -16,38 +16,36 @@ const loadingManager = new THREE.LoadingManager();
 const progressBar = document.getElementById('progress-bar')
 const progressBarContainer = document.querySelector('.progress-bar-container')
 
- // Method to do things when we starting loading 
- loadingManager.onStart = function(url,item,total){
-      progressBarContainer.style.display = 'block';
-      progressBarContainer.style.position = 'absolute';
+// Method to do things when we starting loading 
+loadingManager.onStart = function(url,item,total){
+progressBarContainer.style.display = 'block';
+progressBarContainer.style.position = 'absolute';
 
-      console.log(`Started loading: ${url}`)
-  }
-    
-  // Method called when the loading is under progress
-  loadingManager.onProgress = function(url,loaded,total){
-      progressBar.value = (loaded/total)*100;
-  }
+console.log(`Started loading: ${url}`)
+}
 
-    
-  // Method called called when the loading of the assest has finished
-  loadingManager.onLoad = function(){
-      progressBarContainer.style.display = 'none';
-  }
+// Method called when the loading is under progress
+loadingManager.onProgress = function(url,loaded,total){
+    progressBar.value = (loaded/total)*100;
+}
 
-  // Method called when there is an error
-  loadingManager.onError = function(url){
-      console.error(`Problem loading ${url}`)
-  }
+// Method called called when the loading of the assest has finished
+loadingManager.onLoad = function(){
+    progressBarContainer.style.display = 'none';
+}
 
-  const gltfLoader = new THREE.GLTFLoader(loadingManager);
+// Method called when there is an error
+loadingManager.onError = function(url){
+    console.error(`Problem loading ${url}`)
+}
+
+const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
 function makeFirstFloor(scene,world){
     //Make first floor blender model
     makeObject(scene,'../res/meshes/FirstFloor/FirstFloor.glb',[1,1,1],[0,-0.83,-4],[0,0,0],1,null)
 
-  //collision for the first floor
-    //floor and roof
+    //collision for the first floor
     makeCollisionCube(scene,world,[23,0.1,19.75],[0,-0.85,-4],[0,0,0]); //floor
     // makeCollisionCube(scene,world,[23,0.1,19.75],[0,5.5,-4],[0,0,0]); //roof
 
