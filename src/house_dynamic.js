@@ -273,7 +273,6 @@ function setGoalPosition(position){
 }
 
 function distanceTo(object_pos, playerPos){
-    // console.log("Player at positions: ",playerPos[0],",",playerPos[1],",",playerPos[2])
     var x = object_pos.x - playerPos.x;
     var y = object_pos.y - playerPos.y;
     var z = object_pos.z - playerPos.z;
@@ -296,10 +295,6 @@ function detectObject(player){
     
         }
     }
-    // //Check that the closest object is the goal
-    // if(distanceTo(goalPosition,player.position)<2){
-    //     console.log("Close to goal")
-    // }
     if(goalPosition!=null){ //check for the loading level
         if(distanceTo(goalPosition,player.position)<2){
             closest = 1 
@@ -310,13 +305,9 @@ function detectObject(player){
 
 
 function UI(lvl){
-    console.log(lvl)
     if(closest==1){
-        // console.log("Close to goal")
-        console.log(lvl)
         if(lvl==4){
             HUD.add(spriteFinish)
-            console.log(spriteFinish)
         }
         else{
             HUD.add(spriteNext)
@@ -357,7 +348,6 @@ function removeAllDyamics(){
 document.addEventListener('keydown',(e)=>{
     if(e.code=='KeyE'){
         if(closest!=null){
-            console.log("Pressed E ",closest)
             if(closest[2]==false){ //check for if the object is pickupable
                 addToInventory(closest[1])
                 removeObjectFromScene(closest[1],true)
@@ -367,8 +357,6 @@ document.addEventListener('keydown',(e)=>{
                     removeObjectFromScene(closest[1],true)
                     clearItem();
                 }
-                console.log("Item selected: ", getItemSelected())
-                console.log("Item in scene: ", closest[1])
             }
             
             

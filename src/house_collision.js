@@ -241,7 +241,9 @@ function makeSecondFloor(scene,world){
 function makeBasement(scene,world){
    
     //making the phing shading for the nests
-    const nestMat = new THREE.MeshPhongMaterial({flatShading:true,color:0x3CD070,specular:0x636e72})
+    const textLoader = new THREE.TextureLoader();
+    let normalColor = textLoader.load('../res/textures/nest_bumpmap.png');
+    const nestMat = new THREE.MeshPhongMaterial({flatShading:true,color:0x3CD070,emissive:0x3CD070,emissiveIntensity:0.01,specular:0x636e72,normalMap:normalColor})
 
     //Make basement blender model
     makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],3,null)
