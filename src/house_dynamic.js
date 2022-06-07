@@ -35,16 +35,16 @@ function initialiseDynamics(scene_, HUD_,world_, spriteGoal_){
     world = world_
     spriteGoal=spriteGoal_
 
-    var spriteMaterialItem = new THREE.SpriteMaterial({map:
-        THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/pick_up_item.png")});
+    var spriteMaterialItem = new THREE.SpriteMaterial({
+        map: new THREE.TextureLoader().load("../res/textures/pause_menu/pick_up_item.png")
+    });
     spriteItem = new THREE.Sprite(spriteMaterialItem);
     spriteItem.position.set(0,-window.innerHeight/8,0);
     spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
 
-    var spriteMaterialInteraction = new THREE.SpriteMaterial({map:
-        THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/interact.png")});
+    var spriteMaterialInteraction = new THREE.SpriteMaterial({
+        map: new THREE.TextureLoader().load("../res/textures/pause_menu/interact.png")
+    });
     spriteInteraction = new THREE.Sprite(spriteMaterialInteraction);
     spriteInteraction.position.set(0,-window.innerHeight/8,0);
     spriteInteraction.scale.set(window.innerHeight/2,window.innerWidth/75,1);

@@ -49,9 +49,7 @@ var sceneHUD = null;
 
   function drawBlock(startx,starty,width,height){
     graphics.save();
-    //graphics.fillStyle="rgb(0,0,0,0.1)";
     graphics.strokeRect(startx,starty,width,height);
-    //graphics.fillRect(startx,starty,width,height);
     graphics.restore();
   }
 
@@ -62,8 +60,7 @@ var sceneHUD = null;
     graphics.moveTo(0,0);
     graphics.bezierCurveTo(-5,-7.5,-10,-5,-10,0);
     graphics.bezierCurveTo(-10,5,-7.5,7.5,0.1,15);
-    // graphics.bezierCurveTo(-2.5,-3.75,-5,-2.5,-5,0);
-    // graphics.bezierCurveTo(-5,2.5,-3.75,3.75,0.05,7.5);
+
     if(closePath){
       graphics.lineTo(0,0);
     }
@@ -106,7 +103,6 @@ var sceneHUD = null;
     graphics.lineWidth=0.5;
     graphics.strokeStyle=colour;
     graphics.beginPath();
-    //graphics.moveTo(width,0);
     graphics.arc(width-3,3,1.5,0,2*Math.PI);
     graphics.moveTo(8.5,4)
     graphics.lineTo(3,9);
@@ -229,16 +225,13 @@ var sceneHUD = null;
     graphics.save();
     graphics.clearRect(-100,39,200,10)
     
-      graphics.fillStyle="wheat"
-      graphics.textAlign="centre";
-      //graphics.font = "7.5px Calibri";
-      graphics.font = "7.5px Times New Roman";
-      graphics.translate(-1.25*word.length,0);
-      graphics.fillText(word, 0, 45);
-    
+    graphics.fillStyle="wheat"
+    graphics.textAlign="centre";
+    graphics.font = "7.5px Times New Roman";
+    graphics.translate(-1.25*word.length,0);
+    graphics.fillText(word, 0, 45);
     
     graphics.restore();
-
   }
 
 //Draws the inventory bar 
@@ -279,26 +272,6 @@ function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
     startx+=width+graphics.lineWidth+0.5;
 
   }
-  // for(var i=0;i<8;i++){
-  //   if(inventory[i]!=-1){
-  //     word_colour = drawIcon(inventory[i],startx,starty,width)
-  //     if(selected==i){
-  //       selected_item = word_colour[0];
-  //     }
-  //     else{
-  //       selected_item="";
-  //     }
-      
-  //   }
-  //   if(i==selected){
-  //     graphics.strokeStyle="white";
-  //     writeItem(selected_item,word_colour[1])
-  //   }
-
-  //   drawBlock(startx,starty,width,height);
-  //   graphics.strokeStyle=colour;
-  //   startx+=width+graphics.lineWidth+0.5;
-  // }
 }
 
 //Draws the health bar
@@ -318,11 +291,11 @@ function drawHealthBar(translate_x,translate_y){
 function healthIndicator(){
   graphics.save();
   graphics.translate(-150,-75)
-  // graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-  // graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
   graphics.clearRect(0,0,300,150);
+
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
+
   // Ensure same dimensions
   maskCanvas.width = hud_canvas.width;
   maskCanvas.height = hud_canvas.height;
@@ -334,17 +307,16 @@ function healthIndicator(){
   if(Math.trunc(hearts)==2){
     graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
     maskCtx.fillStyle = "rgba(0,0,0,1)"; 
-    // graphics.strokeStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts-3))+")";
-    // graphics.fillStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts))+")";
   }
-  
   
   maskCtx.beginPath();
   maskCtx.moveTo(0,0);
+
   //top bar
   maskCtx.lineTo(100,10);
   maskCtx.bezierCurveTo(50,-5,250,2,200,10);
   maskCtx.bezierCurveTo(100,-1,250,20,300,0);
+
   //right bar
   maskCtx.bezierCurveTo(275,10,310,50,290,50);
   maskCtx.lineTo(295,125)
@@ -353,6 +325,7 @@ function healthIndicator(){
   maskCtx.lineTo(200,145);
   maskCtx.bezierCurveTo(100,140,100,140,100,150);
   maskCtx.bezierCurveTo(10,140,100,140,0,150);
+
   //left bar
   maskCtx.bezierCurveTo(5,15,100,250,3,100);  
   maskCtx.lineTo(0,0);
@@ -363,7 +336,6 @@ function healthIndicator(){
   graphics.restore();
 }
 
-//
 function addToInventory(item_num){
   inventory.push(item_num)
   inventory = [...new Set(inventory)];
@@ -398,8 +370,7 @@ function HUD(){
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,8,"rgb(42, 42, 42)");
-  // graphics.fillRect(-50,39,100,10);
+  drawInventoryBar(begin,50,12.5,12.5,8,"rgb(255, 204, 102)");
   graphics.restore();
 }
 
