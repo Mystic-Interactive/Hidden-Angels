@@ -5,10 +5,10 @@ import { angleBetween } from './misc.js'
 import Monster from './base_monster.js'
 import { tookDamage } from './overlay.js'
 
-export default class SmallMonster extends Monster {
+export default class LargeMonster extends Monster {
 
     constructor(scene, world, position, path, player, paused){
-        super(scene, world, position, path, player, paused, "../res/meshes/Characters/SmallMonster.glb")
+        super(scene, world, position, path, player, paused, "../res/meshes/Characters/LargeMonster.glb")
     }
 
     define(){
@@ -28,9 +28,10 @@ export default class SmallMonster extends Monster {
 
         //Getting the animations from the mesh
         const actions = [
-            {name : "walk",      action : mixer.clipAction( animations[ 0 ] )},
-            {name : "d3d",       action : mixer.clipAction( animations[ 1 ] )},
-            //{name : "walk",       action : mixer.clipAction( animations[ 2 ] )}
+            {name : "basic_attack",         action : mixer.clipAction( animations[ 0 ] )},
+            {name : "special_attack",       action : mixer.clipAction( animations[ 1 ] )},
+            {name : "idle",                 action : mixer.clipAction( animations[ 2 ] )},
+            {name : "walk",                 action : mixer.clipAction( animations[ 3 ] )},
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])

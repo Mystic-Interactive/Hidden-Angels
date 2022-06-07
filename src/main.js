@@ -12,6 +12,7 @@ import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}
 import { Reflector } from '../lib/Reflector.js'
 import SmallMonster from './small_monster.js';
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
+import LargeMonster from './large_monster.js';
 
 // variables to set up scene with camera
 var  camera;
@@ -48,8 +49,7 @@ var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext;
 
 // items added to scene
 var player;
-var monster;
-var smol_boi;
+const monsters = []
 var ground;
 var moonLight;
 var moonSphere;
@@ -117,7 +117,6 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
 
-  const monsters = [];
   player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
 
   //var monster_v2 = new monster_ai(scene,player);
@@ -127,11 +126,14 @@ var init = function(){
   light.intensity = 1; //dim light for atmosphere
   scene.add(light);
 
-  monster = new Monster(scene, world,new THREE.Vector3(-11, 1, -12), path, player, true); //Create and add monster to scene and physics world
+  const monster = new Monster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true); //Create and add monster to scene and physics world
   monsters.push(monster);
 
-  smol_boi = new SmallMonster(scene, world,new THREE.Vector3(0, 0, 0), path, player, true);
+  const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
   monsters.push(smol_boi)
+
+  const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
+  monsters.push(big_boi)
 
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
@@ -270,7 +272,11 @@ function update(){ //Game Logic
   const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
   if(!paused){
-    monster.update();
+    monsters.forEach(monster => {
+      try{
+        monster.update(delta);
+      } catch (e) {}
+    });
     const new_time = new Date().getTime()
     delta = new_time - time
     time = new_time

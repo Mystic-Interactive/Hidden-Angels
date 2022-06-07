@@ -159,9 +159,6 @@ export default class Player extends THREE.Group {
             if (controls.right){
                 x_dir = -1
             }
-
-            console.log(this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + x_dir * Math.PI/4))
-            console.log(-y_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + x_dir * Math.PI/4))
             
             this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
             this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta

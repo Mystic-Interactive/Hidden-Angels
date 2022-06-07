@@ -58,7 +58,6 @@ export default class Monster extends THREE.Group {
 
         // distance between the body and the point its trying to reach
         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
-
         if (diff  <= 0.5){
             this.path_index = (this.path_index + 1) % this.path.length
         }
@@ -74,6 +73,7 @@ export default class Monster extends THREE.Group {
 
     update( delta ){
         if(!this.loaded) return
+        
         try{
             let time = delta%10;
             this.play_direction = 1 
