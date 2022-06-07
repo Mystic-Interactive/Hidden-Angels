@@ -13,6 +13,33 @@
         width: 100%;
         height: 100%;
       }
+      .progress-bar-container{
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(21, 21, 24);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: auto;
+      }
+
+      #progress-bar{
+        width: 30%;
+        margin-left: 5%;
+        align-items: center;
+      }
+
+      label{
+        color: white;
+        font-size: 2rem;
+      }
     </style>
   </head>
   
@@ -21,14 +48,24 @@
     <script src='../lib/GLTFLoader.js'></script>
     <script src="../lib/stats.js"></script>
     <script type='module' src="../lib/cannon-es.js"></script>
+    <script type='module' src="../src/base_monster.js"></script>
+    <script type='module' src="../src/small_monster.js"></script>
+    <script type='module' src="../src/normal_monster.js"></script>
+    <script type='module' src="../src/large_monster.js"></script>
+    <script type="module" src="../src/sight.js"></script>
     <script type="module" src="../src/playerControls.js"></script>
     <script type="module" src="../src/misc.js"></script>
     <script type='module' src="../src/animationManager.js"></script>
-    <script type ="module" src = "../src/PointerLockControls.js"></script>
+    <script type="module" src = "../src/PointerLockControls.js"></script>
     <script type="module" src="../src/player.js"></script>
     <script type='module' src='../src/sky.js'></script>
     <script type='module' src='../src/main.js'></script>
+    <canvas id="MainWorld"></canvas>
     <canvas id="myCanvas" style="display:block;position:absolute;cursor:pointer"></canvas>
+    <div class="progress-bar-container">
+      <label for="progress-bar">Loading...</label>`
+      <progress id="progress-bar" value="0" max = "100"></progress>
+    </div>
   </body>
   
 </html>
