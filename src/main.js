@@ -22,7 +22,7 @@ const timestep = 1/60
 var delta = 0
 var time = new Date().getTime()
 var speed = 0
-var t = 41;
+var t = 43;
 var selected = 0;
 
 // HUD control variables
@@ -53,6 +53,12 @@ var moonSphere;
 var torchLight;
 var skybox;
 
+//sounds that will be added to the scene
+var listener;
+var audioLoader;
+var backgroundsound;
+var hitSound;
+var pickupSound ;
 
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
@@ -78,6 +84,9 @@ var init = function(){
     0.1, // near clipping plane
     1000 // far clipping plane
   );
+
+  listener = new THREE.AudioListener();
+  camera.add(listener);
   
   renderer = new THREE.WebGLRenderer({
     maxLights: 8,
@@ -132,13 +141,14 @@ var init = function(){
 	});
 
   createMenu()//create menu screen overlay (level selection)
+  addSounds()
   
   //Create and add spotlight tos scene (acts as player torch)
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
   initialiseDynamics(scene, sceneHUD, world, spriteNext)
-  setDeathScreen(spriteDeath,sceneHUD)
+  setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
@@ -272,7 +282,6 @@ function update(){ //Game Logic
 
     detectObject(player)
     UI()
-    console.log("HHHH")
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
 
@@ -458,6 +467,31 @@ function createMenu(){ //Creating the pause menu
   sceneHUD.add(sprite2);
   sceneHUD.add(sprite3);
   sceneHUD.add(sprite4);
+}
+
+//function that will initialise all the sounds in the game
+function addSounds(){
+  audioLoader = new THREE.AudioLoader();
+  backgroundsound = new THREE.Audio(listener);
+  hitSound = new THREE.Audio(listener);
+  pickupSound = new THREE.Audio(listener);
+
+  audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
+    backgroundsound.setBuffer(buffer);
+    backgroundsound.setLoop(true);
+    backgroundsound.setVolume(0.1);
+    backgroundsound.play();
+  })
+
+  audioLoader.load('../res/sound_effects/pick_up_item.wav',function(buffer){
+    pickupSound.setBuffer(buffer);
+    pickupSound.setVolume(0.2);
+  })
+
+  audioLoader.load('../res/sound_effects/hurt.mp3',function(buffer){
+    hitSound.setBuffer(buffer);
+    hitSound.setVolume(0.2);
+  })
 }
 
 function GameLoop(){ //Run game loop(update -> render -> repeat)
