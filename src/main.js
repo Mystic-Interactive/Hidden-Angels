@@ -2,7 +2,6 @@ import { sky } from './sky.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
 import Monster from '../src/monster.js'
-import  monster_ai  from '../src/monster_ai.js'
 import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
@@ -128,8 +127,7 @@ var init = function(){
     new THREE.Vector3(-10, 0, 0)
   ]
   
-  const monster_v2 = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
-  //var monster_v2 = new monster_ai(scene,player);
+  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -202,7 +200,7 @@ var selected = 0;
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time
-      monster_v2.update(delta * 0.001);
+      monster.update(delta * 0.001);
       player.update(delta)
       g.update()
 

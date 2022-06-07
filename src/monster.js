@@ -102,6 +102,7 @@ export default class Monster extends THREE.Group {
         else{
             //if monster sees player, go to player
             //else follow set path
+            
         }
 
     }
