@@ -2,7 +2,6 @@ import { sky } from './sky.js';
 import { Ground } from './ground.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import Monster from '../src/monster.js'
 
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
@@ -13,6 +12,7 @@ import { Reflector } from '../lib/Reflector.js'
 import SmallMonster from './small_monster.js';
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
 import LargeMonster from './large_monster.js';
+import NormalMonster from './normal_monster.js';
 
 // variables to set up scene with camera
 var  camera;
@@ -124,13 +124,13 @@ var init = function(){
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
   light.intensity = 1; //dim light for atmosphere
-  scene.add(light);
-
-  const monster = new Monster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true); //Create and add monster to scene and physics world
-  monsters.push(monster);
+  scene.add(light)
 
   const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
   monsters.push(smol_boi)
+
+  const normal_monster = new NormalMonster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true)
+  monsters.push(normal_monster)
 
   const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
   monsters.push(big_boi)

@@ -1,9 +1,7 @@
 
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
-import { angleBetween } from './misc.js'
 import Monster from './base_monster.js'
-import { tookDamage } from './overlay.js'
 
 export default class LargeMonster extends Monster {
 

@@ -1,12 +1,11 @@
-
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import Monster from './base_monster.js'
 
-export default class SmallMonster extends Monster {
+export default class NormalMonster extends Monster {
 
     constructor(scene, world, position, path, player, paused){
-        super(scene, world, position, path, player, paused, "../res/meshes/Characters/SmallMonster.glb")
+        super(scene, world, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
     }
 
     define(){
@@ -26,9 +25,9 @@ export default class SmallMonster extends Monster {
 
         //Getting the animations from the mesh
         const actions = [
-            {name : "basic_attack",       action : mixer.clipAction( animations[ 0 ] )},
-            {name : "walk",         action : mixer.clipAction( animations[ 1 ] )},
-            {name : "quick-attack",     action : mixer.clipAction( animations[ 2 ] )},
+            {name : "basic_attack",         action : mixer.clipAction( animations[ 0 ] )},
+            {name : "idle",                 action : mixer.clipAction( animations[ 1 ] )},
+            {name : "walk",                 action : mixer.clipAction( animations[ 2 ] )},
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
