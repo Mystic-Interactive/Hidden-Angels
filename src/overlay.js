@@ -8,6 +8,7 @@ var selected = 0;
 var inventory = [];
 var spriteDeath = null;
 var sceneHUD = null;
+var hitSound = null;
 
 
 //Simple functions to help with creation of the scene
@@ -353,9 +354,10 @@ function getItemSelected(){
 }
 
 //Setting the death screen for when the player dies
-function setDeathScreen(spriteDeath_, HUD_){
+function setDeathScreen(spriteDeath_, HUD_, hitSound_){
   spriteDeath = spriteDeath_
   sceneHUD = HUD_
+  hitSound = hitSound_
 }
 
 //Draws the HUD on the screen
@@ -384,6 +386,9 @@ function tookDamage(damageTaken){
   graphics.setTransform(1, 0, 0, 1, 0, 0);
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   graphics.restore();
+
+  //take damage sound
+  hitSound.play()
 }
 
 //Changes the item selected - to be used in conjunction with an event listener to the numbers and numpad

@@ -29,15 +29,16 @@ var world = null;
 var goalPosition = null;
 var spriteNext = null;
 var spriteFinish = null;
-
+var audioPickUp = null;
 
 //Called to give all values from other classes
-function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_){
+function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audioPickUp_){
     scene = scene_
     HUD = HUD_
     world = world_
     spriteNext = spriteNext_ //Next level sprite
     spriteFinish = spriteFinish_ //Finished the game sprite
+    audioPickUp = audioPickUp_ //check to play sound
 
     //Pick up the item sprite
     var spriteMaterialItem = new THREE.SpriteMaterial({map:
@@ -370,8 +371,7 @@ document.addEventListener('keydown',(e)=>{
                     clearItem();
                 }
             }
-            
-            
+            audioPickUp.play();            
             
         }
         

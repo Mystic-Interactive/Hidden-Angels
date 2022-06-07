@@ -116,6 +116,34 @@ var init = function(){
     1000 // far clipping plane
   );
   
+  //adding sounds
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
+  const audioLoader = new THREE.AudioLoader();
+  const backgroundsound = new THREE.Audio(listener);
+  const hitSound = new THREE.Audio(listener);
+  const pickupSound = new THREE.Audio(listener);
+
+  audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
+    backgroundsound.setBuffer(buffer);
+    backgroundsound.setLoop(true);
+    backgroundsound.setVolume(0.1);
+    backgroundsound.play();
+  })
+
+  audioLoader.load('../res/sound_effects/pick_up_item.wav',function(buffer){
+    pickupSound.setBuffer(buffer);
+    pickupSound.setVolume(0.2);
+  })
+
+  audioLoader.load('../res/sound_effects/hurt.mp3',function(buffer){
+    hitSound.setBuffer(buffer);
+    hitSound.setVolume(0.2);
+  })
+
+
+
   var renderer = new THREE.WebGLRenderer({maxLights: 8});
   renderer.setSize(0.999*window.innerWidth,0.999* window.innerHeight,);
   renderer.shadowMap.enabled = true;
@@ -237,10 +265,10 @@ var init = function(){
       death_uuid = spriteDeath.uuid;
 
 //Mandatory method calls from the other classes
-initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish)
-setDeathScreen(spriteDeath,sceneHUD)
+initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish,pickupSound)
+setDeathScreen(spriteDeath,sceneHUD,hitSound)
 
-var t =9;
+var t =41;
 var selected = 0;
 
 //Makes the torch object that will follow the user
