@@ -52,9 +52,9 @@ var hitSound = null;
 
     function drawBlock(startx,starty,width,height){
     graphics.save();
-    // graphics.fillStyle="rgb(0,0,0,0.01)";
+    //graphics.fillStyle="rgb(0,0,0,0.1)";
     graphics.strokeRect(startx,starty,width,height);
-    // graphics.fillRect(startx,starty,width,height);
+    //graphics.fillRect(startx,starty,width,height);
     graphics.restore();
     }
 
@@ -196,8 +196,8 @@ var hitSound = null;
     }
     //Icon is the closet key
     else if(item_num==2){
-      drawKey(translate_x,translate_y,width,"rgb(75,122,71)");
-      return ["Closet Key","rgb(75,122,71)"];
+      drawKey(translate_x,translate_y,width,"lime");
+      return ["Closet Key","lime"];
     }
     //Icon is the screw driver
     else if(item_num==3){
@@ -231,19 +231,20 @@ var hitSound = null;
     graphics.save();
     graphics.clearRect(-100,39,200,10) //used to clear the prior text that was placed upon the canvas
     
-    graphics.fillStyle=colour
+    graphics.fillStyle="wheat"
     graphics.textAlign="centre";
-    graphics.font = "7.5px Calibri";
+    graphics.font = "7.5px Times New Roman";
     graphics.translate(-1.25*word.length,0);
     graphics.fillText(word, 0, 45);
-    
-    
+
     graphics.restore();
 
   }
 
 //Draws the inventory bar 
+
 function drawInventoryBar(startx,starty,width,height,colour){
+
   graphics.strokeStyle=colour;
   graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icons)
   var selected_item = "";

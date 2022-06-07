@@ -3,44 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Game</title>
-    <style>
-      body{
-        margin: 0;
-      }
-      canvas{
-        width: 100%;
-        height: 100%;
-      }
-        .progress-bar-container{
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgb(21, 21, 24);
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin: auto;
-      }
-
-      #progress-bar{
-        width: 30%;
-        margin-left: 5%;
-        align-items: center;
-      }
-
-      label{
-        color: white;
-        font-size: 2rem;
-      }
-    </style>
+    <link rel='stylesheet' href="game.css"></link>
   </head>
   
   <body onload="init();">
@@ -48,6 +13,7 @@
     <script src='../lib/GLTFLoader.js'></script>
     <script src="../lib/stats.js"></script>
     <script type='module' src="../lib/cannon-es.js"></script>
+    <script type="module" src="../src/sight.js"></script>
     <script type="module" src="../src/playerControls.js"></script>
     <script type="module" src="../src/misc.js"></script>
     <script type='module' src="../src/animationManager.js"></script>
@@ -60,6 +26,7 @@
       <label for="progress-bar">Loading...</label>`
       <progress id="progress-bar" value="0" max = "100"></progress>
     </div>
+    <canvas id="MainWorld" class="mainCanvas"></canvas>
   </body>
   
 </html>

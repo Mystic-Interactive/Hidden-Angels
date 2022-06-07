@@ -19,7 +19,6 @@ function moonCreator(colour,intensity,distance,decay){
     moonLight.shadow.mapSize.height = 2048;
 
     return moonLight
-        
 }
 
 //Creates the moon geometry that will move with the point light
@@ -27,8 +26,6 @@ function addSphereMoon(radius){
   //Texture loader to store the texture and bumpmap for the moon
   const textLoader = new THREE.TextureLoader();
   var texture = textLoader.load("./textures/moon_texture.jfif");
-  var displacementMap =  textLoader.load("./textures/moon_displacement.jpg");
-
 
   const sphereGeo = new THREE.SphereGeometry(radius);
   const sphereMaterial = new THREE.MeshLambertMaterial (  //Adding a special material to make the moon look more realistic

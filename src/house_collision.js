@@ -83,11 +83,14 @@ function makeFirstFloor(scene,world){
         makeCollisionCube(scene,world,[0.1,1,0.01],[6,1,-0.75],[0,Math.PI/3,0]); //door
         
         //Bookshelves
-        // makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
-        // makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
-        // makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
-        // makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
-            makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0]); //bookshelf collision
+
+
+        makeBookShelf(scene,[-12,-0.8,4.2],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
+        makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
+            makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
+
 
         //Oven
         makeObject(scene,'../res/meshes/FirstFloor/Oven.glb',[0.01,0.01,0.01],[28.7,-0.7,-10],[0,5/2*Math.PI,0],null)
@@ -125,8 +128,8 @@ function makeFirstFloor(scene,world){
     makeDynamicObject('../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,4.75],[Math.PI/2,0,0],7) //secretbook
 
     //Placing interactable objects
-    makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Library door
-    makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
+    makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Library
+    makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
 
     //make goal position
     setGoalPosition(new THREE.Vector3(-11.5,-0.75,-13))
@@ -392,7 +395,7 @@ function makeFirstFloorStairs(scene,world,translate){
 
 //Males the bookshelf
 function makeBookShelf(scene,translate,rotation){
-    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],translate,rotation,1,null)
+    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],translate,rotation,1,null)
 }
 
 //Makes the mirrors with their reflection

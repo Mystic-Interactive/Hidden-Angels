@@ -343,8 +343,10 @@ function UI(lvl){
     
 }
 
+
 //Removes all remaining dynamic objects from the scene
 function removeAllDyamics(){
+
     for(var i = 1; i<=obj_positions.length;i++){
         removeObjectFromScene(i,false)
         obj_positions[i-1][0]=null;
@@ -378,4 +380,4 @@ document.addEventListener('keydown',(e)=>{
     }
 })
 
-export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDyamics,UI,initialiseDynamics,setGoalPosition}
+export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDynamics,UI,initialiseDynamics,setGoalPosition}
