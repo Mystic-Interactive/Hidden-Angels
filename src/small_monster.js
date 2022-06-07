@@ -26,9 +26,9 @@ export default class SmallMonster extends Monster {
 
         //Getting the animations from the mesh
         const actions = [
-            {name : "basic_attack",       action : mixer.clipAction( animations[ 0 ] )},
-            {name : "walk",         action : mixer.clipAction( animations[ 1 ] )},
-            {name : "quick-attack",     action : mixer.clipAction( animations[ 2 ] )},
+            {name : "basic_attack",         action : mixer.clipAction( animations[ 0 ] )},
+            {name : "walk",                 action : mixer.clipAction( animations[ 1 ] )},
+            {name : "quick-attack",         action : mixer.clipAction( animations[ 2 ] )},
         ]
 
         this.animation_manager = new AnimationManager(model, mixer, actions, [])
