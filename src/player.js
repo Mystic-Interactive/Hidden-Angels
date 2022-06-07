@@ -120,7 +120,7 @@ export default class Player extends THREE.Group {
                 monster.set_looked_at(this.looking_at(monster))
             });
         } catch(e) {
-            console.error(e.stack)
+            // console.error(e.stack)
         }
 
 

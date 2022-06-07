@@ -48,11 +48,11 @@ var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext, spriteFinish;
 // items added to scene
 var player;
 var monster;
-var ground;
 var moonLight;
+var ground;
 var moonSphere;
 var torchLight;
-var skybox;
+
 
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
@@ -138,10 +138,6 @@ var init = function(){
 
   var monster_v2 = new monster_ai(scene,guy);
 
-  //Creates and adds skybox to scene
-  skybox = sky();
-  scene.add(skybox);
-
   const initial_position = new CANNON.Vec3(0, 1, 0); //Initial player position for opening sandbox exploration
 
   var path = [
@@ -171,9 +167,10 @@ var init = function(){
 
 
 //Mandatory method calls from the other classes
+createMenu()//create menu screen overlay (level selection)
 initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish,pickupSound)
 setDeathScreen(spriteDeath,sceneHUD,hitSound)
-createMenu()//create menu screen overlay (level selection)
+
 
 var t =41;
 var selected = 0;
@@ -211,7 +208,6 @@ var update = function(){//game logic
       delta = new_time - time
       time = new_time
       guy.update(delta)
-      g.update()
 
       //Call to the dynamics class to allow us to interact with the scene
       detectObject(guy)
@@ -337,7 +333,7 @@ var update = function(){//game logic
   //Function that will be called upon a level change to remove the objects that are currently in the scene
   function lvlChange(){
     removeFloor(scene,world)
-    removeAllDyamics(scene,world);
+    removeAllDynamics(scene,world);
     resetHealth();
     guy.body.position.set(0,1,-1);
   }
@@ -402,7 +398,7 @@ var update = function(){//game logic
     console.log("clicked")
     console.log("Level check: ",lvl)
     paused=false;
-
+    console.log(goToNext)
     if(goToNext){
       console.log("Current level: ",curr_lvl)
       lvl = getNextLevel();
@@ -460,6 +456,12 @@ var update = function(){//game logic
 
   GameLoop()
 };
+function getNextLevel(){
+  if(lvl!=4){
+    return lvl+1;
+  }
+  return -1;
+}
 
 function createMenu(){ //Creating the pause menu
   var container = document.createElement('canvas');

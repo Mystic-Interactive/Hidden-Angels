@@ -36,7 +36,6 @@ export class Ground extends THREE.Group{
       ground.castShadow = true;
   
       this.body.position.y = -1 
-      
       // Add both body and plane to world
       this.add(ground)
       this.scene.add(this)
