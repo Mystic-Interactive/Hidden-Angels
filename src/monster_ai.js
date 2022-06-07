@@ -1,5 +1,6 @@
 import { Vec3 } from '../lib/cannon-es.js';
 import * as YUKA from '../lib/yuka.module.js' 
+import AnimationManager from './animationManager.js'
 
 export default class monster_ai extends THREE.Group{
     constructor(scene,player){
@@ -16,7 +17,6 @@ export default class monster_ai extends THREE.Group{
         this.path = new YUKA.Path();
         this.path.add(new YUKA.Vector3(0,0,0));
         this.path.add(new YUKA.Vector3(0,0,10));
-        //this.path.add(new YUKA.Vector3(0,0,-10));
         this.path.loop = false;
         this.vehicle.position.copy(this.path.current());
       

@@ -128,9 +128,8 @@ var init = function(){
     new THREE.Vector3(-10, 0, 0)
   ]
   
- // const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
- // const fpCamera = new FirstPersonCamera(camera);
-  var monster_v2 = new monster_ai(scene,guy);
+  const monster_v2 = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
+  //var monster_v2 = new monster_ai(scene,guy);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -200,10 +199,10 @@ var selected = 0;
 
   var update = function(){//game logic
     if(!paused){
-      monster_v2.update();
       const new_time = new Date().getTime()
       delta = new_time - time
       time = new_time
+      monster_v2.update(delta * 0.001);
       guy.update(delta)
       g.update()
 

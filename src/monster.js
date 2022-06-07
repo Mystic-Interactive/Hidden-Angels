@@ -2,6 +2,7 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
+import * as YUKA from '../lib/yuka.module.js'
 
 export default class Monster extends THREE.Group {
 
@@ -10,13 +11,31 @@ export default class Monster extends THREE.Group {
         this.scene = scene
         this.world = world
         this.start_pos = position
-        for (var i = 0; i < path.length; i++){
-            path[i].add(path[i], this.start_pos)
-        }
-        this.path = path
+
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
         this.loaded = false
+
+        //monster ai
+        this.vehicle = new YUKA.Vehicle();
+        function sync(entity, renderComponent) {
+            renderComponent.matrix.copy(entity.worldMatrix);
+        }
+        this.vehicle.maxSpeed = 5;
+        this.path = new YUKA.Path();
+        this.path.add(new YUKA.Vector3(0,-1,0));
+        this.path.add(new YUKA.Vector3(0,-1,2.5));
+        this.path.add(new YUKA.Vector3(0,-1,-2.5));
+        this.path.add(new YUKA.Vector3(2.5,-1,1.5));
+        this.path.add(new YUKA.Vector3(5,-1,0));
+        this.path.loop = true;
+        this.vehicle.position.copy(this.path.current());
+      
+        this.followPathBehavior = new YUKA.FollowPathBehavior(this.path,0.5);
+        this.vehicle.steering.add(this.followPathBehavior);
+        this.entityManager = new YUKA.EntityManager();
+        this.entityManager.add(this.vehicle);
+
 
         const loader = new THREE.GLTFLoader()
         loader.load('../res/meshes/Characters/BasicMonster.glb', (gltf) => {
@@ -40,12 +59,12 @@ export default class Monster extends THREE.Group {
         var model = this.gltf.scene
         this.add(model)
         this.model = model
+        this.model.matrixAutoUpdate = false;
+    //    this.updateMaterials(model)
 
-        this.updateMaterials(model)
-
-        this.skeleton = new THREE.SkeletonHelper( model )
-        this.skeleton.visible = true;
-        this.scene.add( this.skeleton )
+      //  this.skeleton = new THREE.SkeletonHelper( model )
+      //  this.skeleton.visible = true;
+     //   this.scene.add( this.skeleton )
 
         const animations = this.gltf.animations;
 
@@ -71,6 +90,13 @@ export default class Monster extends THREE.Group {
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
+
+        this.model.matrixAutoUpdate = false;
+
+        this.vehicle.setRenderComponent(this.model,sync)
+        function sync(entity, renderComponent) {
+            renderComponent.matrix.copy(entity.worldMatrix);
+        }
     }
 
     updateTransform(delta){
@@ -101,13 +127,15 @@ export default class Monster extends THREE.Group {
     update( delta ){
         if(!this.loaded) return
         try{
-            this.play_direction = 1 
-            this.desired_action = "roar"
-            this.animation_manager.update( delta, this.desired_action, this.play_direction )
-            this.updateTransform(delta)
+            this.play_direction = 1; 
+            this.desired_action = "walk"
+            this.animation_manager.update( delta * 4500, this.desired_action, this.play_direction )
+            //this.updateTransform(delta)
+
         }catch(e){
             console.error(e.stack)
         }
+        this.entityManager.update(delta);
     }
 
 }
