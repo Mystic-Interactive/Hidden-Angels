@@ -288,8 +288,7 @@ function makeBasement(scene,world){
 
 //Function that will add all objects in the maze to the scene
 function makeFourthFloor(scene,world){
-    var mazeMat =new THREE.MeshBasicMaterial({color: 0xFF0000});
-    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],mazeMat)
+    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],null)
     
     //collisions
         //outer walls 
