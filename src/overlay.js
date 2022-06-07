@@ -4,6 +4,8 @@ var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
 var selected = 0;
 var inventory = [];
+var spriteDeath = null;
+var sceneHUD = null;
 
 
 //Simple functions to help with creation of the scene
@@ -73,6 +75,7 @@ var inventory = [];
     graphics.restore();
   }
 
+  //Draws the half heart for the health bar
   function drawHalfHeart(){
     graphics.save();
     graphics.scale(0.75,0.75);
@@ -83,6 +86,7 @@ var inventory = [];
     graphics.restore();
   }
 
+  //Draws the half heart for the health bar
   function drawHeart(){
     graphics.save();
     graphics.scale(0.75,0.75)
@@ -190,8 +194,8 @@ var inventory = [];
     }
     //Icon is the closet key
     else if(item_num==2){
-      drawKey(translate_x,translate_y,width,"rgb(75,122,71)");
-      return ["Closet Key","rgb(75,122,71)"];
+      drawKey(translate_x,translate_y,width,"lime");
+      return ["Closet Key","lime"];
     }
     //Icon is the screw driver
     else if(item_num==3){
@@ -236,30 +240,65 @@ var inventory = [];
     graphics.restore();
 
   }
- //Draws the inventory bar 
+
+//Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,num_blocks,colour){
   graphics.strokeStyle=colour;
+  graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
   var selected_item = "";
   var word_colour = [];
-  for(var i=0;i<num_blocks;i++){
-    if(inventory[i]!=-1){
-      word_colour = drawIcon(inventory[i],startx,starty,width)
-      if(selected==i){
-        selected_item = word_colour[0];
-      }
-      else{
-        selected_item="";
+  for(var i = 0;i<8;i++){
+    try {
+      if(inventory[i]!=null){
+        word_colour = drawIcon(inventory[i],startx,starty,width)
+        if(selected==i){
+          selected_item = word_colour[0];
+        }
+        else{
+          selected_item="";
+        }
       }
     }
+    catch(err) {
+     console.log("No item in this slot")
+    }
+    
     if(i==selected){
       graphics.strokeStyle="white";
-      writeItem(selected_item,word_colour[1])
+      try{
+        writeItem(selected_item,word_colour[1])
+      }
+      catch(err){
+        writeItem(selected_item,"")
+      }
+      
     }
 
     drawBlock(startx,starty,width,height);
     graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
+
   }
+  // for(var i=0;i<8;i++){
+  //   if(inventory[i]!=-1){
+  //     word_colour = drawIcon(inventory[i],startx,starty,width)
+  //     if(selected==i){
+  //       selected_item = word_colour[0];
+  //     }
+  //     else{
+  //       selected_item="";
+  //     }
+      
+  //   }
+  //   if(i==selected){
+  //     graphics.strokeStyle="white";
+  //     writeItem(selected_item,word_colour[1])
+  //   }
+
+  //   drawBlock(startx,starty,width,height);
+  //   graphics.strokeStyle=colour;
+  //   startx+=width+graphics.lineWidth+0.5;
+  // }
 }
 
 //Draws the health bar
@@ -281,7 +320,7 @@ function healthIndicator(){
   graphics.translate(-150,-75)
   // graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
   // graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-
+  graphics.clearRect(0,0,300,150);
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
   // Ensure same dimensions
@@ -324,18 +363,42 @@ function healthIndicator(){
   graphics.restore();
 }
 
+//
+function addToInventory(item_num){
+  inventory.push(item_num)
+  inventory = [...new Set(inventory)];
+}
+
+function clearInventory(){
+  inventory = [];
+}
+
+function getItemSelected(){
+  try{
+    return inventory[selected]
+  }
+  catch(error){
+    return -1
+  }
+  
+}
+
+function setDeathScreen(spriteDeath_, HUD_){
+  spriteDeath = spriteDeath_
+  sceneHUD = HUD_
+}
+
 //Draws the HUD on the screen
-function HUD(inventory_slots,_inventory){
+function HUD(){
   graphics.save();
   graphics.translate(hud_canvas.width/2, hud_canvas.height/2);
   graphics.scale(hud_canvas.width/300,  hud_canvas.height/150);
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   
-  inventory=_inventory
-  var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*inventory_slots;
+  var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,inventory_slots,/*"rgba(255,100,50,1)"*/"rgb(255, 230, 130)");
+  drawInventoryBar(begin,50,12.5,12.5,8,"rgb(42, 42, 42)");
   // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }
@@ -344,7 +407,8 @@ function HUD(inventory_slots,_inventory){
 function tookDamage(damageTaken){
   graphics.save();
   hearts-=damageTaken;
-  if(hearts == 0){
+  if(hearts<1){
+    sceneHUD.add(spriteDeath)
     console.log("You have died");
   }
   graphics.save();
@@ -357,4 +421,11 @@ function changeInventorySelected(_change){
   selected=_change-1
 }
 
-export{HUD,tookDamage,changeInventorySelected}
+function clearItem(){
+  inventory.splice(selected,1)
+}
+function resetHealth(){
+  hearts = 3;
+}
+
+export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem, setDeathScreen, resetHealth}

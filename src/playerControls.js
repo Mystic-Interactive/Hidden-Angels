@@ -3,8 +3,9 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
 
     constructor(player, animation_manager){
         this.player = player
-        this.animation_manager = animation_manager
+        this.animation_manager = animation_manager // Initialize Helper so animations are played in correct order  
 
+        // Define possible movements 
         this.forward = false
         this.backward = false
         this.left = false
@@ -20,7 +21,7 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
 
     define(){
         document.addEventListener('keydown', (event)=>{
-            switch( event.key.toLowerCase() ){
+            switch( event.key.toLowerCase() ){ // set movement to true while key is pressed
                 case "w"        : this.forward     = true; break
                 case "s"        : this.backward    = true; break
                 case "a"        : this.left        = true; break
@@ -32,7 +33,7 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
         })
 
         document.addEventListener('keyup', (event)=>{
-            switch( event.key.toLowerCase() ){
+            switch( event.key.toLowerCase() ){ // set movement to false when key is not pressed
                 case "w"        : this.forward     = false; break
                 case "s"        : this.backward    = false; break
                 case "a"        : this.left        = false; break

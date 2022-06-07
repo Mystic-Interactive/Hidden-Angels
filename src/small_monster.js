@@ -47,7 +47,4 @@ export default class SmallMonster extends Monster {
         this.world.addBody(this.body)
         this.loaded = true
     }
-
-
-
 }

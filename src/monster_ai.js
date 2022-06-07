@@ -33,7 +33,7 @@ export default class monster_ai extends THREE.Group{
             this.model = model;
             this.add(model)
             this.scene.add(this)
-            this.model.matrixAutoUpdate = false;
+            this.model.matrixAutoUpdate = true;
 
             this.vehicle.setRenderComponent(this.model,sync)
         }) 

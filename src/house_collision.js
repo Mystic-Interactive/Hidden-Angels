@@ -1,4 +1,6 @@
 import * as CANNON from '../lib/cannon-es.js'
+import { Reflector } from '../lib/Reflector.js'
+import  {makeDynamicObject,setGoalPosition}  from '../src/house_dynamic.js'
 
 var first_floor_objects = [];
 var first_floor_collisions= [];
@@ -16,36 +18,38 @@ const loadingManager = new THREE.LoadingManager();
 const progressBar = document.getElementById('progress-bar')
 const progressBarContainer = document.querySelector('.progress-bar-container')
 
-// Method to do things when we starting loading 
-loadingManager.onStart = function(url,item,total){
-progressBarContainer.style.display = 'block';
-progressBarContainer.style.position = 'absolute';
+ // Method to do things when we starting loading 
+ loadingManager.onStart = function(url,item,total){
+      progressBarContainer.style.display = 'block';
+      progressBarContainer.style.position = 'absolute';
 
-console.log(`Started loading: ${url}`)
-}
+      console.log(`Started loading: ${url}`)
+  }
+    
+  // Method called when the loading is under progress
+  loadingManager.onProgress = function(url,loaded,total){
+      progressBar.value = (loaded/total)*100;
+  }
 
-// Method called when the loading is under progress
-loadingManager.onProgress = function(url,loaded,total){
-    progressBar.value = (loaded/total)*100;
-}
+    
+  // Method called called when the loading of the assest has finished
+  loadingManager.onLoad = function(){
+      progressBarContainer.style.display = 'none';
+  }
 
-// Method called called when the loading of the assest has finished
-loadingManager.onLoad = function(){
-    progressBarContainer.style.display = 'none';
-}
+  // Method called when there is an error
+  loadingManager.onError = function(url){
+      console.error(`Problem loading ${url}`)
+  }
 
-// Method called when there is an error
-loadingManager.onError = function(url){
-    console.error(`Problem loading ${url}`)
-}
-
-const gltfLoader = new THREE.GLTFLoader(loadingManager);
+  const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
 function makeFirstFloor(scene,world){
     //Make first floor blender model
     makeObject(scene,'../res/meshes/FirstFloor/FirstFloor.glb',[1,1,1],[0,-0.83,-4],[0,0,0],1,null)
 
-    //collision for the first floor
+  //collision for the first floor
+    //floor and roof
     makeCollisionCube(scene,world,[23,0.1,19.75],[0,-0.85,-4],[0,0,0]); //floor
     // makeCollisionCube(scene,world,[23,0.1,19.75],[0,5.5,-4],[0,0,0]); //roof
 
@@ -89,7 +93,6 @@ function makeFirstFloor(scene,world){
         makeBookShelf(scene,[-12,-0.8,0.9],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-2.4],[0,Math.PI/2,0]);
         makeBookShelf(scene,[-12,-0.8,-5.7],[0,Math.PI/2,0]);
-        makeBookShelf(scene,[-10,-0.8,-7.5],[0,0,0]);
             makeCollisionCube(scene,world,[0.01,2,12],[-11.9,1,-1],[0,0,0],1); //bookshelf collision
 
         //Oven
@@ -99,8 +102,8 @@ function makeFirstFloor(scene,world){
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[4.1,1,1],[8.2,-0.7,5.4],[0,Math.PI,0],1,null)
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.6,1,1],[11.75,-0.7,3.1],[0,Math.PI/2,0],1,null)
         makeObject(scene,'../res/meshes/FirstFloor/Counter.glb',[1.15,1,1],[11.75,-0.7,-0.8],[0,Math.PI/2,0],1,null)
-            makeCollisionCube(scene,world,[8,0.75,0.5],[8,0.5,5],[0,0,0],1);
-            makeCollisionCube(scene,world,[0.5,0.75,6],[12,0.5,1],[0,0,0],1);
+            makeCollisionCube(scene,world,[8,0.75,0.125],[8,0.25,5],[0,0,0],1);
+            makeCollisionCube(scene,world,[0.125,0.25,6],[12,0.5,1],[0,0,0],1);
 
 
     //adding lights
@@ -122,6 +125,19 @@ function makeFirstFloor(scene,world){
         
         //dining room
             ChandelierCreator(scene,[8,1.8,-8],[0,Math.PI,0],1);
+    
+    //Placing level items
+    makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,-13],[0,0,0],6) //Library key
+    makeDynamicObject('../res/meshes/PuzzleItems/Book.glb',[1,1,1],[6,0.4,4.75],[Math.PI/2,0,0],7) //secretbook
+
+    //Placing interactable objects
+    makeDynamicObject('../res/meshes/DoubleDoor.glb',[1,1,1],[-4,-1,-1.05],[0,Math.PI/2,0],13) //Secretbookcase
+    makeDynamicObject('../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],[-10,-0.8,-7.5],[0,0,0],14) //Secretbookcase
+
+    //make goal position
+    setGoalPosition(new THREE.Vector3(-11.5,-0.75,-13))
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[-11.5,-0.75,-13],[0,-Math.PI,0],1,null)
+
 
 }
 
@@ -198,13 +214,37 @@ function makeSecondFloor(scene,world){
         //storage room
         InteriorWallLightCreator(scene,[-6,1,4],[0,3*Math.PI/2,0],2);
 
-        //rubble
-        makeObject(scene,'../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],2,null) //bedroom 2
+        
+
+        //Mirrors
+        makeMirrors(scene)
+
+        //Placing level items
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,-13],[0,0,0],1) //Bathroom key
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[11.5,-0.75,5],[0,0,0],2) //Closet Key
+        makeDynamicObject('../res/meshes/PuzzleItems/Screwdriver.glb',[0.5,0.5,0.5],[5,-0.8,5.5],[Math.PI/2,0,Math.PI/2],3) //Screw driver
+        makeDynamicObject('../res/meshes/PuzzleItems/Shovel.glb',[0.5,0.25,0.3],[11.5,-0.75,-13.25],[0,Math.PI/2,-Math.PI/6],4) //Shovel
+        makeDynamicObject('../res/meshes/PuzzleItems/Key.glb',[1,1,1],[-11.5,-0.75,4.75],[0,0,0],5) //GoalKey
+
+        //Placing interactable objects
+        makeDynamicObject('../res/meshes/Door.glb',[0.95,1,1],[0.75,-0.75,0.95],[0,0,0],8) //bathroom door
+        makeDynamicObject('../res/meshes/Blockade.glb',[0.5,0.75,1],[11.5,-0.75,-6.4],[0,0,0],10) //bedroom 1 door
+        makeDynamicObject('../res/meshes/Rubble.glb',[0.5,0.75,0.75],[11.5,-0.75,-1],[0,0,0],11) //bedroom 2 door
+        makeDynamicObject('../res/meshes/Door.glb',[1,1,1],[-9.75,-0.75,2.5],[0,0,0],9) //closet door
+        makeDynamicObject('../res/meshes/Door.glb',[1.1,1,1],[4.1,-0.75,-11.5],[0,0,0],12) //goal door
+
+        //make goal position
+        setGoalPosition(new THREE.Vector3(0,-0.75,-13))
+        makeObject(scene,'../res/meshes/Flag.glb',[1,1,1],[0,-0.75,-13],[0,-Math.PI,0],2,null)
 }
 
 function makeBasement(scene,world){
     //Make basement blender model
     makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],3,null)
+
+    //nests
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[-11,-0.83,4.5],[0,0,0],3,null)
+    makeObject(scene,'../res/meshes/Basement/Nest.glb',[1,1,1],[11.25,-0.83,-12.75],[0,0,0],3,null)
 
   //Collision boxes
     //exterior walls
@@ -229,10 +269,21 @@ function makeBasement(scene,world){
 
     //ladder
     makeCollisionCube(scene,world,[0.01,5,0.5],[10,1.5,4.75],[0,0,-Math.PI/4],3);
+
+    //egg sacks messhes
+    makeCollisionCube(scene,world,[1.2,4,1.5],[-11,0,4.75],[0,0,0],3);
+    makeCollisionCube(scene,world,[1.2,4,1.5],[11,0,-12.5],[0,0,0],3);
+
+    //make goal position
+    setGoalPosition(new THREE.Vector3(7.75,-0.75,4.75))
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[7.5,-0.75,4.5],[0,-Math.PI,0],3,null)
+
+
 }
 
 function makeFourthFloor(scene,world){
-    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4,null)
+    var mazeMat =new THREE.MeshBasicMaterial({color: 0xFF0000});
+    makeObject(scene,'../res/meshes/Maze/GardenMaze.glb',[1,2,1],[0,-1,0],[0,0,0],4,mazeMat)
     
     //collisions
         //outer walls 
@@ -293,11 +344,16 @@ function makeFourthFloor(scene,world){
         makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,1,-10],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,1,-13],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[-2.9,1,-10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.9,1,-8],[0,0,0],4); 
         makeCollisionCube(scene,world,[0.25,3,2.5],[0,1,-13],[0,0,0],4);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[3,1,-10],[0,0,0],4);
+        makeCollisionCube(scene,world,[0.25,3,3],[3,1,-10],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-13],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0],4);
         makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0],4);
+
+    //make goal position
+    setGoalPosition(new THREE.Vector3(7.75,-0.75,-16))
+    makeObject(scene,'../res/meshes/Flag.glb',[0.75,0.75,0.75],[7.5,-0.75,-15],[0,-Math.PI,0],4,null)
 }
 
 function makeFirstFloorStairs(scene,world,translate){
@@ -331,7 +387,62 @@ function makeFirstFloorStairs(scene,world,translate){
 }
 
 function makeBookShelf(scene,translate,rotation){
-    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.035,0.015,0.015],translate,rotation,1,null)
+    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],translate,rotation,1,null)
+}
+
+function makeMirrors(scene){
+    const mirrorOptions = {
+        clipBias: 0.000,
+        textureWidth: window.innerWidth * window.devicePixelRatio,
+        textureHeight: window.innerHeight * window.devicePixelRatio,
+        color: 0x808080,
+        multisample: 4,
+      }
+
+      const mirrorGeo = new THREE.PlaneGeometry(1, 1);
+      const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+      mainBathroomMirror.rotation.y = -Math.PI/2
+      mainBathroomMirror.position.set(4.85, 0.85, 2);
+      bedroomBathroomMirror.rotation.y = Math.PI/2
+      bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
+      scene.add(mainBathroomMirror);
+      scene.add(bedroomBathroomMirror);
+
+      second_floor_objects.push(mainBathroomMirror);
+      second_floor_objects.push(bedroomBathroomMirror);
+
+      let mainMirrorFrame;
+      let bedroomMirrorFrame
+
+      gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        bedroomMirrorFrame = gltf.scene;
+        bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
+        bedroomMirrorFrame.rotation.y = -Math.PI/2
+        bedroomMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(bedroomMirrorFrame);
+        second_floor_objects.push(bedroomMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
+
+      gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+        mainMirrorFrame = gltf.scene;
+        mainMirrorFrame.position.set(4.85, 0.3, 2);
+        mainMirrorFrame.rotation.y = -Math.PI/2
+        mainMirrorFrame.scale.set(0.55, 0.55);
+        scene.add(mainMirrorFrame);
+        second_floor_objects.push(mainMirrorFrame);
+      }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      }, (error) => {
+        console.log(error);
+      });
+
+      
+      
 }
 
 function makeObject(scene,path,scale,translate,rotation,floor,material){
@@ -385,7 +496,7 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr,floor){
     const box = new THREE.Mesh(boxGeo,boxMat);
     box.position.set(boxPos[0],boxPos[1],boxPos[2]);
     box.rotation.set(rotationArr[0],rotationArr[1],rotationArr[2])
-    //scene.add(box);
+    scene.add(box);
   
     const boxBody = new CANNON.Body({
         shape: new CANNON.Box(new CANNON.Vec3(boxGeoSize[0]/2,boxGeoSize[1]/2,boxGeoSize[2]/2)),
@@ -442,7 +553,7 @@ function makeCollisionStairCase(scene,world,boxGeoSize,boxPos,num_stairs,directi
 }
 
 function InteriorWallLightCreator(scene,position,rotation,floor){
-    makeObject(scene,'../res/meshes/InteriorWallLight.glb',[0.5,0.5,0.5],position,rotation,floor,null)
+    makeObject(scene,'../res/meshes/InteriorWallLight.glb',[1,1,1],position,rotation,floor,null)
 }
 
 function BedroomLightCreator(scene,position,rotation,floor){
@@ -492,5 +603,5 @@ function removeFloor(scene,world,floor){
     }
 }
 
-export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor}
+export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor,makeObject,makeCollisionCube}
 

@@ -12,11 +12,11 @@ export class Ground extends THREE.Group{
     
     define(){ // Create plane with ground textures and add it to world
       const textLoader = new THREE.TextureLoader();
-      let baseColor = textLoader.load("./textures/forrest_ground_01_diff_1k.jpg");
-      let aoColor = textLoader.load("./textures/forrest_ground_01_rough_ao_1k.jpg");
+      let baseColor = textLoader.load("./textures/ground/forrest_ground_01_diff_1k.jpg");
+      let aoColor = textLoader.load("./textures/ground/forrest_ground_01_rough_ao_1k.jpg");
   
       // Create plane with ground textures
-      const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), 
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 512, 512), 
         new THREE.MeshLambertMaterial({ // Lambert Material used so shadows look smooth
           map: baseColor,
           aoMap: aoColor,
