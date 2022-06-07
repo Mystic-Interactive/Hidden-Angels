@@ -23,6 +23,8 @@ export class Ground extends THREE.Group{
         })
       );
       ground.geometry.attributes.uv2 = ground.geometry.attributes.uv;
+      ground.rotation.set(-Math.PI/2, 0, 0)
+      ground.position.y = -1
   
       this.body = new CANNON.Body({ // create physics body for plane
         shape: new CANNON.Box(new CANNON.Vec3(60, 60, 0.1)), // Cannon.js planes are infinite so use a cube instead
