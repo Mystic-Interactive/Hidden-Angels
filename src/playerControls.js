@@ -57,12 +57,16 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
         } else {this.player.view = 3}
 
         if(this.jump) {
+            this.jump_duration += delta
             if(this.jump_duration < this.max_jump_duration){
                 st.push(this.compose_state("jump", 1))
+                console.log(this.jump_duration)
                 this.state = st
+                return
             }
-            this.jump_duration += delta
-            return
+            
+            
+            
         } else {
             this.jump_duration = 0
         }
@@ -104,7 +108,6 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
         this.choose_state(delta)
         var current_state = this.state[0]
         this.player.current_state = current_state
-        //console.log(current_state.action.split(" ")[0])
         this.animation_manager.update(delta, current_state.action.split(" ")[0], current_state.direction)
 
     }

@@ -10,6 +10,7 @@ import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import { Reflector } from '../lib/Reflector.js'
+import SmallMonster from './small_monster.js';
 
 // variables to set up scene with camera
 var  camera;
@@ -40,6 +41,7 @@ var mousePos;
 // items added to scene
 var player;
 var monster;
+var smol_boi;
 var ground;
 var moonLight;
 var moonSphere;
@@ -118,6 +120,9 @@ var init = function(){
 
   monster = new Monster(scene, world,new THREE.Vector3(-11, 1, -12), path, player, true); //Create and add monster to scene and physics world
   monsters.push(monster);
+
+  smol_boi = new SmallMonster(scene, world,new THREE.Vector3(0, 0, 0), path, player, true);
+  monsters.push(smol_boi)
 
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
@@ -285,6 +290,7 @@ function update(){ //Game Logic
     delta = new_time - time;
     time = new_time;
     monster.update(delta);
+    smol_boi.update(delta)
     player.update(delta)
     ground.update()
 
