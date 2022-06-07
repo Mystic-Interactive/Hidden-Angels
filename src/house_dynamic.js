@@ -345,7 +345,7 @@ function UI(lvl){
 
 
 //Removes all remaining dynamic objects from the scene
-function removeAllDyamics(){
+function removeAllDynamics(){
 
     for(var i = 1; i<=obj_positions.length;i++){
         removeObjectFromScene(i,false)
