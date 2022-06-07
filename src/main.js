@@ -119,7 +119,7 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 0, 5)
 
-  const guy = new Player(scene, world, camera)
+  const player = new Player(scene, world, camera)
 
 
 
@@ -128,8 +128,8 @@ var init = function(){
     new THREE.Vector3(-10, 0, 0)
   ]
   
-  const monster_v2 = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
-  //var monster_v2 = new monster_ai(scene,guy);
+  const monster_v2 = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
+  //var monster_v2 = new monster_ai(scene,player);
   const light = new THREE.AmbientLight();
   light.intensity=0.5;
   scene.add(light);
@@ -203,7 +203,7 @@ var selected = 0;
       delta = new_time - time
       time = new_time
       monster_v2.update(delta * 0.001);
-      guy.update(delta)
+      player.update(delta)
       g.update()
 
       //Showing that we can decrease the visible hearts on the fly

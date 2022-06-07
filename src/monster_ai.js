@@ -39,21 +39,50 @@ export default class monster_ai extends THREE.Group{
         }) 
         //time for yuka logic
         this.time = new YUKA.Time();
-       
+        // load navigation mesh
+
+            const nav_loader = new YUKA.NavMeshLoader();
+            nav_loader.load( '../res/meshes/FirstFloor_nav.glb' ).then( ( navigationMesh ) => {
+            this.navMesh = navigationMesh;
+            console.log("added navmesh");
+          //  const graph = navMesh.graph;
+         });
+
+
     }
 
-    update(){
+    findPathTo(place) {
+
+        const from = this.vehicle.position;
+        const to = place;
+    
+        const movements = this.navMesh.findPath( from, to );
+    
+        this.followPathBehavior.active = true;
+        this.path.clear();
+    
+        for ( const point of movements ) {
+    
+            this.path.add( point );
+    
+        }
+    
+    }    
+
+    update(time){
         const delta = this.time.update().getDelta();
         this.player.update();
-        const position =  new YUKA.Vector3();
-        position.copy(this.player.position);
-        const vec = new Vec3(0,0,0);
-        if(!(position.equals(vec))){
-            this.path.clear();
-            this.path.add(position);
+        //  this.findPathTo(this.player.position);
+        // const position =  new YUKA.Vector3();
+        // position.copy(this.player.position);
+        // const vec = new Vec3(0,0,0);
+        // if(!(position.equals(vec))){
+        //     this.path.clear();
+        //     this.path.add(position);
 
-        }
-        
+        // }
+        console.log(this.player.position)
+        this.findPathTo(this.player.position);
         this.entityManager.update(delta);
     }
 

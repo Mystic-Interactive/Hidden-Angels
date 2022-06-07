@@ -9,6 +9,7 @@ export default class Player extends THREE.Group {
         this.world = world
         this.camera = camera
         this.loaded = false
+        this.watching = false;
         this.init_()
     }
 
