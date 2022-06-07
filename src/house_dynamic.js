@@ -364,14 +364,16 @@ document.addEventListener('keydown',(e)=>{
             if(closest[2]==false){ //check for if the object is pickupable
                 addToInventory(closest[1])
                 removeObjectFromScene(closest[1],true)
+                audioPickUp.play(); //Have to put audio in these statements seperately else it would play when nothing is being picked-up/used
             }
             else{
                 if(getItemSelected()==closest[1]-7){
                     removeObjectFromScene(closest[1],true)
                     clearItem();
+                    audioPickUp.play(); 
                 }
             }
-            audioPickUp.play();            
+                       
             
         }
         

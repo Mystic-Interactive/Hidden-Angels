@@ -102,7 +102,7 @@ var init = function(){
   //Create and add ground mesh to scene
   ground = new Ground(scene, world)
   
-  //Setting up the moon. The moon contains a directional light, a mesh and a texture
+  //Setting up the moon. The moon contains a point light, a mesh and a texture
   moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
   scene.add(moonLight);
   moonSphere = addSphereMoon(2);
@@ -202,6 +202,7 @@ var init = function(){
     mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
   })
 
+   //Click listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
     console.log("Level: ",lvl)
@@ -271,6 +272,7 @@ function update(){ //Game Logic
   rayCasterHUD.setFromCamera(mousePos,cameraHUD);
   const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
+  //Only update the game state if the menu is not brought up
   if(!paused){
     // monster_v2.update();
     const new_time = new Date().getTime()
@@ -309,10 +311,15 @@ function update(){ //Game Logic
       skybox.rotation.x+=0.0005;
       skybox.rotation.y+=0.0005;
       skybox.rotation.z+=0.0005;
+
+      scene.add(moonLight)
+      scene.add(moonSphere)
+      scene.remove(torchLight)
     }
     else{
-      moonLight.position.set(0,10,0);
-      moonSphere.position.set(0,10,0);
+      scene.remove(moonLight)
+      scene.remove(moonSphere)
+      scene.add(torchLight)
     }
 
     world.step(timestep)
@@ -360,7 +367,7 @@ function update(){ //Game Logic
 
 function render(){// Draw scene
   renderer.render(scene, camera);
-
+  //Only render the pause menu sprites when the game is paused
   if(paused){
     sceneHUD.add(sprite);
     sceneHUD.add(sprite2);
@@ -377,6 +384,7 @@ function render(){// Draw scene
   renderer.render(sceneHUD, cameraHUD); 
 };
 
+//Function that will be called upon a level change to remove the objects that are currently in the scene
 function lvlChange(curr_lvl){
   removeFloor(scene,world,curr_lvl)
   removeAllDynamics(scene,world);
