@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "http-server": "^14.1.0",
-    "three": "^0.139.2",
-    "yuka": "^0.7.7"
+    "three": "^0.139.2"
   }
 }
