@@ -7,7 +7,7 @@ import Monster from '../src/monster.js'
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelected,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
 
@@ -25,6 +25,7 @@ var speed = 0
 var t = 41;
 var selected = 0;
 
+
 // HUD control variables
 var paused = false;
 var curr_lvl = null;
@@ -34,15 +35,15 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var finish_uuid = "";
 var death_uuid = "";
 var goToNext = false;
-var deathScreen = false;
 var restart = false;
 
 var sceneHUD;
 var cameraHUD;
 var mousePos;
-var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext;
+var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext, spriteFinish;
 
 // items added to scene
 var player;
@@ -52,7 +53,6 @@ var moonLight;
 var moonSphere;
 var torchLight;
 var skybox;
-
 
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
@@ -79,6 +79,33 @@ var init = function(){
     1000 // far clipping plane
   );
   
+
+  //adding sounds
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
+  const audioLoader = new THREE.AudioLoader();
+  const backgroundsound = new THREE.Audio(listener);
+  const hitSound = new THREE.Audio(listener);
+  const pickupSound = new THREE.Audio(listener);
+
+  audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
+    backgroundsound.setBuffer(buffer);
+    backgroundsound.setLoop(true);
+    backgroundsound.setVolume(0.1);
+    backgroundsound.play();
+  })
+
+  audioLoader.load('../res/sound_effects/pick_up_item.wav',function(buffer){
+    pickupSound.setBuffer(buffer);
+    pickupSound.setVolume(0.2);
+  })
+
+  audioLoader.load('../res/sound_effects/hurt.mp3',function(buffer){
+    hitSound.setBuffer(buffer);
+    hitSound.setVolume(0.2);
+  })
+
   renderer = new THREE.WebGLRenderer({
     maxLights: 8,
     canvas: world_canvas,
@@ -86,7 +113,7 @@ var init = function(){
 
   renderer.setSize(0.99*window.innerWidth, 0.99*window.innerHeight,);
   renderer.shadowMap.enabled = true;
-  renderer.autoClear = false;
+  renderer.autoClear = false; //We are going to render 2 scenes so we need to turn off auto clear
   
   document.body.appendChild(renderer.domElement);
 
@@ -101,6 +128,16 @@ var init = function(){
   moonSphere = addSphereMoon(2);
   scene.add(moonSphere);
   
+
+  //Added skybox
+  const skybox = sky()
+  scene.add(skybox)
+
+
+  const guy = new Player(scene, world, camera)
+
+  var monster_v2 = new monster_ai(scene,guy);
+
   //Creates and adds skybox to scene
   skybox = sky();
   scene.add(skybox);
@@ -114,12 +151,34 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
 
+
   const monsters = [];
   player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
 
-  //var monster_v2 = new monster_ai(scene,player);
 
-  // create and add ambient light to scene
+
+  //Creating the pause menu
+  var container = document.createElement('canvas');
+  container.setAttribute(
+    "style","width:1px; height:1px","position:absolute");
+    document.body.appendChild( container );
+    var cameraHUD = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2,window.innerHeight / - 2, - 500, 1000 );
+      cameraHUD.position.x = 0;
+      cameraHUD.position.y = 0;
+      cameraHUD.position.z = 0;
+    
+    var sceneHUD = new THREE.Scene();
+
+
+//Mandatory method calls from the other classes
+initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish,pickupSound)
+setDeathScreen(spriteDeath,sceneHUD,hitSound)
+createMenu()//create menu screen overlay (level selection)
+
+var t =41;
+var selected = 0;
+
+// create and add ambient light to scene
   const light = new THREE.AmbientLight();
   light.intensity = 0.2; //dim light for atmosphere
   scene.add(light);
@@ -132,23 +191,166 @@ var init = function(){
 	  PointerLock.lock();
 	});
 
-  createMenu()//create menu screen overlay (level selection)
   
   //Create and add spotlight tos scene (acts as player torch)
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
+ 
+var update = function(){//game logic
+    
+    //Raycaster for sprite detection
+    const rayCasterHUD = new THREE.Raycaster();
+    rayCasterHUD.setFromCamera(mousePos,cameraHUD);
+    const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
-  initialiseDynamics(scene, sceneHUD, world, spriteNext)
-  setDeathScreen(spriteDeath,sceneHUD)
 
+    //Only update the game state if the menu is not brought up
+    if(!paused){
+      monster_v2.update();
+      const new_time = new Date().getTime()
+      delta = new_time - time
+      time = new_time
+      guy.update(delta)
+      g.update()
+
+      //Call to the dynamics class to allow us to interact with the scene
+      detectObject(guy)
+      
+      //Call to the dynamics class so we can draw the respective sprites
+      UI(lvl);
+
+      //Showing that we can decrease the visible hearts on the fly
+      const d = new Date();
+      // console.log(d.getMinutes())
+      if(d.getMinutes()==t){
+        selected+=2;
+        tookDamage(1.5);
+        changeInventorySelected(selected)
+        HUD();
+        t+=1;
+      }
+      HUD()
+      
+
+      
+
+      //Move the moon and skybox only when you can see them to reduce the compuation needed
+      if(curr_lvl==4){
+        //Rotates and moves the moon
+        speed+=0.001
+        moonLight.position.y = 20*(Math.sin(speed))+50;
+        moonLight.position.z = 10*(Math.cos(speed));
+        moonSphere.position.y = 20*(Math.sin(speed))+50;
+        moonSphere.position.z = 10*(Math.cos(speed));
+        moonSphere.rotation.x+=0.005;
+        moonSphere.rotation.y+=0.005;
+        moonSphere.rotation.z+=0.005;
+        
+        //Rotates the skybox
+        skybox.rotation.x+=0.0005;
+        skybox.rotation.y+=0.0005;
+        skybox.rotation.z+=0.0005;
+
+        scene.add(moonLight)
+        scene.add(moonSphere)
+        scene.remove(torchLight)
+      }
+      else{
+        scene.remove(moonLight)
+        scene.remove(moonSphere)
+        scene.add(torchLight)
+      }
+      
+      
+
+      world.step(timestep)
+      // console.log(camera.position)
+      torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
+      
+      //See if the user clicks to restart or go to the next level
+      if(intersectsHUD.length>0){
+        if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
+          console.log("Next level Highlighted")
+          goToNext = true;
+        }
+        else if(intersectsHUD[0].object.uuid === death_uuid){
+          console.log("DeathSelected");
+          restart = true;
+        }
+      }
+      else{
+        goToNext = false;
+        restart = false;
+      }
+    }
+    else{
+        //Menu is brought up so see if they chose a level that they want to go to
+        if(intersectsHUD.length==0){
+          console.log("Nothing selected")
+          lvl = null;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl1_uuid){
+          console.log("Level 1 Highlighted")
+          lvl = 1;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl2_uuid){
+          console.log("Level 2 Highlighted")
+          lvl = 2;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl3_uuid){
+          console.log("Level 3 Highlighted")
+          lvl = 3;
+        }
+        else if(intersectsHUD[0].object.uuid === lvl4_uuid){
+          console.log("Level 4 Highlighted")
+          lvl = 4;
+        }
+    }
+    
+  };
+
+  var render = function(){//draw scene
+    renderer.render(scene, camera);
+    //Only render the pause menu sprites when the game is paused
+    if(paused){
+      //renderer.clearDepth();
+      sceneHUD.add(sprite);
+      sceneHUD.add(sprite2);
+      sceneHUD.add(sprite3);
+      sceneHUD.add(sprite4);
+    }
+    else{
+      sceneHUD.remove(sprite);
+      sceneHUD.remove(sprite2);
+      sceneHUD.remove(sprite3);
+      sceneHUD.remove(sprite4);
+    }
+    renderer.render(sceneHUD, cameraHUD); 
+  };
+
+  var GameLoop = function(){//run game loop(update, render, repeat)
+    update();
+    render();
+    requestAnimationFrame(GameLoop);
+  };
+
+  //Function that will be called upon a level change to remove the objects that are currently in the scene
+  function lvlChange(){
+    removeFloor(scene,world)
+    removeAllDyamics(scene,world);
+    resetHealth();
+    guy.body.position.set(0,1,-1);
+  }
+
+  //Event listener listening to the resizing of the screen
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
-    renderer.setSize(0.98*window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   })
 
+  //Key listener to keep track of inventory changes or pausing the game
   document.addEventListener('keydown',(e)=>{
     if(e.key=='`'){//open menu and pause game
       paused = true;
@@ -189,27 +391,29 @@ var init = function(){
     }
   })
   
+
   window.addEventListener('mousemove',(e)=>{//Track mouse position with respect to play area
     mousePos.x = (e.clientX / window.innerWidth) * 2 - 1;
     mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
   })
 
+  //Clcik listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
-    console.log("Level: ",lvl)
+    console.log("Level check: ",lvl)
     paused=false;
 
     if(goToNext){
       console.log("Current level: ",curr_lvl)
       lvl = getNextLevel();
-      console.log(lvl);
+      console.log("Going to: ",lvl);
       goToNext = false;
     }
 
     if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=1;
         makeFirstFloor(scene,world);
         player.body.position.set(0,1,-13)
@@ -218,7 +422,7 @@ var init = function(){
 
     if(lvl==2){
       if(curr_lvl!=2|| restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=2;
         makeSecondFloor(scene,world);
         player.body.position.set(-10.5,1,-1)
@@ -228,7 +432,7 @@ var init = function(){
     else if(lvl==3){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=3;
         makeBasement(scene,world);
         player.body.position.set(-10.5,1,-12)
@@ -237,7 +441,7 @@ var init = function(){
     else if(lvl==4){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=4;
         makeFourthFloor(scene,world);
       }  
@@ -256,134 +460,6 @@ var init = function(){
 
   GameLoop()
 };
-
-function update(){ //Game Logic
-  //Raycaster for level selector
-  const rayCasterHUD = new THREE.Raycaster();
-  rayCasterHUD.setFromCamera(mousePos,cameraHUD);
-  const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
-
-  if(!paused){
-    // monster_v2.update();
-    const new_time = new Date().getTime()
-    delta = new_time - time
-    time = new_time
-    player.update(delta)
-    ground.update()
-
-    detectObject(player)
-    UI()
-
-    //Showing that we can decrease the visible hearts on the fly
-    const d = new Date();
-
-    if(d.getMinutes()==t){
-      selected+=2;
-      tookDamage(3);
-      changeInventorySelected(selected)
-      HUD();
-      t+=1;
-    }
-    HUD();
-
-    //Move the moon and skybox only when you can see them to reduce the computation needed
-    if(curr_lvl==4){
-      //Rotates and moves the moon
-      speed+=0.001
-      moonLight.position.y = 20*(Math.sin(speed))+50;
-      moonLight.position.z = 10*(Math.cos(speed));
-      moonSphere.position.y = 20*(Math.sin(speed))+50;
-      moonSphere.position.z = 10*(Math.cos(speed));
-      moonSphere.rotation.x+=0.005;
-      moonSphere.rotation.y+=0.005;
-      moonSphere.rotation.z+=0.005;
-      
-      //Rotates the skybox
-      skybox.rotation.x+=0.0005;
-      skybox.rotation.y+=0.0005;
-      skybox.rotation.z+=0.0005;
-    }
-    else{
-      moonLight.position.set(0,10,0);
-      moonSphere.position.set(0,10,0);
-    }
-
-    world.step(timestep)
-
-    torchLight.position.set(player.position.x,player.position.y,player.position.z)
-      
-    if(intersectsHUD.length>0){
-      if(intersectsHUD[0].object.uuid === next_uuid){
-        console.log("Next level Highlighted")
-        goToNext = true;
-      }
-      else if(intersectsHUD[0].object.uuid === death_uuid){
-        console.log("DeathSelected");
-        restart = true;
-      }
-    }
-    else{
-      goToNext = false;
-      restart = false;
-    }
-  }
-  else{
-    if(intersectsHUD.length==0){
-      console.log("Nothing selected")
-      lvl = null;
-    }
-    else if(intersectsHUD[0].object.uuid === lvl1_uuid){
-      console.log("Level 1 Highlighted")
-      lvl = 1;
-    }
-    else if(intersectsHUD[0].object.uuid === lvl2_uuid){
-      console.log("Level 2 Highlighted")
-      lvl = 2;
-    }
-    else if(intersectsHUD[0].object.uuid === lvl3_uuid){
-      console.log("Level 3 Highlighted")
-      lvl = 3;
-    }
-    else if(intersectsHUD[0].object.uuid === lvl4_uuid){
-      console.log("Level 4 Highlighted")
-      lvl = 4;
-    }
-  }
-};
-
-function render(){// Draw scene
-  renderer.render(scene, camera);
-
-  if(paused){
-    sceneHUD.add(sprite);
-    sceneHUD.add(sprite2);
-    sceneHUD.add(sprite3);
-    sceneHUD.add(sprite4);
-  }
-  else{
-    sceneHUD.remove(sprite);
-    sceneHUD.remove(sprite2);
-    sceneHUD.remove(sprite3);
-    sceneHUD.remove(sprite4);
-  }
-
-  renderer.render(sceneHUD, cameraHUD); 
-};
-
-function lvlChange(curr_lvl){
-  removeFloor(scene,world,curr_lvl)
-  removeAllDynamics(scene,world);
-  clearInventory();
-  resetHealth();
-  player.body.position.set(0,1,-1);
-}
-
-function getNextLevel(){
-  if(lvl<4){
-    return lvl + 1;
-  }
-  return -1
-}
 
 function createMenu(){ //Creating the pause menu
   var container = document.createElement('canvas');
@@ -438,6 +514,14 @@ function createMenu(){ //Creating the pause menu
   spriteNext = new THREE.Sprite(spriteNextMaterial);
   spriteNext.position.set(0,0,0);
   spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+  
+  //Sprite for finishing the game
+  var spriteFinishMaterial = new THREE.SpriteMaterial({
+    map:THREE.ImageUtils.loadTexture("../res/textures/pause_menu/GameWon.jpg")});
+          
+  spriteFinish = new THREE.Sprite(spriteFinishMaterial);
+  spriteFinish.position.set(0,0,0);
+  spriteFinish.scale.set(window.innerHeight,window.innerWidth/5,1);
     
   var spriteDeathMaterial = new THREE.SpriteMaterial({
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameOver.jpg")
@@ -453,6 +537,7 @@ function createMenu(){ //Creating the pause menu
   lvl3_uuid = sprite3.uuid;
   lvl4_uuid = sprite4.uuid;
   next_uuid = spriteNext.uuid;
+  finish_uuid = spriteFinish.uuid;
   death_uuid = spriteDeath.uuid;
 
   sceneHUD.add(sprite);
@@ -460,11 +545,4 @@ function createMenu(){ //Creating the pause menu
   sceneHUD.add(sprite3);
   sceneHUD.add(sprite4);
 }
-
-function GameLoop(){ //Run game loop(update -> render -> repeat)
-  update();
-  render();
-  requestAnimationFrame(GameLoop);
-};
-
 window.init = init
