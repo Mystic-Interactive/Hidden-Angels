@@ -1,4 +1,6 @@
-//get the canvas
+//Will draw the UI elements (not including those of which require a level switch) to the canvas
+
+//get the canvas and initialise the variables
 var hud_canvas = document.getElementById('myCanvas');
 var graphics = hud_canvas.getContext('2d');
 var hearts = 3;
@@ -9,7 +11,7 @@ var sceneHUD = null;
 
 
 //Simple functions to help with creation of the scene
-  function drawLine(x0,y0,x1,y1,colour){
+    function drawLine(x0,y0,x1,y1,colour){
     graphics.save();
     graphics.lineWidth = 0.4;
     graphics.strokeStyle=colour;
@@ -18,9 +20,9 @@ var sceneHUD = null;
     graphics.lineTo(x1,y1);
     graphics.stroke();
     graphics.restore();
-  }
+    }
 
-  function drawTriangle(colour){
+    function drawTriangle(colour){
     graphics.save();
     graphics.lineWidth = 0.5;
     graphics.fillStyle=colour;
@@ -31,9 +33,9 @@ var sceneHUD = null;
 		graphics.closePath();
 		graphics.fill();
     graphics.restore();
-  }
+    }
 
-  function drawShovelBase(colour){
+    function drawShovelBase(colour){
     graphics.save();
     graphics.lineWidth = 0.4;
     graphics.fillStyle=colour;
@@ -45,27 +47,25 @@ var sceneHUD = null;
     graphics.lineTo(8.5,4)
     graphics.fill();
     graphics.restore();
-  }
+    }
 
-  function drawBlock(startx,starty,width,height){
+    function drawBlock(startx,starty,width,height){
     graphics.save();
     // graphics.fillStyle="rgb(0,0,0,0.01)";
     graphics.strokeRect(startx,starty,width,height);
     // graphics.fillRect(startx,starty,width,height);
     graphics.restore();
-  }
+    }
 
-  function halfHeart(closePath){
+    function halfHeart(closePath){
     graphics.save();
     graphics.beginPath();
 
     graphics.moveTo(0,0);
     graphics.bezierCurveTo(-5,-7.5,-10,-5,-10,0);
     graphics.bezierCurveTo(-10,5,-7.5,7.5,0.1,15);
-    // graphics.bezierCurveTo(-2.5,-3.75,-5,-2.5,-5,0);
-    // graphics.bezierCurveTo(-5,2.5,-3.75,3.75,0.05,7.5);
     if(closePath){
-      graphics.lineTo(0,0);
+      graphics.lineTo(0,0); //uses this to determine whether we are drawing a full or half heart to the UI
     }
     graphics.save();
     graphics.lineWidth=1;
@@ -73,10 +73,11 @@ var sceneHUD = null;
     graphics.restore();
     graphics.fill();
     graphics.restore();
-  }
+    }
 
-  //Draws the half heart for the health bar
-  function drawHalfHeart(){
+//Draws the icons that will be used to create the HUD
+    //Draws the half heart for the health bar (when a character has half a heart)
+    function drawHalfHeart(){
     graphics.save();
     graphics.scale(0.75,0.75);
     graphics.strokeStyle="white";
@@ -84,7 +85,7 @@ var sceneHUD = null;
     graphics.lineWidth=2;
     halfHeart(true);
     graphics.restore();
-  }
+    }
 
   //Draws the half heart for the health bar
   function drawHeart(){
@@ -99,14 +100,13 @@ var sceneHUD = null;
     graphics.restore();
   }
 
-  //draw key
+  //Draw key icon
   function drawKey(translate_x,translate_y,width,colour){
     graphics.save();
     graphics.translate(translate_x,translate_y);
     graphics.lineWidth=0.5;
     graphics.strokeStyle=colour;
     graphics.beginPath();
-    //graphics.moveTo(width,0);
     graphics.arc(width-3,3,1.5,0,2*Math.PI)
     graphics.moveTo(8.5,4)
     graphics.lineTo(3,9);
@@ -118,7 +118,7 @@ var sceneHUD = null;
     graphics.restore();
   }
 
-  //draws the screw driver
+  //Draws the screw driver icon
   function drawScrewdriver(translate_x,translate_y,colour){
     //Draw the rectangle
     graphics.save();
@@ -141,7 +141,7 @@ var sceneHUD = null;
     graphics.restore();
   }
 
-  //draws the shovel
+  //Draws the shovel icon
   function drawShovel(translate_x,translate_y,colour){
     //Draw the rectangle
     graphics.save();
@@ -164,6 +164,7 @@ var sceneHUD = null;
     graphics.restore();
   }
 
+  //Draws the secret book icon
   function drawSecretBook(translate_x,translate_y,colour){
     graphics.save();
     graphics.translate(translate_x,translate_y);
@@ -185,7 +186,7 @@ var sceneHUD = null;
     graphics.restore();
   }
 
-  //Draws the icon based off the inventory number passed through
+  //Draws the icon based off the inventory number passed through -  used to help with design
   function drawIcon(item_num,translate_x,translate_y,width){
     //Icon is the bathroom key
     if(item_num==1){
@@ -227,76 +228,49 @@ var sceneHUD = null;
   //Writes the name of the item that they have currently selected so that they know what it is for
   function writeItem(word,colour){
     graphics.save();
-    graphics.clearRect(-100,39,200,10)
+    graphics.clearRect(-100,39,200,10) //used to clear the prior text that was placed upon the canvas
     
-      graphics.fillStyle=colour
-      graphics.textAlign="centre";
-      graphics.font = "7.5px Calibri";
-      graphics.translate(-1.25*word.length,0);
-      graphics.fillText(word, 0, 45);
+    graphics.fillStyle=colour
+    graphics.textAlign="centre";
+    graphics.font = "7.5px Calibri";
+    graphics.translate(-1.25*word.length,0);
+    graphics.fillText(word, 0, 45);
     
     
     graphics.restore();
 
   }
- //Draws the inventory bar 
+
+//Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,colour){
   graphics.strokeStyle=colour;
-  graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
+  graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icons)
   var selected_item = "";
   var word_colour = [];
-  for(var i = 0;i<8;i++){
+  
+  for(var i = 0;i<8;i++){ //8 is the number of inventory slots
     try {
-      if(inventory[i]!=null){
+      if(inventory[i]!=null){ //Draws the icon for every icon in the inventory bar
         word_colour = drawIcon(inventory[i],startx,starty,width)
         if(selected==i){
           selected_item = word_colour[0];
         }
-        else{
-          selected_item="";
-        }
       }
     }
-    catch(err) {
-     console.log("No item in this slot")
+    catch(err) { //if the current length of the inventory doesnt encompass 8 unique items
+     console.log(err)
     }
     
     if(i==selected){
-      graphics.strokeStyle="white";
-      try{
-        writeItem(selected_item,word_colour[1])
-      }
-      catch(err){
-        writeItem(selected_item,"")
-      }
-      
+      graphics.strokeStyle="white"; //Indication of icon selected
+      writeItem(selected_item,word_colour[1]) //writes the name of the current selected icon
     }
 
-    drawBlock(startx,starty,width,height);
+    drawBlock(startx,starty,width,height); //raws block icon for the inventory bar
     graphics.strokeStyle=colour;
     startx+=width+graphics.lineWidth+0.5;
 
   }
-  // for(var i=0;i<8;i++){
-  //   if(inventory[i]!=-1){
-  //     word_colour = drawIcon(inventory[i],startx,starty,width)
-  //     if(selected==i){
-  //       selected_item = word_colour[0];
-  //     }
-  //     else{
-  //       selected_item="";
-  //     }
-      
-  //   }
-  //   if(i==selected){
-  //     graphics.strokeStyle="white";
-  //     writeItem(selected_item,word_colour[1])
-  //   }
-
-  //   drawBlock(startx,starty,width,height);
-  //   graphics.strokeStyle=colour;
-  //   startx+=width+graphics.lineWidth+0.5;
-  // }
 }
 
 //Draws the health bar
@@ -307,18 +281,20 @@ function drawHealthBar(translate_x,translate_y){
     drawHeart(); 
     graphics.translate(17.5,0);
   }
-  if(Math.floor(hearts)!=hearts){ //then they they have a half heart
+
+  //Drawing half hearts after all of the full hearts have been drawn
+  if(Math.floor(hearts)!=hearts){ 
     drawHalfHeart();
   }
   graphics.restore();
 }
 
+//Draws border on the corner of the canvas as a indicator of low health
 function healthIndicator(){
   graphics.save();
   graphics.translate(-150,-75)
-  // graphics.strokeStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-  // graphics.fillStyle='rgba(255,0,0,'+ (-1/2 * (hearts-3))+")";
-  graphics.clearRect(0,0,300,150);
+  graphics.clearRect(0,0,300,150); //Clears it so that when resetting health, this is reset
+
   //Create a mask to cut out
   var maskCanvas = document.createElement('canvas');
   // Ensure same dimensions
@@ -332,8 +308,6 @@ function healthIndicator(){
   if(Math.trunc(hearts)==2){
     graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
     maskCtx.fillStyle = "rgba(0,0,0,1)"; 
-    // graphics.strokeStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts-3))+")";
-    // graphics.fillStyle='rgba(255,0,0,'+ 1-(-1/2 * (hearts))+")";
   }
   
   
@@ -361,16 +335,13 @@ function healthIndicator(){
   graphics.restore();
 }
 
-//
+//Adds item to the inventory
 function addToInventory(item_num){
   inventory.push(item_num)
-  inventory = [...new Set(inventory)];
+  inventory = [...new Set(inventory)]; //Event handler calls the icon multiple times, thus we make the list of unique elements only
 }
 
-function clearInventory(){
-  inventory = [];
-}
-
+//Gets the icon selected so that we can see if the correct object is selected for object interaction
 function getItemSelected(){
   try{
     return inventory[selected]
@@ -381,6 +352,7 @@ function getItemSelected(){
   
 }
 
+//Setting the death screen for when the player dies
 function setDeathScreen(spriteDeath_, HUD_){
   spriteDeath = spriteDeath_
   sceneHUD = HUD_
@@ -394,10 +366,10 @@ function HUD(){
   graphics.clearRect(0, 0, hud_canvas.width, hud_canvas.height);
   
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
+  //Draws all items onto the HUD
   healthIndicator(); 
   drawHealthBar(-140,-65);
   drawInventoryBar(begin,50,12.5,12.5,"rgba(255,100,50,1)");
-  // graphics.fillRect(-50,39,100,10);
   graphics.restore();
 }
 
@@ -407,7 +379,6 @@ function tookDamage(damageTaken){
   hearts-=damageTaken;
   if(hearts<1){
     sceneHUD.add(spriteDeath)
-    console.log("You have died");
   }
   graphics.save();
   graphics.setTransform(1, 0, 0, 1, 0, 0);
@@ -415,15 +386,19 @@ function tookDamage(damageTaken){
   graphics.restore();
 }
 
+//Changes the item selected - to be used in conjunction with an event listener to the numbers and numpad
 function changeInventorySelected(_change){
   selected=_change-1
 }
 
+//Removes item from the users inventory and shifts all their selected items 
 function clearItem(){
   inventory.splice(selected,1)
 }
+
+//changes their health back to 3
 function resetHealth(){
   hearts = 3;
 }
 
-export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem, setDeathScreen, resetHealth}
+export{HUD,tookDamage,changeInventorySelected,addToInventory,getItemSelected,clearItem, setDeathScreen, resetHealth}

@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelectedy,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
@@ -133,16 +133,9 @@ var init = function(){
   const skybox = sky()
   scene.add(skybox)
 
-  const initial_position = new CANNON.Vec3(0, 0, 5)
 
   const guy = new Player(scene, world, camera)
 
-
-
-  var path = [
-    new THREE.Vector3(10, 0, 0), 
-    new THREE.Vector3(-10, 0, 0)
-  ]
   
  // const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
  // const fpCamera = new FirstPersonCamera(camera);
@@ -247,10 +240,9 @@ setDeathScreen(spriteDeath,sceneHUD)
 var t =9;
 var selected = 0;
 
-var torchLight = torch(0xFFFFFF,1,5,1,-0.004,[0,0,0])
+var torchLight = torch(0xFFFFFF,2,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
   var update = function(){//game logic
-
     //Raycaster for level selector
     const rayCasterHUD = new THREE.Raycaster();
     rayCasterHUD.setFromCamera(mousePos,cameraHUD);
@@ -301,10 +293,15 @@ scene.add(torchLight)
         skybox.rotation.x+=0.0005;
         skybox.rotation.y+=0.0005;
         skybox.rotation.z+=0.0005;
+
+        scene.add(moonLight)
+        scene.add(moonSphere)
+        scene.remove(torchLight)
       }
       else{
-        moonLight.position.set(0,10,0);
-        moonSphere.position.set(0,10,0);
+        scene.remove(moonLight)
+        scene.remove(moonSphere)
+        scene.add(torchLight)
       }
       
       
@@ -384,7 +381,6 @@ scene.add(torchLight)
   function lvlChange(curr_lvl){
     removeFloor(scene,world,curr_lvl)
     removeAllDyamics(scene,world);
-    clearInventory();
     resetHealth();
     guy.body.position.set(0,1,-1);
   }
