@@ -10,6 +10,7 @@ import {HUD, tookDamage,changeInventorySelected,setDeathScreen, resetHealth} fro
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
+//Initailised variables for pausing and the raycaster
 var paused = false;
 var curr_lvl = null;
 var lvl = null;
@@ -84,8 +85,8 @@ class Ground extends THREE.Group{
   }
 }
 
+//Gets the next level when clicking next level
 function getNextLevel(){
-  console.log("getNextLevel level: ", lvl)
   if(lvl<4){
     return lvl+1;
   }
@@ -98,6 +99,7 @@ var init = function(){
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
 
+  //Hides the loadong menu when starting the game
   const progressBarContainer = document.querySelector('.progress-bar-container')
   progressBarContainer.style.display = 'none';
 
@@ -117,7 +119,7 @@ var init = function(){
   var renderer = new THREE.WebGLRenderer({maxLights: 8});
   renderer.setSize(0.999*window.innerWidth,0.999* window.innerHeight,);
   renderer.shadowMap.enabled = true;
-  renderer.autoClear=false;
+  renderer.autoClear=false; //We are going to render 2 scenes so we need to turn off auto clear
   
   document.body.appendChild(renderer.domElement);
 
@@ -136,9 +138,6 @@ var init = function(){
 
   const guy = new Player(scene, world, camera)
 
-  
- // const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), path)
- // const fpCamera = new FirstPersonCamera(camera);
   var monster_v2 = new monster_ai(scene,guy);
   const light = new THREE.AmbientLight();
   light.intensity=0.02;
@@ -174,6 +173,7 @@ var init = function(){
     
     var sceneHUD = new THREE.Scene();
 
+    //Creating the sprites of the objects that will be used for the pause menu
     var spriteMaterial = new THREE.SpriteMaterial({map:
       THREE.ImageUtils.loadTexture(
       "../res/textures/pause_menu/Level1.jpg")});
@@ -202,6 +202,7 @@ var init = function(){
            sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
            sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
         
+        //Sprite for next level
         var spriteNextMaterial = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
           "../res/textures/pause_menu/next_level.jpg")});
@@ -209,13 +210,15 @@ var init = function(){
           spriteNext.position.set(0,0,0);
           spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
         
+        //Sprite for finishing the game
         var spriteFinishMaterial = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
           "../res/textures/pause_menu/GameWon.jpg")});
           var spriteFinish = new THREE.Sprite(spriteFinishMaterial);
           spriteFinish.position.set(0,0,0);
           spriteFinish.scale.set(window.innerHeight,window.innerWidth/5,1);
-          
+        
+        //Sprite for restaring level upon death
         var spriteDeathMaterial = new THREE.SpriteMaterial({map:
           THREE.ImageUtils.loadTexture(
           "../res/textures/pause_menu/GameOver.jpg")});
@@ -224,7 +227,7 @@ var init = function(){
           spriteDeath.scale.set(window.innerHeight,window.innerWidth/4,1);
                         
                        
-      
+      //Setting the uuid values of the sprites so we know which object that we are clicking
       lvl1_uuid = sprite.uuid;
       lvl2_uuid = sprite2.uuid;
       lvl3_uuid = sprite3.uuid;
@@ -233,23 +236,26 @@ var init = function(){
       finish_uuid = spriteFinish.uuid;
       death_uuid = spriteDeath.uuid;
 
-
+//Mandatory method calls from the other classes
 initialiseDynamics(scene, sceneHUD, world,spriteNext,spriteFinish)
 setDeathScreen(spriteDeath,sceneHUD)
 
 var t =9;
 var selected = 0;
 
+//Makes the torch object that will follow the user
 var torchLight = torch(0xFFFFFF,2,5,1,-0.004,[0,0,0])
 scene.add(torchLight)
-  var update = function(){//game logic
-    //Raycaster for level selector
+ 
+var update = function(){//game logic
+    
+    //Raycaster for sprite detection
     const rayCasterHUD = new THREE.Raycaster();
     rayCasterHUD.setFromCamera(mousePos,cameraHUD);
     const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
 
-
+    //Only update the game state if the menu is not brought up
     if(!paused){
       monster_v2.update();
       const new_time = new Date().getTime()
@@ -258,8 +264,10 @@ scene.add(torchLight)
       guy.update(delta)
       g.update()
 
+      //Call to the dynamics class to allow us to interact with the scene
       detectObject(guy)
       
+      //Call to the dynamics class so we can draw the respective sprites
       UI(lvl);
 
       //Showing that we can decrease the visible hearts on the fly
@@ -309,7 +317,8 @@ scene.add(torchLight)
       world.step(timestep)
       // console.log(camera.position)
       torchLight.position.set(guy.position.x,guy.position.y,guy.position.z)
-        
+      
+      //See if the user clicks to restart or go to the next level
       if(intersectsHUD.length>0){
         if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
           console.log("Next level Highlighted")
@@ -329,6 +338,7 @@ scene.add(torchLight)
       //stats.end()
     }
     else{
+        //Menu is brought up so see if they chose a level that they want to go to
         if(intersectsHUD.length==0){
           console.log("Nothing selected")
           lvl = null;
@@ -355,7 +365,7 @@ scene.add(torchLight)
 
   var render = function(){//draw scene
     renderer.render(scene, camera);
-    
+    //Only render the pause menu sprites when the game is paused
     if(paused){
       //renderer.clearDepth();
       sceneHUD.add(sprite);
@@ -378,6 +388,7 @@ scene.add(torchLight)
     requestAnimationFrame(GameLoop);
   };
 
+  //Function that will be called upon a level change to remove the objects that are currently in the scene
   function lvlChange(){
     removeFloor(scene,world)
     removeAllDyamics(scene,world);
@@ -385,19 +396,15 @@ scene.add(torchLight)
     guy.body.position.set(0,1,-1);
   }
 
+  //Event listener listening to the resizing of the screen
   window.addEventListener('resize', () => {
     hud_canvas.width = window.innerWidth;
     hud_canvas.height = window.innerHeight;
-    renderer.setSize(0.98*window.innerWidth,window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-
-    sprite.position.set(-window.innerWidth/4,window.innerHeight/4,0);
-    sprite2.position.set(window.innerWidth/4,window.innerHeight/4,0);
-    sprite3.position.set(-window.innerWidth/4,-window.innerHeight/8,0);
-    sprite4.position.set(window.innerWidth/4,-window.innerHeight/8,0);
   })
 
+  //Key listener to keep track of inventory changes or pausing the game
   document.addEventListener('keydown',(e)=>{
     if(e.code=='Escape'){
       console.log("Bring up menu");
@@ -435,24 +442,15 @@ scene.add(torchLight)
       console.log("Pressed 8")
       changeInventorySelected(8);
     }
-    /*else if(e.code=='KeyE'){
-      console.log("Pressed E")
-      if(curr_lvl==2){
-        console.log("Is on level 2")
-        removeObjectFromScene(scene,1)
-        sceneHUD.remove(spriteItem)
-      }
-    }*/
   })
   
+  //Keeping track of the mouses position
   window.addEventListener('mousemove',(e)=>{
     mousePos.x = (e.clientX/window.innerWidth)*2-1;
     mousePos.y = - (e.clientY/window.innerHeight)*2+1;
-    if(curr_lvl==null){
-      console.log("No current level")
-    }
   })
 
+  //Clcik listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
     console.log("Level check: ",lvl)
