@@ -6,7 +6,7 @@ import Monster from '../src/monster.js'
 import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelectedy,setDeathScreen, resetHealth} from './overlay.js'
+import {HUD, tookDamage,changeInventorySelected,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
 import {detectObject,UI, removeAllDyamics,initialiseDynamics} from './house_dynamic.js'
 
@@ -378,8 +378,8 @@ scene.add(torchLight)
     requestAnimationFrame(GameLoop);
   };
 
-  function lvlChange(curr_lvl){
-    removeFloor(scene,world,curr_lvl)
+  function lvlChange(){
+    removeFloor(scene,world)
     removeAllDyamics(scene,world);
     resetHealth();
     guy.body.position.set(0,1,-1);
@@ -468,7 +468,7 @@ scene.add(torchLight)
       if(lvl==1){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=1;
         makeFirstFloor(scene,world);
       }
@@ -476,7 +476,7 @@ scene.add(torchLight)
 
     if(lvl==2){
       if(curr_lvl!=2|| restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=2;
         makeSecondFloor(scene,world);
       }
@@ -485,7 +485,7 @@ scene.add(torchLight)
     if(lvl==3){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=3;
         makeBasement(scene,world);
       }
@@ -494,7 +494,7 @@ scene.add(torchLight)
     if(lvl==4){
       console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4 || restart){
-        lvlChange(curr_lvl);
+        lvlChange();
         curr_lvl=4;
         makeFourthFloor(scene,world);
       }  
