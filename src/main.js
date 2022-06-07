@@ -87,7 +87,6 @@ var init = function(){
   renderer.setSize(0.99*window.innerWidth, 0.99*window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear = false;
-  
   document.body.appendChild(renderer.domElement);
 
   mousePos = new THREE.Vector2();
@@ -273,7 +272,7 @@ function update(){ //Game Logic
 
     detectObject(player)
     UI()
-
+    console.log("HHHH")
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
 
