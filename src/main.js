@@ -59,22 +59,22 @@ var init = function(){
   let world_canvas = document.getElementById('MainWorld');
   var hud_canvas = document.getElementById('myCanvas');
   const progressBarContainer = document.querySelector('.progress-bar-container');
-  world_canvas.width = window.innerWidth - 20;
-  world_canvas.height = window.innerHeight - 20;
+  world_canvas.width = window.innerWidth;
+  world_canvas.height = window.innerHeight;
   hud_canvas.width = window.innerWidth;
   hud_canvas.height = window.innerHeight;
   progressBarContainer.style.display = 'none'; //hide loading screen
 
 
   world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -98.1, 0)
+    gravity: new CANNON.Vec3(0, -9.81, 0)
   })
 
   scene = new THREE.Scene();
 	
   camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
-    window.innerWidth/window.innerHeight, // browser aspect ratio
+    (0.991*window.innerWidth)/(0.99*window.innerHeight), // browser aspect ratio
     0.1, // near clipping plane
     1000 // far clipping plane
   );
@@ -84,7 +84,7 @@ var init = function(){
     canvas: world_canvas,
   });
 
-  renderer.setSize(window.innerWidth, window.innerHeight,);
+  renderer.setSize(0.99*window.innerWidth, 0.99*window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear = false;
   

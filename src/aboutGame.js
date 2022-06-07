@@ -34,7 +34,7 @@ var init = function(){
         maxLights: 8,
         canvas: world_canvas,
     });
-    renderer.setSize(600, 300);
+    renderer.setSize(300, 150);
     renderer.shadowMap.enabled = true;
     renderer.autoClear = false;
     
@@ -42,8 +42,8 @@ var init = function(){
 
     camera = new THREE.PerspectiveCamera(
         95, // field of view (fov)
-        600/300, // browser aspect ratio
-        0.1, // near clipping plane
+        300/150, // browser aspect ratio
+        1, // near clipping plane
         1000 // far clipping plane
     );
 
