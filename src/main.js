@@ -34,15 +34,14 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var finish_uuid = "";
 var death_uuid = "";
 var goToNext = false;
-var deathScreen = false;
 var restart = false;
-
 var sceneHUD;
 var cameraHUD;
 var mousePos;
-var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext;
+var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext,spriteFinish;
 
 // items added to scene
 var player;
@@ -147,7 +146,7 @@ var init = function(){
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
-  initialiseDynamics(scene, sceneHUD, world, spriteNext)
+  initialiseDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound)
   setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
@@ -281,7 +280,7 @@ function update(){ //Game Logic
     ground.update()
 
     detectObject(player)
-    UI()
+    UI(lvl)
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
 
@@ -321,7 +320,7 @@ function update(){ //Game Logic
     torchLight.position.set(player.position.x,player.position.y,player.position.z)
       
     if(intersectsHUD.length>0){
-      if(intersectsHUD[0].object.uuid === next_uuid){
+      if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
         console.log("Next level Highlighted")
         goToNext = true;
       }
@@ -383,7 +382,6 @@ function lvlChange(curr_lvl){
   removeAllDynamics(scene,world);
   clearInventory();
   resetHealth();
-  player.body.position.set(0,1,-1);
 }
 
 function getNextLevel(){
@@ -446,6 +444,15 @@ function createMenu(){ //Creating the pause menu
   spriteNext = new THREE.Sprite(spriteNextMaterial);
   spriteNext.position.set(0,0,0);
   spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+
+   //Sprite for finishing the game
+   var spriteFinishMaterial = new THREE.SpriteMaterial({
+    map:THREE.ImageUtils.loadTexture("../res/textures/pause_menu/GameWon.jpg")});
+          
+  spriteFinish = new THREE.Sprite(spriteFinishMaterial);
+  spriteFinish.position.set(0,0,0);
+  spriteFinish.scale.set(window.innerHeight,window.innerWidth/5,1);
+
     
   var spriteDeathMaterial = new THREE.SpriteMaterial({
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameOver.jpg")
@@ -461,6 +468,7 @@ function createMenu(){ //Creating the pause menu
   lvl3_uuid = sprite3.uuid;
   lvl4_uuid = sprite4.uuid;
   next_uuid = spriteNext.uuid;
+  finish_uuid = spriteFinish.uuid;
   death_uuid = spriteDeath.uuid;
 
   sceneHUD.add(sprite);

@@ -395,7 +395,7 @@ function makeFirstFloorStairs(scene,world,translate){
 
 //Males the bookshelf
 function makeBookShelf(scene,translate,rotation){
-    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],translate,rotation,1,null)
+    makeObject(scene,'../res/meshes/FirstFloor/Bookshelf.glb',[0.85,1,1],translate,rotation,null)
 }
 
 //Makes the mirrors with their reflection
