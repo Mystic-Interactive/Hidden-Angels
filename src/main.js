@@ -121,7 +121,7 @@ var init = function(){
 
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
-  light.intensity = 0.4; //dim light for atmosphere
+  light.intensity = 0.2; //dim light for atmosphere
   scene.add(light);
 
   monster = new Monster(scene, world,new THREE.Vector3(-11, 1, -12), path, player, true); //Create and add monster to scene and physics world
