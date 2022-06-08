@@ -139,27 +139,27 @@ function makeDynamicObject(path,scale,translate,rotation,object_num){
 
         //Collision and interactable objects
         else if(object_num == 8){
-            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
             bathroomDoor=[obj,collision];
             obj_positions[7] = [obj.position, object_num,true]
         }
         else if(object_num == 9){
-            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
             closetDoor=[obj,collision];
             obj_positions[8] = [obj.position, object_num,true]
         }
         else if(object_num == 10){
-            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]-0.5],rotation)
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
             bedroom1Door=[obj,collision];
             obj_positions[9] = [obj.position, object_num,true]
         }
         else if(object_num == 11){
-            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
             bedroom2Door=[obj,collision];
             obj_positions[10] = [obj.position, object_num,true]
         }
         else if(object_num == 12){
-            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
             goalDoor=[obj,collision];
             obj_positions[11] = [obj.position, object_num,true]
         }

@@ -148,38 +148,39 @@ function makeSecondFloor(scene,world){
 
   //Collision boxes
     //exterior walls
-      makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0]); //right wall
-      makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0]); //left wall
-      makeCollisionCube(scene,world,[24,2,0.1],[0,1,-13.95],[0,0,0]); //back wall stairs
-    //   makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
+      makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,2,-4],[0,0,0]); //right wall
+      makeCollisionCube(scene,world,[0.01,2,19],[12.25,2,-4],[0,0,0]); //left wall
+      makeCollisionCube(scene,world,[24,2,0.1],[0,2,-13.95],[0,0,0]); //back wall stairs
+      makeCollisionCube(scene,world,[24,2,0.1],[0,2,6],[0,0,0]); //front wall
+    makeCollisionCube(scene,world,[23,0.1,19.75],[0,5.5,-4],[0,0,0]); //roof
 
     //master bedroom
-    makeCollisionCube(scene,world,[8,3,0.01],[-7.5,1,0.1],[0,0,0]); //back bathroom
-    makeCollisionCube(scene,world,[5,3,0.1],[-6,1,-4],[0,0,0]); //bathroom divider big
-    makeCollisionCube(scene,world,[2,3,0.1],[-11,1,-4],[0,0,0]); //bathroom divider small
-    makeCollisionCube(scene,world,[0.1,3,6.5],[-3,1,-3.75],[0,0,0]); //right divider big
-    makeCollisionCube(scene,world,[0.1,3,5],[-3,1,-11],[0,0,0]); //right divider small
+    makeCollisionCube(scene,world,[8,3,0.01],[-7.5,2,0.1],[0,0,0]); //back bathroom
+    makeCollisionCube(scene,world,[5,3,0.1],[-6,2,-4],[0,0,0]); //bathroom divider big
+    makeCollisionCube(scene,world,[2,3,0.1],[-11,2,-4],[0,0,0]); //bathroom divider small
+    makeCollisionCube(scene,world,[0.1,3,6.5],[-3,2,-3.75],[0,0,0]); //right divider big
+    makeCollisionCube(scene,world,[0.1,3,5],[-3,2,-11],[0,0,0]); //right divider small
 
     //bedroom far
-    makeCollisionCube(scene,world,[6,2,0.1],[8,1,-6.5],[0,0,0]); //door
-    makeCollisionCube(scene,world,[0.1,2,7],[5,1,-10],[0,0,0]); //wall
+    makeCollisionCube(scene,world,[6,2,0.1],[8,2,-6.5],[0,0,0]); //door
+    makeCollisionCube(scene,world,[0.1,2,7],[5,2,-10],[0,0,0]); //wall
 
     //bedroom close
-    makeCollisionCube(scene,world,[5,2,0.1],[8,1,-1.5],[0,0,0]); //door
-    makeCollisionCube(scene,world,[0.1,2,7],[5,1,2],[0,0,0]); //wall
+    makeCollisionCube(scene,world,[5,2,0.1],[8,2,-1.5],[0,0,0]); //door
+    makeCollisionCube(scene,world,[0.1,2,7],[5,2,2],[0,0,0]); //wall
 
     //toilet
-    makeCollisionCube(scene,world,[3,2,0.1],[3,1,1],[0,0,0]); //door
-    makeCollisionCube(scene,world,[0.1,2,4.5],[0,1,3.5],[0,0,0]); //wall
+    makeCollisionCube(scene,world,[3,2,0.1],[3,2,1],[0,0,0]); //door
+    makeCollisionCube(scene,world,[0.1,2,4.5],[0,2,3.5],[0,0,0]); //wall
 
 
     //storage room
-    makeCollisionCube(scene,world,[3.25,2,0.01],[-7.3,1,2.5],[0,0,0]); //front wall big
-    makeCollisionCube(scene,world,[1.25,2,0.01],[-11.1,1,2.5],[0,0,0]); //front wall small
-    makeCollisionCube(scene,world,[0.1,2,2.5],[-5.5,1,4.3],[0,0,0]); //right wall
+    makeCollisionCube(scene,world,[3.25,2,0.01],[-7.3,2,2.5],[0,0,0]); //front wall big
+    makeCollisionCube(scene,world,[1.25,2,0.01],[-11.1,2,2.5],[0,0,0]); //front wall small
+    makeCollisionCube(scene,world,[0.1,2,2.5],[-5.5,2,4.3],[0,0,0]); //right wall
 
     //Goal wall
-    makeCollisionCube(scene,world,[5.5,3,0.2],[0.25,1,-11.5],[0,0,0]); //back bathroom
+    makeCollisionCube(scene,world,[5.5,3,0.2],[0.25,2,-11.5],[0,0,0]); //back bathroom
 
 
     //Adding objects to the scene
@@ -263,10 +264,10 @@ function makeBasement(scene,world){
 
   //Collision boxes
     //exterior walls
-    makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,1,-4],[0,0,0]); //right wall
-    makeCollisionCube(scene,world,[0.01,2,19],[12.25,1,-4],[0,0,0]); //left wall
-    makeCollisionCube(scene,world,[24,2,0.1],[0,1,-13.95],[0,0,0]); //back wall 
-    //   makeCollisionCube(scene,world,[24,2,0.1],[0,1,6],[0,0,0]); //front wall
+    makeCollisionCube(scene,world,[0.01,2,19.75],[-12.4,2,-4],[0,0,0]); //right wall
+    makeCollisionCube(scene,world,[0.01,2,19],[12.25,2,-4],[0,0,0]); //left wall
+    makeCollisionCube(scene,world,[24,2,0.1],[0,2,-13.95],[0,0,0]); //back wall 
+      makeCollisionCube(scene,world,[24,2,0.1],[0,2,6],[0,0,0]); //front wall
 
     //pillars
     makeCollisionCube(scene,world,[1.2,5,1.2],[-7,0,1.9],[0,0,0]); //pillar 1
@@ -274,20 +275,20 @@ function makeBasement(scene,world){
     makeCollisionCube(scene,world,[1.2,5,1.2],[5,0,-10],[0,0,0]); //pillar 3
 
     //dividers
-    makeCollisionCube(scene,world,[0.01,2,15],[0,1,-6],[0,0,0]); //main divider big
-    makeCollisionCube(scene,world,[0.01,2,1],[0,1,5],[0,0,0]); //main divider small
+    makeCollisionCube(scene,world,[0.01,2,15],[0,2,-6],[0,0,0]); //main divider big
+    makeCollisionCube(scene,world,[0.01,2,1],[0,2,5],[0,0,0]); //main divider small
 
     //exit room
-    makeCollisionCube(scene,world,[0.01,2,9],[5.5,1,0.75],[0,0,0]); //big wall
-    makeCollisionCube(scene,world,[3.5,2,0.01],[7.75,1,-4],[0,0,0]); //small recommendation
-    makeCollisionCube(scene,world,[0.01,2,0.01],[12.1,1,-4],[0,0,0]); //small recommendation
+    makeCollisionCube(scene,world,[0.01,2,9],[5.5,2,0.75],[0,0,0]); //big wall
+    makeCollisionCube(scene,world,[3.5,2,0.01],[7.75,2,-4],[0,0,0]); //small recommendation
+    makeCollisionCube(scene,world,[0.01,2,0.01],[12.1,2,-4],[0,0,0]); //small recommendation
 
     //ladder
     makeCollisionCube(scene,world,[0.01,5,0.5],[10,1.5,4.75],[0,0,-Math.PI/4]);
 
     //egg sacks meshes
-    makeCollisionCube(scene,world,[1.2,4,1.5],[-11,0,4.75],[0,0,0]);
-    makeCollisionCube(scene,world,[1.2,4,1.5],[11,0,-12.5],[0,0,0]);
+    makeCollisionCube(scene,world,[1.2,3,1.5],[-11,1,4.75],[0,0,0]);
+    makeCollisionCube(scene,world,[1.2,3,1.5],[11,1,-12.5],[0,0,0]);
 
     //make goal position
     setGoalPosition(new THREE.Vector3(7.75,-0.75,4.75))
@@ -302,69 +303,69 @@ function makeFourthFloor(scene,world){
     
     //collisions
         //outer walls 
-        makeCollisionCube(scene,world,[0.1,3,30],[-14.75,1,0],[0,0,0]); //left
-        makeCollisionCube(scene,world,[0.1,3,30],[14.75,1,0],[0,0,0]); //right
-        makeCollisionCube(scene,world,[20,3,0.01],[-4,1,-14.75],[0,0,0]); //back long
-        makeCollisionCube(scene,world,[5.5,3,0.01],[11.5,1,-14.75],[0,0,0]); //exit
-        // makeCollisionCube(scene,world,[30,3,0.01],[0,1,14.75],[0,0,0],4); //front
+        makeCollisionCube(scene,world,[0.1,3,30],[-14.75,2,0],[0,0,0]); //left
+        makeCollisionCube(scene,world,[0.1,3,30],[14.75,2,0],[0,0,0]); //right
+        makeCollisionCube(scene,world,[20,3,0.01],[-4,2,-14.75],[0,0,0]); //back long
+        makeCollisionCube(scene,world,[5.5,3,0.01],[11.5,2,-14.75],[0,0,0]); //exit
+        makeCollisionCube(scene,world,[30,3,0.01],[0,2,14.75],[0,0,0],4); //front
 
         //inner horizontal walls
-        makeCollisionCube(scene,world,[6,3,0.25],[-11.5,1,5.8],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[-8.8,1,11.65],[0,0,0]);
-        makeCollisionCube(scene,world,[2.8,3,0.25],[-9.8,1,8.8],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[-1.4,1,6],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[1,1,11.7],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[7,1,11.7],[0,0,0]);
-        makeCollisionCube(scene,world,[5,3,0.25],[6,1,6],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[12,1,9],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[13,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[3,3,0.25],[-10,1,3],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[-6,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[-8.5,1,-3],[0,0,0]);
-        makeCollisionCube(scene,world,[3,3,0.25],[-10.5,1,-6],[0,0,0]);
-        makeCollisionCube(scene,world,[3,3,0.25],[-13.5,1,-11.5],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[-7.5,1,-8.5],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[-3,1,-5.75],[0,0,0]);
-        makeCollisionCube(scene,world,[2.4,3,0.25],[-4.75,1,-11.75],[0,0,0]);
-        makeCollisionCube(scene,world,[9,3,0.25],[4.5,1,-8.75],[0,0,0]);
-        makeCollisionCube(scene,world,[6,3,0.25],[8.75,1,-11.5],[0,0,0]);
-        makeCollisionCube(scene,world,[3,3,0.25],[13.25,1,-8.5],[0,0,0]);
-        makeCollisionCube(scene,world,[9,3,0.25],[7,1,-5.75],[0,0,0]);
-        makeCollisionCube(scene,world,[3.3,3,0.25],[10.25,1,-3],[0,0,0]);
-        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,1,-2.9],[0,0,0]);
-        makeCollisionCube(scene,world,[3.3,3,0.25],[1.5,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,1,3],[0,0,0]);
-        makeCollisionCube(scene,world,[3.3,3,0.25],[4.3,1,3],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[-11.5,2,5.8],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[-8.8,2,11.65],[0,0,0]);
+        makeCollisionCube(scene,world,[2.8,3,0.25],[-9.8,2,8.8],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-1.4,2,6],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[1,2,11.7],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[7,2,11.7],[0,0,0]);
+        makeCollisionCube(scene,world,[5,3,0.25],[6,2,6],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[12,2,9],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[13,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[3,3,0.25],[-10,2,3],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[-6,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[-8.5,2,-3],[0,0,0]);
+        makeCollisionCube(scene,world,[3,3,0.25],[-10.5,2,-6],[0,0,0]);
+        makeCollisionCube(scene,world,[3,3,0.25],[-13.5,2,-11.5],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-7.5,2,-8.5],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[-3,2,-5.75],[0,0,0]);
+        makeCollisionCube(scene,world,[2.4,3,0.25],[-4.75,2,-11.75],[0,0,0]);
+        makeCollisionCube(scene,world,[9,3,0.25],[4.5,2,-8.75],[0,0,0]);
+        makeCollisionCube(scene,world,[6,3,0.25],[8.75,2,-11.5],[0,0,0]);
+        makeCollisionCube(scene,world,[3,3,0.25],[13.25,2,-8.5],[0,0,0]);
+        makeCollisionCube(scene,world,[9,3,0.25],[7,2,-5.75],[0,0,0]);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[10.25,2,-3],[0,0,0]);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,2,-2.9],[0,0,0]);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[1.5,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[-1.5,2,3],[0,0,0]);
+        makeCollisionCube(scene,world,[3.3,3,0.25],[4.3,2,3],[0,0,0]);
 
         //inner vertical walls
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-11.5,1,10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[-6,1,7.5],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,6.4],[-2.9,1,8.75],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[0,1,7.5],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[3,1,7.5],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[3,1,13],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[5.75,1,10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[8.75,1,10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.75],[11.75,1,13],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[8.75,1,3],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[11.75,1,3],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[5.75,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[-3,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[2.8,1,-3],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[-0.2,1,-6],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,1,2],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.5,1,0],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,1,-4],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.6,1,-9],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,1,-10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,1,-13],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-2.9,1,-10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.9,1,-8],[0,0,0]); 
-        makeCollisionCube(scene,world,[0.25,3,2.5],[0,1,-13],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,3],[3,1,-10],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-13],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,1,-7],[0,0,0]);
-        makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,1,-7],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-11.5,2,10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[-6,2,7.5],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,6.4],[-2.9,2,8.75],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[0,2,7.5],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[3,2,7.5],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[3,2,13],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[5.75,2,10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[8.75,2,10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.75],[11.75,2,13],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[8.75,2,3],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[11.75,2,3],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[5.75,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-3,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[2.8,2,-3],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-0.2,2,-6],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,2,2],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.5,2,0],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,2,-4],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,5.5],[-11.6,2,-9],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-8.8,2,-10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.8,2,-13],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-2.9,2,-10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[-5.9,2,-8],[0,0,0]); 
+        makeCollisionCube(scene,world,[0.25,3,2.5],[0,2,-13],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,3],[3,2,-10],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,2,-13],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[5.9,2,-7],[0,0,0]);
+        makeCollisionCube(scene,world,[0.25,3,2.5],[11.8,2,-7],[0,0,0]);
 
     //make goal position
     setGoalPosition(new THREE.Vector3(7.75,-0.75,-16))
