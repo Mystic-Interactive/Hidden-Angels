@@ -467,7 +467,8 @@ function createMenu(){ //Creating the pause menu
 
    //Sprite for finishing the game
    var spriteFinishMaterial = new THREE.SpriteMaterial({
-    map:THREE.ImageUtils.loadTexture("../res/textures/pause_menu/GameWon.jpg")});
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameWon.jpg")
+  });
           
   spriteFinish = new THREE.Sprite(spriteFinishMaterial);
   spriteFinish.position.set(0,0,0);

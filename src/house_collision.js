@@ -10,32 +10,29 @@ var objects = []
 const loadingManager = new THREE.LoadingManager();
 const progressBar = document.getElementById('progress-bar')
 const progressBarContainer = document.querySelector('.progress-bar-container')
+const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
- // Method to do things when we starting loading 
- loadingManager.onStart = function(url,item,total){
-      progressBarContainer.style.display = 'block';
-      progressBarContainer.style.position = 'absolute';
+// Method to do things when we starting loading 
+loadingManager.onStart = function(url,item,total){
+    progressBarContainer.style.display = 'block';
+    progressBarContainer.style.position = 'absolute';
+    console.log(`Started loading: ${url}`)
+}
 
-      console.log(`Started loading: ${url}`)
-  }
-    
-  // Method called when the loading is under progress
-  loadingManager.onProgress = function(url,loaded,total){
-      progressBar.value = (loaded/total)*100;
-  }
+// Method called when the loading is under progress
+loadingManager.onProgress = function(url,loaded,total){
+    progressBar.value = (loaded/total)*100;
+}
 
-    
-  // Method called called when the loading of the assest has finished
-  loadingManager.onLoad = function(){
-      progressBarContainer.style.display = 'none';
-  }
+// Method called called when the loading of the assest has finished
+loadingManager.onLoad = function(){
+    progressBarContainer.style.display = 'none';
+}
 
-  // Method called when there is an error
-  loadingManager.onError = function(url){
-      console.error(`Problem loading ${url}`)
-  }
-
-  const gltfLoader = new THREE.GLTFLoader(loadingManager);
+// Method called when there is an error
+loadingManager.onError = function(url){
+    console.error(`Problem loading ${url}`)
+}
 
 //Function that will add all objects in the first floor to the scene
 function makeFirstFloor(scene,world){
@@ -239,10 +236,17 @@ function makeSecondFloor(scene,world){
 //Function that will add all objects in the basement to the scene
 function makeBasement(scene,world){
    
-    //making the phing shading for the nests
+    //making the Phong Shading for the nests
     const textLoader = new THREE.TextureLoader();
     let normalColor = textLoader.load('../res/textures/nest_bumpmap.png');
-    const nestMat = new THREE.MeshPhongMaterial({flatShading:true,color:0x3CD070,emissive:0x3CD070,emissiveIntensity:0.01,specular:0x636e72,normalMap:normalColor})
+    const nestMat = new THREE.MeshPhongMaterial({
+        flatShading:true,
+        color:0x3CD070,
+        emissive:0x3CD070,
+        emissiveIntensity:0.01,
+        specular:0x636e72,
+        normalMap:normalColor
+    })
 
     //Make basement blender model
     makeObject(scene,'../res/meshes/Basement/Basement.glb',[1,1,1],[0,-0.83,-4],[0,0,0],null)
@@ -405,52 +409,49 @@ function makeMirrors(scene){
         textureHeight: window.innerHeight * window.devicePixelRatio,
         color: 0x808080,
         multisample: 4,
-      }
+    }
 
-      const mirrorGeo = new THREE.PlaneGeometry(1, 1);
-      const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
-      const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
-      mainBathroomMirror.rotation.y = -Math.PI/2
-      mainBathroomMirror.position.set(4.85, 0.85, 2);
-      bedroomBathroomMirror.rotation.y = Math.PI/2
-      bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
-      scene.add(mainBathroomMirror);
-      scene.add(bedroomBathroomMirror);
+    const mirrorGeo = new THREE.PlaneGeometry(1, 1);
+    const mainBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+    const bedroomBathroomMirror = new Reflector(mirrorGeo, mirrorOptions);
+    mainBathroomMirror.rotation.y = -Math.PI/2
+    mainBathroomMirror.position.set(4.85, 0.85, 2);
+    bedroomBathroomMirror.rotation.y = Math.PI/2
+    bedroomBathroomMirror.position.set(-12.35, 0.85, -2);
+    scene.add(mainBathroomMirror);
+    scene.add(bedroomBathroomMirror);
 
-      objects.push(mainBathroomMirror);
-      objects.push(bedroomBathroomMirror);
+    objects.push(mainBathroomMirror);
+    objects.push(bedroomBathroomMirror);
 
-      let mainMirrorFrame;
-      let bedroomMirrorFrame
+    let mainMirrorFrame;
+    let bedroomMirrorFrame
 
-      gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
-        bedroomMirrorFrame = gltf.scene;
-        bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
-        bedroomMirrorFrame.rotation.y = -Math.PI/2
-        bedroomMirrorFrame.scale.set(0.55, 0.55);
-        scene.add(bedroomMirrorFrame);
-        objects.push(bedroomMirrorFrame);
-      }, (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      }, (error) => {
-        console.log(error);
-      });
+    gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+    bedroomMirrorFrame = gltf.scene;
+    bedroomMirrorFrame.position.set(-12.35, 0.3, -2);
+    bedroomMirrorFrame.rotation.y = -Math.PI/2
+    bedroomMirrorFrame.scale.set(0.55, 0.55);
+    scene.add(bedroomMirrorFrame);
+    objects.push(bedroomMirrorFrame);
+    }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    }, (error) => {
+    console.log(error);
+    });
 
-      gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
-        mainMirrorFrame = gltf.scene;
-        mainMirrorFrame.position.set(4.85, 0.3, 2);
-        mainMirrorFrame.rotation.y = -Math.PI/2
-        mainMirrorFrame.scale.set(0.55, 0.55);
-        scene.add(mainMirrorFrame);
-        objects.push(mainMirrorFrame);
-      }, (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      }, (error) => {
-        console.log(error);
-      });
-
-      
-      
+    gltfLoader.load("../res/meshes/SecondFloor/MirrorFrame.glb", function(gltf){
+    mainMirrorFrame = gltf.scene;
+    mainMirrorFrame.position.set(4.85, 0.3, 2);
+    mainMirrorFrame.rotation.y = -Math.PI/2
+    mainMirrorFrame.scale.set(0.55, 0.55);
+    scene.add(mainMirrorFrame);
+    objects.push(mainMirrorFrame);
+    }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    }, (error) => {
+    console.log(error);
+    }); 
 }
 
 //Make object method that will be used to add the majorith of gltf files to the scene
@@ -464,25 +465,25 @@ function makeObject(scene,path,scale,translate,rotation,material){
         obj.rotation.set(rotation[0],rotation[1],rotation[2])
         // var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
 
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls
-                    if(material!=null){
-                        node.material = material
-                    }
-                    
+        //Creating shadows for each child mesh
+        gltf.scene.traverse(function(node){
+            if(node.type === 'Mesh'){     
+                node.castShadow=true;
+                node.receiveShadow=true; //allows us to put shadows onto the walls
+                if(material!=null){
+                    node.material = material
                 }
-            });
-            
-            scene.add(obj);
-            objects.push(obj)
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+                
+            }
+        });
+        
+        scene.add(obj);
+        objects.push(obj)
+    }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    }, (error) => {
+        console.log(error);
+    });
 }
 
 //Make collision method that will add a collision box at boxPos
@@ -492,6 +493,7 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
        color: 0xffffff,
        wireframe:true
     });
+
     const box = new THREE.Mesh(boxGeo,boxMat);
     box.position.set(boxPos[0],boxPos[1],boxPos[2]);
     box.rotation.set(rotationArr[0],rotationArr[1],rotationArr[2])
@@ -506,11 +508,8 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
     objects.push(box)
     collisions.push(boxBody)
 
-
-
     boxBody.position.copy(box.position); //Copy position
     boxBody.quaternion.copy(box.quaternion); //Copy orientation
-
 }
 
 //Will be used when making the stairs

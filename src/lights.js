@@ -28,8 +28,8 @@ function addSphereMoon(radius){
   var displacementMap = textLoader.load("./textures/moon_displacement.jpg")
 
   const sphereGeo = new THREE.SphereGeometry(radius);
-  const sphereMaterial = new THREE.MeshLambertMaterial (  //Adding a special material to make the moon look more realistic
-    { color: 0xffffff ,
+  const sphereMaterial = new THREE.MeshLambertMaterial ({ //Adding a special material to make the moon look more realistic
+    color: 0xffffff ,
     map: texture ,
     displacementMap: displacementMap,
     displacementScale: 1,
@@ -39,7 +39,8 @@ function addSphereMoon(radius){
     shininess :1,
     emissive:0xffffff,
     emissiveMap: texture
-    }); 
+  }); 
+  
   const moon = new THREE.Mesh(sphereGeo,sphereMaterial);
   moon.position.set(0,0,0);
   moon.castShadow = false;  //Dont want the moon the cast a shadow as it should be considered a directional light

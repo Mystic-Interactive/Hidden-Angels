@@ -41,17 +41,19 @@ function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audio
     audioPickUp = audioPickUp_ //check to play sound
 
     //Pick up the item sprite
-    var spriteMaterialItem = new THREE.SpriteMaterial({map:
-        THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/pick_up_item.png")});
+    var spriteMaterialItem = new THREE.SpriteMaterial({
+        map: new THREE.TextureLoader().load("../res/textures/pause_menu/pick_up_item.png")
+    });
+
     spriteItem = new THREE.Sprite(spriteMaterialItem);
     spriteItem.position.set(0,-window.innerHeight/8,0);
     spriteItem.scale.set(window.innerHeight/2,window.innerWidth/75,1);
 
     //Interact with item sprite
-    var spriteMaterialInteraction = new THREE.SpriteMaterial({map:
-        THREE.ImageUtils.loadTexture(
-        "../res/textures/pause_menu/interact.png")});
+    var spriteMaterialInteraction = new THREE.SpriteMaterial({
+        map: new THREE.TextureLoader().load("../res/textures/pause_menu/interact.png")
+    });
+
     spriteInteraction = new THREE.Sprite(spriteMaterialInteraction);
     spriteInteraction.position.set(0,-window.innerHeight/8,0);
     spriteInteraction.scale.set(window.innerHeight/2,window.innerWidth/75,1);
@@ -93,90 +95,89 @@ function makeDynamicObject(path,scale,translate,rotation,object_num){
         obj.position.set(translate[0],translate[1],translate[2]);
         obj.scale.set(scale[0],scale[1],scale[2])
         obj.rotation.set(rotation[0],rotation[1],rotation[2])
-        // var newMaterial = new THREE.MeshStandardMaterial({color: 0x110000});
 
-            //Creating shadows for each child mesh
-            gltf.scene.traverse(function(node){
-                if(node.type === 'Mesh'){     
-                    node.castShadow=true;
-                    node.receiveShadow=true; //allows us to put shadows onto the walls                    
-                }
-            });
-            //These needs to be hardcoded else we wont know which particular item must be removed
-            scene.add(obj);
-            //Pickupable objects
-            if(object_num==1 && bathroomKey==null){ //Second check to make sure we dont add multiple of the same objects per level
-                bathroomKey=obj;
-                obj_positions[0] = [obj.position, object_num,false]
+        //Creating shadows for each child mesh
+        gltf.scene.traverse(function(node){
+            if(node.type === 'Mesh'){     
+                node.castShadow=true;
+                node.receiveShadow=true; //allows us to put shadows onto the walls                    
             }
-            else if(object_num == 2 && closetKey==null){
-                closetKey=obj;
-                obj_positions[1] = [obj.position, object_num,false]
-            }
-            else if(object_num == 3 && screwdriver==null){
-                screwdriver=obj;
-                obj_positions[2] = [obj.position, object_num,false]
-            }
-            else if(object_num == 4 && shovel==null){
-                shovel=obj;
-                obj_positions[3] = [obj.position, object_num,false]
-            }
-            else if(object_num == 5 && goalKey==null){
-                goalKey=obj;
-                obj_positions[4] = [obj.position, object_num,false]
-            }
-            else if(object_num == 6 && libraryKey==null){
-                libraryKey=obj;
-                obj_positions[5] = [obj.position, object_num,false]
-            }
-            else if(object_num == 7 && secretBook==null){
-                secretBook=obj;
-                obj_positions[6] = [obj.position, object_num,false]
-            }
+        });
+        //These needs to be hardcoded else we wont know which particular item must be removed
+        scene.add(obj);
+        //Pickupable objects
+        if(object_num==1 && bathroomKey==null){ //Second check to make sure we dont add multiple of the same objects per level
+            bathroomKey=obj;
+            obj_positions[0] = [obj.position, object_num,false]
+        }
+        else if(object_num == 2 && closetKey==null){
+            closetKey=obj;
+            obj_positions[1] = [obj.position, object_num,false]
+        }
+        else if(object_num == 3 && screwdriver==null){
+            screwdriver=obj;
+            obj_positions[2] = [obj.position, object_num,false]
+        }
+        else if(object_num == 4 && shovel==null){
+            shovel=obj;
+            obj_positions[3] = [obj.position, object_num,false]
+        }
+        else if(object_num == 5 && goalKey==null){
+            goalKey=obj;
+            obj_positions[4] = [obj.position, object_num,false]
+        }
+        else if(object_num == 6 && libraryKey==null){
+            libraryKey=obj;
+            obj_positions[5] = [obj.position, object_num,false]
+        }
+        else if(object_num == 7 && secretBook==null){
+            secretBook=obj;
+            obj_positions[6] = [obj.position, object_num,false]
+        }
 
-            //Collision and interactable objects
-            else if(object_num == 8){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                bathroomDoor=[obj,collision];
-                obj_positions[7] = [obj.position, object_num,true]
-            }
-            else if(object_num == 9){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                closetDoor=[obj,collision];
-                obj_positions[8] = [obj.position, object_num,true]
-            }
-            else if(object_num == 10){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]-0.5],rotation)
-                bedroom1Door=[obj,collision];
-                obj_positions[9] = [obj.position, object_num,true]
-            }
-            else if(object_num == 11){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                bedroom2Door=[obj,collision];
-                obj_positions[10] = [obj.position, object_num,true]
-            }
-            else if(object_num == 12){
-                var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
-                goalDoor=[obj,collision];
-                obj_positions[11] = [obj.position, object_num,true]
-            }
-            else if(object_num == 13){
-                var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
-                libraryDoor=[obj,collision];
-                obj_positions[12] = [obj.position, object_num,true]
-            }
-            else if(object_num == 14){
-                var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
-                secretBookCase=[obj,collision];
-                obj_positions[13] = [obj.position, object_num,true]
-            }
-
-  }, (xhr) => {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  }, (error) => {
-    console.log(error);
-  });
+        //Collision and interactable objects
+        else if(object_num == 8){
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            bathroomDoor=[obj,collision];
+            obj_positions[7] = [obj.position, object_num,true]
+        }
+        else if(object_num == 9){
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            closetDoor=[obj,collision];
+            obj_positions[8] = [obj.position, object_num,true]
+        }
+        else if(object_num == 10){
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]-0.5],rotation)
+            bedroom1Door=[obj,collision];
+            obj_positions[9] = [obj.position, object_num,true]
+        }
+        else if(object_num == 11){
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            bedroom2Door=[obj,collision];
+            obj_positions[10] = [obj.position, object_num,true]
+        }
+        else if(object_num == 12){
+            var collision =makeDynamicCollision([1,2,0.01],[translate[0],translate[1]+1,translate[2]],rotation)
+            goalDoor=[obj,collision];
+            obj_positions[11] = [obj.position, object_num,true]
+        }
+        else if(object_num == 13){
+            var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+2,translate[2]],rotation)
+            libraryDoor=[obj,collision];
+            obj_positions[12] = [obj.position, object_num,true]
+        }
+        else if(object_num == 14){
+            var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
+            secretBookCase=[obj,collision];
+            obj_positions[13] = [obj.position, object_num,true]
+        }
+    }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    }, (error) => {
+        console.log(error);
+    });
 }
+
 //Function to remove a particular object from the scene
 function removeObjectFromScene(object_num,check){
     if(object_num==1 && bathroomKey!=null){ 
@@ -314,7 +315,6 @@ function detectObject(player){
     }
 }
     
-
 //Loads the UI for that paricular time period
 function UI(lvl){
     if(closest==1){ //Check if we're not closest to the goal
@@ -326,7 +326,6 @@ function UI(lvl){
         }
     }
     else if(closest!=null){ //Not closest to the goal but to an object/interactable
-
         if(closest[2]){ //closest to an interactable
             HUD.add(spriteInteraction)
         }
