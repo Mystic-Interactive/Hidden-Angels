@@ -305,8 +305,7 @@ function makeFourthFloor(scene,world){
         //outer walls 
         makeCollisionCube(scene,world,[0.1,3,30],[-14.75,2,0],[0,0,0]); //left
         makeCollisionCube(scene,world,[0.1,3,30],[14.75,2,0],[0,0,0]); //right
-        makeCollisionCube(scene,world,[20,3,0.01],[-4,2,-14.75],[0,0,0]); //back long
-        makeCollisionCube(scene,world,[5.5,3,0.01],[11.5,2,-14.75],[0,0,0]); //exit
+        makeCollisionCube(scene,world,[30,3,0.01],[0,2,-14.85],[0,0,0],4); //back
         makeCollisionCube(scene,world,[30,3,0.01],[0,2,14.75],[0,0,0],4); //front
 
         //inner horizontal walls

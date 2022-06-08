@@ -435,7 +435,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite = new THREE.Sprite(spriteMaterial);
-  sprite.position.set(-window.innerWidth / 4, window.innerHeight / 4, 0);
+  sprite.position.set(-window.innerWidth / 4, window.innerHeight / 6, 0);
   sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial2 = new THREE.SpriteMaterial({
@@ -443,7 +443,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite2 = new THREE.Sprite(spriteMaterial2);
-  sprite2.position.set(window.innerWidth / 4, window.innerHeight / 4, 0);
+  sprite2.position.set(window.innerWidth / 4, window.innerHeight / 6, 0);
   sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial3 = new THREE.SpriteMaterial({
@@ -451,7 +451,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite3 = new THREE.Sprite(spriteMaterial3);
-  sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 4, 0);
+  sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 6, 0);
   sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial4 = new THREE.SpriteMaterial({
@@ -459,7 +459,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite4 = new THREE.Sprite(spriteMaterial4);
-  sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 4, 0);
+  sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 6, 0);
   sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteNextMaterial = new THREE.SpriteMaterial({
