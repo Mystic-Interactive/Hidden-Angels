@@ -75,7 +75,7 @@ var init = function(){
 
 
   world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
+    gravity: new CANNON.Vec3(0, -98.1, 0)
   })
 
   scene = new THREE.Scene();
