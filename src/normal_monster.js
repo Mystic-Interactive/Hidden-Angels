@@ -10,19 +10,32 @@ export default class NormalMonster extends Monster {
         const loader = new THREE.GLTFLoader();
         loader.load( '../res/meshes/FirstFloor_nav.glb', ({scene}) => {
             scene.traverse((node) => {
-                if (node.isMesh){ 
-                    navmesh = node;
-                    navmesh.material.transparent = true;
-                    navmesh.material.opacity = 0.5;
-                    this.navmesh  = navmesh;
+                if (node.name == "NavMesh"){ 
+                    this.navmesh  = node;
                     console.log("navmesh found")
+                    this.setUpPathfinding();
                 }
                 
-                
-            });
         }, undefined, (e) => {
             console.error(e);
         });
+      });
+      
+    }
+
+    setUpPathfinding(){// initialise navmesh to be used
+        this.pathfinding = new Pathfinding();
+        this.ZONE = 'firstfloor'
+        this.pathfinding.setZoneData(this.ZONE,Pathfinding.createZone(this.navmesh.geometry));
+        console.log("mesh setup complete")
+    }
+
+    moveMonster(){
+        console.log("Monster position = " + this.position);
+        console.log("Player position = " + this.player.position);
+        const groupID = this.pathfinding.getGroup(this.ZONE);
+        const path = this.pathfinding.findPath(this.position,this.player.position,this.ZONE,groupID);
+        console.log(path);
     }
 
     define(){
