@@ -6,32 +6,38 @@ import  {makeDynamicObject,setGoalPosition}  from '../src/house_dynamic.js'
 var collisions = []
 var objects = []
 
-//Loading manager that will be used to manage the loading screen
-const loadingManager = new THREE.LoadingManager();
-const progressBar = document.getElementById('progress-bar')
-const progressBarContainer = document.querySelector('.progress-bar-container')
-const gltfLoader = new THREE.GLTFLoader(loadingManager);
+// //Loading manager that will be used to manage the loading screen
+// const loadingManager = new THREE.LoadingManager();
+// const progressBar = document.getElementById('progress-bar')
+// const progressBarContainer = document.querySelector('.progress-bar-container')
+// const gltfLoader = new THREE.GLTFLoader(loadingManager);
 
-// Method to do things when we starting loading 
-loadingManager.onStart = function(url,item,total){
-    progressBarContainer.style.display = 'block';
-    progressBarContainer.style.position = 'absolute';
-    console.log(`Started loading: ${url}`)
-}
+// // Method to do things when we starting loading 
+// loadingManager.onStart = function(url,item,total){
+//     progressBarContainer.style.display = 'block';
+//     progressBarContainer.style.position = 'absolute';
+//     console.log(`Started loading: ${url}`)
+// }
 
-// Method called when the loading is under progress
-loadingManager.onProgress = function(url,loaded,total){
-    progressBar.value = (loaded/total)*100;
-}
+// // Method called when the loading is under progress
+// loadingManager.onProgress = function(url,loaded,total){
+//     progressBar.value = (loaded/total)*100;
+// }
 
-// Method called called when the loading of the assest has finished
-loadingManager.onLoad = function(){
-    progressBarContainer.style.display = 'none';
-}
+// // Method called called when the loading of the assest has finished
+// loadingManager.onLoad = function(){
+//     progressBarContainer.style.display = 'none';
+// }
 
-// Method called when there is an error
-loadingManager.onError = function(url){
-    console.error(`Problem loading ${url}`)
+// // Method called when there is an error
+// loadingManager.onError = function(url){
+//     console.error(`Problem loading ${url}`)
+// }
+
+var gltfLoader;
+
+function getLoader(loader){
+    gltfLoader  =loader;
 }
 
 //Function that will add all objects in the first floor to the scene
@@ -564,4 +570,4 @@ function removeFloor(scene,world){
     objects = []
 }
 
-export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor,makeObject,makeCollisionCube}
+export {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor,makeObject,makeCollisionCube, getLoader}

@@ -26,19 +26,21 @@ var spriteInteraction = null;
 var scene = null;
 var HUD = null;
 var world = null;
+var gltfLoader = null;
 var goalPosition = null;
 var spriteNext = null;
 var spriteFinish = null;
 var audioPickUp = null;
 
 //Called to give all values from other classes
-function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audioPickUp_){
+function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audioPickUp_, gltfLoader_){
     scene = scene_
     HUD = HUD_
     world = world_
     spriteNext = spriteNext_ //Next level sprite
     spriteFinish = spriteFinish_ //Finished the game sprite
     audioPickUp = audioPickUp_ //check to play sound
+    gltfLoader = gltfLoader_ //pass the loader to the loading screen
 
     //Pick up the item sprite
     var spriteMaterialItem = new THREE.SpriteMaterial({
@@ -89,8 +91,8 @@ function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
 function makeDynamicObject(path,scale,translate,rotation,object_num){
     var obj;
 
-    const loader = new THREE.GLTFLoader();
-    loader.load(path, function(gltf){
+    gltfLoader = new THREE.GLTFLoader();
+    gltfLoader.load(path, function(gltf){
         obj = gltf.scene
         obj.position.set(translate[0],translate[1],translate[2]);
         obj.scale.set(scale[0],scale[1],scale[2])
