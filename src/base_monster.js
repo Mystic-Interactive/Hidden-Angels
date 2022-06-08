@@ -8,26 +8,11 @@ import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-<<<<<<< HEAD:src/monster.js
-    constructor(scene, world, position, player) {
-=======
     constructor(scene, world, position, path, player, paused, mesh_source){
->>>>>>> 731d1fc73ec4b98b53cdad3975f2b6dad62c7bc3:src/base_monster.js
         super()
         this.scene = scene
         this.world = world
         this.start_pos = position
-<<<<<<< HEAD:src/monster.js
-        this.player = new PlayerProxy(player);
-        this.prev_direction = new CANNON.Vec3(0, 0, 0)
-        this.path_index = 1
-        this.loaded = false
-
-
-
-
-
-=======
         for (var i = 0; i < path.length; i++){
             path[i].add(path[i], this.start_pos)
         }
@@ -42,7 +27,6 @@ export default class Monster extends THREE.Group {
     }
     
     init(source){
->>>>>>> 731d1fc73ec4b98b53cdad3975f2b6dad62c7bc3:src/base_monster.js
         const loader = new THREE.GLTFLoader()
         loader.load(source, (gltf) => {
             this.gltf = gltf
@@ -63,51 +47,8 @@ export default class Monster extends THREE.Group {
         });
     }
 
-<<<<<<< HEAD:src/monster.js
-    define() {
-        var model = this.gltf.scene
-        this.add(model)
-        this.model = model
-        this.model.matrixAutoUpdate = false;
-        //    this.updateMaterials(model)
-
-        //  this.skeleton = new THREE.SkeletonHelper( model )
-        //  this.skeleton.visible = true;
-        //   this.scene.add( this.skeleton )
-
-        const animations = this.gltf.animations;
-
-        const mixer = new THREE.AnimationMixer(model);
-
-        //Getting the animations from the mesh
-        const actions = [
-            { name: "basic_attack", action: mixer.clipAction(animations[0]) },
-            { name: "walk", action: mixer.clipAction(animations[1]) },
-            { name: "roar", action: mixer.clipAction(animations[2]) }
-        ]
-
-        this.animation_manager = new AnimationManager(model, mixer, actions, [])
-
-        this.body = new CANNON.Body({
-            shape: new CANNON.Sphere(0.5),
-            position: new CANNON.Vec3(this.start_pos.x, this.start_pos.y, this.start_pos.z),
-            mass: 10,
-        })
-
-
-        this.body.linearDamping = 0
-        this.scene.add(this)
-        this.world.addBody(this.body)
-        this.loaded = true
-
-        this.model.matrixAutoUpdate = false;
-
-        this.vehicle.setRenderComponent(this.model, sync)
-        function sync(entity, renderComponent) {
-            renderComponent.matrix.copy(entity.worldMatrix);
-=======
     updateTransform(delta){
-       
+    
         const p = this.path[this.path_index]
         const b = this.body.position
         var desired = (new CANNON.Vec3(p.x - b.x, 0, p.z - b.z).unit())
@@ -123,20 +64,9 @@ export default class Monster extends THREE.Group {
         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
         if (diff  <= 0.5){
             this.path_index = (this.path_index + 1) % this.path.length
->>>>>>> 731d1fc73ec4b98b53cdad3975f2b6dad62c7bc3:src/base_monster.js
         }
     }
 
-<<<<<<< HEAD:src/monster.js
-
-    update(delta) {
-        if (!this.loaded) return
-        try {
-            this.play_direction = 1;
-            this.desired_action = "walk"
-            this.animation_manager.update(delta * 4500, this.desired_action, this.play_direction)
-        } catch (e) {
-=======
     set_looked_at(bool){
         this.being_looked_at = bool
     }
@@ -167,7 +97,6 @@ export default class Monster extends THREE.Group {
             
             
         }catch(e){
->>>>>>> 731d1fc73ec4b98b53cdad3975f2b6dad62c7bc3:src/base_monster.js
             console.error(e.stack)
         }
         this.player.update();
@@ -176,6 +105,8 @@ export default class Monster extends THREE.Group {
         }
         else{
             //if monster sees player, go to player
+
+
             //else follow set path
             
         }

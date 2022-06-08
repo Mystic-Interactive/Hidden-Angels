@@ -1,11 +1,28 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import Monster from './base_monster.js'
-
+import { Pathfinding } from '../lib/Pathfinding.js'
 export default class NormalMonster extends Monster {
 
     constructor(scene, world, position, path, player, paused){
         super(scene, world, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
+        let navmesh;
+        const loader = new THREE.GLTFLoader();
+        loader.load( '../res/meshes/FirstFloor_nav.glb', ({scene}) => {
+            scene.traverse((node) => {
+                if (node.isMesh){ 
+                    navmesh = node;
+                    navmesh.material.transparent = true;
+                    navmesh.material.opacity = 0.5;
+                    this.navmesh  = navmesh;
+                    console.log("navmesh found")
+                }
+                
+                
+            });
+        }, undefined, (e) => {
+            console.error(e);
+        });
     }
 
     define(){
@@ -44,4 +61,5 @@ export default class NormalMonster extends Monster {
         this.world.addBody(this.body)
         this.loaded = true
     }
+
 }

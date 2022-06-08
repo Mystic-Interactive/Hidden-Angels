@@ -2,15 +2,7 @@ import { sky } from './sky.js';
 import { Ground } from './ground.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import Monster from '../src/monster.js'
-import { pointLightCreator, InteriorWallLightCreator, ChandelierCreator, BedroomLightCreator, moonCreator, addSphereMoon } from './lights.js';
-import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,removeFloor} from './house_collision.js'
-import { Reflector } from '../lib/Reflector.js'
-
-import  monster_ai  from '../src/monster_ai.js'
-import {moonCreator, addSphereMoon ,torch } from './lights.js';
+import { pointLightCreator, moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
@@ -123,7 +115,7 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
   
-  const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
+  //const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
 
   player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
 
@@ -134,14 +126,14 @@ var init = function(){
   light.intensity = 1; //dim light for atmosphere
   scene.add(light)
 
-  const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
-  monsters.push(smol_boi)
+  //const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
+ // monsters.push(smol_boi)
 
   const normal_monster = new NormalMonster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true)
   monsters.push(normal_monster)
 
-  const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
-  monsters.push(big_boi)
+  //const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
+ // monsters.push(big_boi)
 
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
