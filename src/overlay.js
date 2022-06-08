@@ -229,7 +229,10 @@ var hitSound = null
   //Writes the name of the item that they have currently selected so that they know what it is for
   function writeItem(word,colour){
     graphics.save();
-    graphics.clearRect(-100,39,200,10)
+    if(Math.floor(hearts)!=2){
+      graphics.clearRect(-100,39,200,10)
+    }
+    
     
       graphics.fillStyle="wheat"
       graphics.textAlign="centre";
@@ -245,7 +248,10 @@ var hitSound = null
 //Draws the inventory bar 
 function drawInventoryBar(startx,starty,width,height,colour){
   graphics.strokeStyle=colour;
-  graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
+  if(Math.floor(hearts)!=2){
+    graphics.clearRect(startx,starty,startx+13*width,height) //Helps with clearing the inventory when changing levels (just for the icon)
+  }
+  
   var selected_item = "";
   var word_colour = [];
   for(var i = 0;i<8;i++){ //8 is the number of inventory slots

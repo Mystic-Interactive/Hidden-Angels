@@ -7,7 +7,7 @@ import  monster_ai  from '../src/monster_ai.js'
 import {moonCreator, addSphereMoon ,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
+import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor, getLoader} from './house_collision.js'
 import { Reflector } from '../lib/Reflector.js'
 import SmallMonster from './small_monster.js';
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
@@ -19,6 +19,7 @@ var  camera;
 var scene;
 var renderer;
 var world;
+var gltfLoader;
 
 // control variables to time actions correctly
 const timestep = 1/60
@@ -105,6 +106,9 @@ var init = function(){
   //Create and add ground mesh to scene
   ground = new Ground(scene, world)
   
+  //Create the loading screen
+  loadingScene();
+  getLoader(gltfLoader);
   //Setting up the moon. The moon contains a point light, a mesh and a texture
   moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
   scene.add(moonLight);
@@ -154,7 +158,7 @@ var init = function(){
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
-  initialiseDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound)
+  initialiseDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound, gltfLoader)
   setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
@@ -521,6 +525,36 @@ function addSounds(){
     hitSound.setBuffer(buffer);
     hitSound.setVolume(0.2);
   })
+}
+
+function loadingScene(){
+  //Loading manager that will be used to manage the loading screen
+  var loadingManager = new THREE.LoadingManager();
+  const progressBar = document.getElementById('progress-bar')
+  const progressBarContainer = document.querySelector('.progress-bar-container')
+  gltfLoader = new THREE.GLTFLoader(loadingManager);
+
+  // Method to do things when we starting loading 
+  loadingManager.onStart = function(url,item,total){
+      progressBarContainer.style.display = 'block';
+      progressBarContainer.style.position = 'absolute';
+      console.log(`Started loading: ${url}`)
+  }
+
+  // Method called when the loading is under progress
+  loadingManager.onProgress = function(url,loaded,total){
+      progressBar.value = (loaded/total)*100;
+  }
+
+  // Method called called when the loading of the assest has finished
+  loadingManager.onLoad = function(){
+      progressBarContainer.style.display = 'none';
+  }
+
+  // Method called when there is an error
+  loadingManager.onError = function(url){
+      console.error(`Problem loading ${url}`)
+  }
 }
 
 function GameLoop(){ //Run game loop(update -> render -> repeat)
