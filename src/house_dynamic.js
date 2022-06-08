@@ -169,7 +169,7 @@ function makeDynamicObject(path,scale,translate,rotation,object_num){
             obj_positions[12] = [obj.position, object_num,true]
         }
         else if(object_num == 14){
-            var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+1.5,translate[2]],rotation)
+            var collision =makeDynamicCollision([2,2,0.01],[translate[0],translate[1]+3,translate[2]],rotation)
             secretBookCase=[obj,collision];
             obj_positions[13] = [obj.position, object_num,true]
         }
