@@ -67,10 +67,10 @@ var init = function(){
   let world_canvas = document.getElementById('MainWorld');
   var hud_canvas = document.getElementById('myCanvas');
   const progressBarContainer = document.querySelector('.progress-bar-container');
-  world_canvas.width = window.innerWidth;
-  world_canvas.height = window.innerHeight;
-  hud_canvas.width = window.innerWidth;
-  hud_canvas.height = window.innerHeight;
+  world_canvas.width = 0.98*window.innerWidth;
+  world_canvas.height = 0.98*window.innerHeight;
+  hud_canvas.width = 0.98*window.innerWidth;
+  hud_canvas.height = 0.98*window.innerHeight;
   progressBarContainer.style.display = 'none'; //hide loading screen
 
 
@@ -82,7 +82,7 @@ var init = function(){
 	
   camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
-    (0.991*window.innerWidth)/(0.99*window.innerHeight), // browser aspect ratio
+    (0.98*window.innerWidth)/(0.98*window.innerHeight), // browser aspect ratio
     0.1, // near clipping plane
     1000 // far clipping plane
   );
@@ -95,7 +95,7 @@ var init = function(){
     canvas: world_canvas,
   });
 
-  renderer.setSize(0.99*window.innerWidth, 0.99*window.innerHeight,);
+  renderer.setSize(0.98*window.innerWidth, 0.98*window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear = false;
   document.body.appendChild(renderer.domElement);
@@ -158,9 +158,9 @@ var init = function(){
   setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
-    hud_canvas.width = window.innerWidth;
-    hud_canvas.height = window.innerHeight;
-    renderer.setSize(0.98*window.innerWidth,window.innerHeight);
+    hud_canvas.width = 0.98*window.innerWidth;
+    hud_canvas.height = 0.98*window.innerHeight;
+    renderer.setSize(0.98*window.innerWidth, 0.98*window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   })
