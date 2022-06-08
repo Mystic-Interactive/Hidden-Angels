@@ -372,7 +372,7 @@ function HUD(){
   var begin=-1/2*(12.5*+graphics.lineWidth+0.5)*8;
   healthIndicator(); 
   drawHealthBar(-140,-65);
-  drawInventoryBar(begin,50,12.5,12.5,"rgb(42, 42, 42)");
+  drawInventoryBar(begin,50,12.5,12.5,"rgb(255, 218, 101)");
   graphics.restore();
 }
 
