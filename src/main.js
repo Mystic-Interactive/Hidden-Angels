@@ -134,7 +134,7 @@ var init = function(){
 
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
-  light.intensity = 1; //dim light for atmosphere
+  light.intensity = 0.4; //dim light for atmosphere
   scene.add(light)
 
   const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
