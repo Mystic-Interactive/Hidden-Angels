@@ -15,7 +15,7 @@ import LargeMonster from './large_monster.js';
 import NormalMonster from './normal_monster.js';
 
 // variables to set up scene with camera
-var  camera;
+var camera;
 var scene;
 var renderer;
 var world;
@@ -128,7 +128,7 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
 
-  player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
+  player = new Player(scene, world, camera, gltfLoader, initial_position, monsters); //Create and add player to scene and physics world
 
   //var monster_v2 = new monster_ai(scene,player);
 
@@ -137,13 +137,13 @@ var init = function(){
   light.intensity = 0.4; //dim light for atmosphere
   scene.add(light)
 
-  const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
+  const smol_boi = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-2, 0, -2), path, player, true);
   monsters.push(smol_boi)
 
-  const normal_monster = new NormalMonster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true)
+  const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true)
   monsters.push(normal_monster)
 
-  const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
+  const big_boi = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-2, 0, 2), path, player, true)
   monsters.push(big_boi)
 
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 

@@ -3,13 +3,13 @@ import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
 import { can_see } from './sight.js'
 
-
 const contains = (item, list) => {
     return(list.indexOf(item) > -1)
 }
 export default class Player extends THREE.Group {
-    constructor(scene, world, camera, init_pos, monsters) {
+    constructor(scene, world, camera, GLTFLoader, init_pos, monsters) {
         super()
+        this.loader = GLTFLoader
         this.scene = scene
         this.world = world
         this.camera = camera
@@ -19,14 +19,13 @@ export default class Player extends THREE.Group {
         this.init_()
         this.vision_limit = 4
         this.monsters = monsters
-
         this.angle = Math.PI/12
     }
 
    init_() {
-        const loader = new THREE.GLTFLoader()
+        //const loader = new THREE.GLTFLoader()
 
-        loader.load('../res/meshes/Characters/Character_Main.glb', (gltf) =>{
+        this.loader.load('../res/meshes/Characters/Character_Main.glb', (gltf) =>{
             this.gltf = gltf
             this.define()
         })

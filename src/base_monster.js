@@ -5,8 +5,9 @@ import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path, player, paused, mesh_source, damage){
+    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
+        this.loader = GLTFLoader
         this.scene = scene
         this.world = world
         this.start_pos = position
@@ -25,8 +26,7 @@ export default class Monster extends THREE.Group {
     }
     
     init(source){
-        const loader = new THREE.GLTFLoader()
-        loader.load(source, (gltf) => {
+        this.loader.load(source, (gltf) => {
             this.gltf = gltf
             this.define()
         })
