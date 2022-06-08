@@ -261,6 +261,7 @@ var init = function(){
         lvlChange(curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
+        player.body.position.set(-11.5,1,12)
       }  
     }
 

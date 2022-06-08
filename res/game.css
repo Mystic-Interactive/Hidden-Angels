@@ -36,6 +36,27 @@ body{
     align-items: center;
 }
 
+progress::-moz-progress-bar{
+    background: gainsboro;
+}
+
+progress::-moz-progress-value{
+    background: rgb(240, 194, 109);
+}
+
+progress::-webkit-progress-bar{
+    background: gainsboro;
+}
+
+progress::-webkit-progress-value{
+    background:rgb(240, 194, 109);
+}
+
+progress{
+    color: rgb(240, 194, 109);
+    background: gainsboro;
+}
+
 label{
     color: white;
     font-size: 2rem;
