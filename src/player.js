@@ -31,7 +31,7 @@ export default class Player extends THREE.Group {
             this.define()
         })
 
-        this.max_velocity = 0.2
+        this.max_velocity = 5
         //(backward = -1)
         //(forward  =  1)
         this.direction = 0 
@@ -72,15 +72,6 @@ export default class Player extends THREE.Group {
             mass : 60
         })
         this.body.linearDamping = 0.5
-
-        this.body.addEventListener("collide",function(e){
-            //Add this to detect collision with specific object
-            // if(e.body.id==24){
-                // console.log("Box collided");
-            // }
-           
-             //console.log(e.body.id)
-        })
 
         this.scene.add(this)
         this.world.addBody(this.body)
@@ -137,18 +128,18 @@ export default class Player extends THREE.Group {
         
         const controls = this.player_controls
         if(contains("jump", state.action)){
-            this.body.applyForce(new CANNON.Vec3(0, 100 * 20, 0))
+            this.body.applyForce(new CANNON.Vec3(0, 10000, 0))
         } else if ((contains("walk", state.action) || contains("crouch-walk", state.action)) && !(controls.left || controls.right)){
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y) * delta
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y) * delta
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y)
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y)
         } else if ((controls.left || controls.right) && !(controls.forward || controls.backward)){
             var x_dir = 1
             if(controls.right){
                 x_dir = -1
             }
             
-            this.body.velocity.x = - x_dir * this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2) * delta
-            this.body.velocity.z = - x_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2) * delta
+            this.body.velocity.x = - x_dir * this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y +  Math.PI / 2)
+            this.body.velocity.z = - x_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y +  Math.PI / 2)
         } else if ((controls.left || controls.right) && (controls.backward || controls.forward)){
             var y_dir = -1
             var x_dir = 1
@@ -159,12 +150,9 @@ export default class Player extends THREE.Group {
             if (controls.right){
                 x_dir = -1
             }
-
-            console.log(this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + x_dir * Math.PI/4))
-            console.log(-y_dir * this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + x_dir * Math.PI/4))
             
-            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
-            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + y_dir * x_dir * Math.PI/4) * delta
+            this.body.velocity.x = - this.max_velocity * this.velocity_ratio * Math.sin(this.rotation.y + y_dir * x_dir * Math.PI/4)
+            this.body.velocity.z = - this.max_velocity * this.velocity_ratio * Math.cos(this.rotation.y + y_dir * x_dir * Math.PI/4)
         }
 
         this.position.copy(this.body.position)
