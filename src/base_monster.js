@@ -6,7 +6,7 @@ import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path, player, paused){
+    constructor(scene, world, position, path, player, paused, mesh_source){
         super()
         this.scene = scene
         this.world = world
@@ -21,12 +21,12 @@ export default class Monster extends THREE.Group {
         this.loaded = false
         this.enemy = player
         this.paused = paused
-        this.init()
+        this.init(mesh_source)
     }
     
-    init(){
+    init(source){
         const loader = new THREE.GLTFLoader()
-        loader.load('../res/meshes/Characters/BasicMonster.glb', (gltf) => {
+        loader.load(source, (gltf) => {
             this.gltf = gltf
             this.define()
         })
@@ -41,43 +41,6 @@ export default class Monster extends THREE.Group {
         model.traverse(child => {
             if (child.isMesh )child.castShadow=true;
         });
-    }
-
-    define(){
-        var model = this.gltf.scene
-        this.add(model)
-        this.model = model
-
-        this.updateMaterials(model)
-
-        this.skeleton = new THREE.SkeletonHelper( model )
-        this.skeleton.visible = true;
-        this.scene.add( this.skeleton )
-
-        const animations = this.gltf.animations;
-
-        const mixer = new THREE.AnimationMixer( model );
-
-        //Getting the animations from the mesh
-        const actions = [
-            {name : "basic_attack",       action : mixer.clipAction( animations[ 0 ] )},
-            {name : "idle",       action : mixer.clipAction( animations[ 1 ] )},
-            {name : "walk",       action : mixer.clipAction( animations[ 2 ] )}
-        ]
-
-        this.animation_manager = new AnimationManager(model, mixer, actions, [])
-
-        this.body = new CANNON.Body({
-            shape : new CANNON.Sphere(0.5),
-            position : new CANNON.Vec3(this.start_pos.x, this.start_pos.y, this.start_pos.z),
-            mass : 10,
-        })
-
-
-        this.body.linearDamping = 0
-        this.scene.add(this)
-        this.world.addBody(this.body)
-        this.loaded = true
     }
 
     updateTransform(delta){
@@ -95,7 +58,6 @@ export default class Monster extends THREE.Group {
 
         // distance between the body and the point its trying to reach
         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
-
         if (diff  <= 0.5){
             this.path_index = (this.path_index + 1) % this.path.length
         }
@@ -111,6 +73,7 @@ export default class Monster extends THREE.Group {
 
     update( delta ){
         if(!this.loaded) return
+        
         try{
             let time = delta%10;
             this.play_direction = 1 
