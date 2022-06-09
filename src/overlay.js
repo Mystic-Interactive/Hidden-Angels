@@ -384,6 +384,7 @@ function HUD(){
 
 //Decreases the amount of hearts to draw on the screen
 function tookDamage(damageTaken){
+  console.log(hearts)
   graphics.save();
   hearts-=damageTaken;
   if(hearts<1){

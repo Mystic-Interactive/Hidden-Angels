@@ -2,8 +2,7 @@ import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
 import { tookDamage } from './overlay.js'
-
-
+import { can_see } from './sight.js'
 
 export default class Monster extends THREE.Group {
 
@@ -91,6 +90,9 @@ export default class Monster extends THREE.Group {
         pos2.copy(this.enemy.body.position);
         pos2.y = 0; 
         const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
+
+        this.path = path
+        this.path_index = 0
     }
 
     update( delta ){
