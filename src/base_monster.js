@@ -1,21 +1,28 @@
 import * as CANNON from '../lib/cannon-es.js'
-import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
 import { tookDamage } from './overlay.js'
 import { can_see } from './sight.js'
 
 export default class Monster extends THREE.Group {
+<<<<<<< HEAD
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
+=======
+
+    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source){
+>>>>>>> 5b95c5b8c0c62971175d801611d07e04643cd3dd
         super()
         this.loader = GLTFLoader
         this.scene = scene
         this.world = world
         this.start_pos = position
+        
+        // offsetting the path based on the monsters position
+        // alows defining a path in object coordinates.
         for (var i = 0; i < path.length; i++){
             path[i].add(path[i], this.start_pos)
         }
         this.hitting = false
-        this.path = path
+        this.patrol = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
         this.path_index = 1
         this.loaded = false
@@ -24,23 +31,20 @@ export default class Monster extends THREE.Group {
         this.pathfinding = null;
         this.ZONE = null;
         this.init(mesh_source)
-        this.damage = damage
+        this.damage = 0 //damage will be set in each individual monster
+        this.vision_limit = 0
+        this.angle = Math.PI * 2
     }
     
+    // initialize the monster by loading its mesh then defining specific attributes
     init(source){
         this.loader.load(source, (gltf) => {
             this.gltf = gltf
             this.define()
         })
-
-        this.animation_state = 0
-        this.transition_state = 0
-        this.rotdir = 0
-        this.rot_scale = 0
-        //monster ai
-
     }
 
+    // cast shadows
     updateMaterials(model) {
         model.traverse(child => {
             if (child.isMesh) child.castShadow = true;
@@ -48,11 +52,10 @@ export default class Monster extends THREE.Group {
     }
 
     updateTransform(delta){
-    
-        const p = this.path[this.path_index]
+        const p = this.path[0]
         const b = this.body.position
-        var desired = (new CANNON.Vec3(p.x - b.x, 0, p.z - b.z).unit())
-        const facing = new CANNON.Vec3(Math.sin(this.rotation.y), 0, Math.cos(this.rotation.y))
+        var desired = (new CANNON.Vec3(p.x - b.x, 0, p.z - b.z).unit()) // direction vector of where we want to go
+        const facing = new CANNON.Vec3(Math.sin(this.rotation.y), 0, Math.cos(this.rotation.y)) // direction currently facing
         
         // face the correct direction
         const angle = Math.round(angleBetween(desired, facing))
@@ -60,11 +63,6 @@ export default class Monster extends THREE.Group {
         if (angle != 0) return;
         const curr_direction = desired
 
-        // distance between the body and the point its trying to reach
-        const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
-        if (diff  <= 0.5){
-            this.path_index = (this.path_index + 1) % this.path.length
-        }  
         this.body.velocity = curr_direction.scale(3)
         this.position.copy(this.body.position)
         this.translateY(-this.body.boundingRadius)
@@ -81,17 +79,20 @@ export default class Monster extends THREE.Group {
     //     return false;
     // }
 
-    changePath() {//changes path using the navmesh
+    changePath(target) {//changes path using the navmesh
         let pos = new THREE.Vector3(0,0,0);
         pos.copy(this.body.position);
         pos.y = 0;
         let pos2 = new THREE.Vector3(0,0,0);
-        pos2.copy(this.enemy.body.position);
+        pos2.copy(target);
         pos2.y = 0; 
         const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
 
         this.path = path
-        this.path_index = 0
+    }
+
+    looking_at_player(){
+        return can_see(this, this.enemy, this.vision_limit, this.angle)
     }
 
     update( delta ){
@@ -109,8 +110,23 @@ export default class Monster extends THREE.Group {
                     }
                     this.desired_action = "basic_attack"
                 } else { 
-                    if (this.path != null){
-                        this.changePath();
+                    // only chase when the player is visible to the monster
+                    if (this.looking_at_player()){
+                        this.changePath(this.enemy.body.position);
+                        console.log("i see you")
+                    } else { // return to patrol path
+                        console.log("i cant see you")
+                        this.changePath(this.patrol[this.path_index])
+                        const p = this.patrol[this.path_index]
+                        const b = this.body.position
+
+                        // distance between the body and the point its trying to reach
+                        const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
+                        if (diff  <= 0.5){
+                            this.path_index = (this.path_index + 1) % this.patrol.length
+                            console.log(this.patrol[this.path_index])
+                        }  
+
                     }
                     
                     this.hitting = false;
