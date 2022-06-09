@@ -10,6 +10,7 @@ export default class Monster extends THREE.Group {
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
         this.loader = GLTFLoader
+        console.log(this.loader)
         this.scene = scene
         this.world = world
         this.start_pos = position
