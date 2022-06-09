@@ -2,14 +2,10 @@ import * as CANNON from '../lib/cannon-es.js'
 import { angleBetween } from './misc.js'
 import { tookDamage } from './overlay.js'
 import { can_see } from './sight.js'
-
+import { Pathfinding } from '../lib/Pathfinding.js'
 export default class Monster extends THREE.Group {
-<<<<<<< HEAD
-    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
-=======
 
-    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source){
->>>>>>> 5b95c5b8c0c62971175d801611d07e04643cd3dd
+    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source,level){
         super()
         this.loader = GLTFLoader
         this.scene = scene
@@ -34,8 +30,52 @@ export default class Monster extends THREE.Group {
         this.damage = 0 //damage will be set in each individual monster
         this.vision_limit = 0
         this.angle = Math.PI * 2
+        this.processNavMesh(level);
     }
     
+    //choose pathfinding navmesh and load navmesh for monster
+    processNavMesh(level){
+        //choose navigation mesh to use depending on level
+        let mesh;
+        let zoneName
+        if(level == 1){
+            mesh = '../res/meshes/Navigation/Level1_nav.glb';
+            zoneName = 'level1';
+        }else if(level == 2){
+            mesh = '../res/meshes/Navigation/Level2_nav.glb';
+            zoneName = 'level2';
+        }
+        else if(level == 3){
+            mesh = '../res/meshes/Navigation/Level3_nav.glb';
+            zoneName = 'level3';
+        }
+        else if(level == 4){
+            mesh = '../res/meshes/Navigation/Level4_nav.glb';
+            zoneName = 'level4';
+        }
+        else{
+            mesh = '../res/meshes/Navigation/Level1_nav.glb';
+            zoneName = 'level1';
+        }
+        const loader = new THREE.GLTFLoader();
+        //load navigation mesh
+        loader.load('../res/meshes/Navigation/Level1_nav.glb', ({ scene }) => {            
+            scene.traverse((node) => {
+                if (node.name == "NavMesh") { //navmesh is found
+                    this.navmesh = node;
+                    this.setUpPathfinding();
+                }
+            }, undefined, (e) => {
+                console.error(e);
+            });
+        });
+    }
+    setUpPathfinding(zoneName) {// create Pathfinding instance and setup the zones to be used
+        this.pathfinding = new Pathfinding();
+        this.ZONE = zoneName
+        this.pathfinding.setZoneData(this.ZONE, Pathfinding.createZone(this.navmesh.geometry));
+    }
+
     // initialize the monster by loading its mesh then defining specific attributes
     init(source){
         this.loader.load(source, (gltf) => {
@@ -51,7 +91,7 @@ export default class Monster extends THREE.Group {
         });
     }
 
-    updateTransform(delta){
+    updateTransform(delta){ //moves monster
         const p = this.path[0]
         const b = this.body.position
         var desired = (new CANNON.Vec3(p.x - b.x, 0, p.z - b.z).unit()) // direction vector of where we want to go
@@ -73,12 +113,6 @@ export default class Monster extends THREE.Group {
         this.being_looked_at = bool
     }
 
-    // seesPlayer(){
-    //     let raycaster = new THREE.Raycaster(this.body.position,this.getWorldDirection,);
-    //     if()
-    //     return false;
-    // }
-
     changePath(target) {//changes path using the navmesh
         let pos = new THREE.Vector3(0,0,0);
         pos.copy(this.body.position);
@@ -87,7 +121,6 @@ export default class Monster extends THREE.Group {
         pos2.copy(target);
         pos2.y = 0; 
         const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
-
         this.path = path
     }
 
@@ -99,11 +132,12 @@ export default class Monster extends THREE.Group {
         if(!this.loaded) return;
         
         try{
+            console.log(this.enemy.body.position);
             let time = delta%30;
             this.play_direction = 1 
             this.desired_action = "walk"
-            if(this.being_looked_at != true){
-                if(this.position.distanceTo(this.enemy.position) < 2){
+            if(this.being_looked_at != true){// if the player is not looking at monster
+                if(this.position.distanceTo(this.enemy.position) < 2){ //attack if the player is close to the monster
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     if(!this.hitting && !this.paused && time == 0) {
                         tookDamage(this.damage)
@@ -113,9 +147,7 @@ export default class Monster extends THREE.Group {
                     // only chase when the player is visible to the monster
                     if (this.looking_at_player()){
                         this.changePath(this.enemy.body.position);
-                        console.log("i see you")
                     } else { // return to patrol path
-                        console.log("i cant see you")
                         this.changePath(this.patrol[this.path_index])
                         const p = this.patrol[this.path_index]
                         const b = this.body.position
@@ -144,23 +176,10 @@ export default class Monster extends THREE.Group {
         }
     }
 
-    destroy(){
+    destroy(){ //method used to remove a monster from memory
         const index = this.world.bodies.indexOf(this.body)
         this.scene.remove(this.skeleton)
         this.world.bodies.splice(index, 1)
         this.scene.remove(this)
     }
-}
-class PlayerProxy {
-    constructor(player) {
-        this.player = player;
-        this.position = new THREE.Vector3(); //keeps track of player position
-        this.position.copy(this.player.position);
-        this.watching = false; //is player looking at monster
-
-    }
-    update() { //copy player coordinates and check if player is looking at monster
-        this.position.copy(this.player.position);
-    }
-
 }
