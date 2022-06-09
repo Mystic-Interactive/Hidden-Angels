@@ -129,6 +129,12 @@ export default class Monster extends THREE.Group {
         }
     }
 
+    destroy(){
+        const index = this.world.bodies.indexOf(this.body)
+        this.scene.remove(this.skeleton)
+        this.world.bodies.splice(index, 1)
+        this.scene.remove(this)
+    }
 }
 class PlayerProxy {
     constructor(player) {
