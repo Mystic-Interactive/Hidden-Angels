@@ -5,7 +5,6 @@ import { tookDamage } from './overlay.js'
 import { can_see } from './sight.js'
 
 export default class Monster extends THREE.Group {
-
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
         this.loader = GLTFLoader

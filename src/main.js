@@ -1,13 +1,48 @@
-import { sky } from './sky.js';
-import { Ground } from './ground.js';
+import { 
+  sky 
+} from './sky.js'
+
+import { 
+  Ground 
+} from './ground.js'
+
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import {moonCreator, addSphereMoon,torch } from './lights.js';
-import {PointerLockControls} from './PointerLockControls.js'
-import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor, getLoader} from './house_collision.js'
-import SmallMonster from './small_monster.js';
-import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
+
+import {
+  moonCreator, 
+  addSphereMoon,
+  torch 
+} from './lights.js'
+
+import {
+  PointerLockControls
+} from './PointerLockControls.js'
+import {
+  HUD,
+  changeInventorySelected,
+  clearInventory,
+  setDeathScreen, 
+  resetHealth
+} from './overlay.js'
+
+import {
+  makeFirstFloor,
+  makeSecondFloor,
+  makeBasement,
+  makeFourthFloor,
+  removeFloor, 
+  getLoader
+} from './house_collision.js'
+
+import {
+  detectObject,
+  UI, 
+  removeAllDynamics, 
+  initializeDynamics
+} from './house_dynamic.js'
+
+import SmallMonster from './small_monster.js'
 import LargeMonster from './large_monster.js';
 import NormalMonster from './normal_monster.js';
 
@@ -56,7 +91,7 @@ var skybox;
 //sounds that will be added to the scene
 var listener;
 var audioLoader;
-var backgroundsound;
+var backgroundSound;
 var hitSound;
 var pickupSound ;
 
@@ -126,11 +161,8 @@ var init = function(){
     new THREE.Vector3(-2, 0, 2)
   ]
   
-  //const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
 
   player = new Player(scene, world, camera, gltfLoader, initial_position, monsters); //Create and add player to scene and physics world
-
-  //var monster_v2 = new monster_ai(scene,player);
 
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
@@ -159,7 +191,7 @@ var init = function(){
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
-  initialiseDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound, gltfLoader)
+  initializeDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound, gltfLoader)
   setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
@@ -214,7 +246,7 @@ var init = function(){
     mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
   })
 
-   //Click listener to move user to next level if they have selected it
+  //Click listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
     console.log("Level: ",lvl)
@@ -324,7 +356,6 @@ function update(){ //Game Logic
 
   //Only update the game state if the menu is not brought up
   if(!paused){
-    
     monsters.forEach(monster => {
       try{
         monster.update(delta);
@@ -542,18 +573,18 @@ function createMenu(){ //Creating the pause menu
   sceneHUD.add(sprite4);
 }
 
-//function that will initialise all the sounds in the game
+//function that will initialize all the sounds in the game
 function addSounds(){
   audioLoader = new THREE.AudioLoader();
-  backgroundsound = new THREE.Audio(listener);
+  backgroundSound = new THREE.Audio(listener);
   hitSound = new THREE.Audio(listener);
   pickupSound = new THREE.Audio(listener);
 
   audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
-    backgroundsound.setBuffer(buffer);
-    backgroundsound.setLoop(true);
-    backgroundsound.setVolume(0.3);
-    backgroundsound.play();
+    backgroundSound.setBuffer(buffer);
+    backgroundSound.setLoop(true);
+    backgroundSound.setVolume(0.3);
+    backgroundSound.play();
   })
 
   audioLoader.load('../res/sound_effects/pick_up_item.wav',function(buffer){
@@ -576,24 +607,24 @@ function loadingScene(){
 
   // Method to do things when we starting loading 
   loadingManager.onStart = function(url,item,total){
-      progressBarContainer.style.display = 'block';
-      progressBarContainer.style.position = 'absolute';
-      console.log(`Started loading: ${url}`)
+    progressBarContainer.style.display = 'block';
+    progressBarContainer.style.position = 'absolute';
+    console.log(`Started loading: ${url}`)
   }
 
   // Method called when the loading is under progress
   loadingManager.onProgress = function(url,loaded,total){
-      progressBar.value = (loaded/total)*100;
+    progressBar.value = (loaded/total)*100;
   }
 
   // Method called called when the loading of the assest has finished
   loadingManager.onLoad = function(){
-      progressBarContainer.style.display = 'none';
+    progressBarContainer.style.display = 'none';
   }
 
   // Method called when there is an error
   loadingManager.onError = function(url){
-      console.error(`Problem loading ${url}`)
+    console.error(`Problem loading ${url}`)
   }
 }
 

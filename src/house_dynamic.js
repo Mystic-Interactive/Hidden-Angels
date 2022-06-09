@@ -1,5 +1,9 @@
 import * as CANNON from '../lib/cannon-es.js'
-import { addToInventory, getItemSelected, clearItem } from './overlay.js';
+import { 
+    addToInventory, 
+    getItemSelected, 
+    clearItem 
+} from './overlay.js';
 
 //Declaring variables that will be used throughtout the class
 var bathroomKey = null;
@@ -33,7 +37,7 @@ var spriteFinish = null;
 var audioPickUp = null;
 
 //Called to give all values from other classes
-function initialiseDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audioPickUp_, gltfLoader_){
+function initializeDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audioPickUp_, gltfLoader_){
     scene = scene_
     HUD = HUD_
     world = world_
@@ -381,4 +385,12 @@ document.addEventListener('keydown',(e)=>{
     }
 })
 
-export {makeDynamicObject,removeObjectFromScene, detectObject,removeAllDynamics,UI,initialiseDynamics,setGoalPosition}
+export {
+    makeDynamicObject,
+    removeObjectFromScene, 
+    detectObject,
+    removeAllDynamics,
+    UI,
+    setGoalPosition, 
+    initializeDynamics
+}

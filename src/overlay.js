@@ -415,4 +415,14 @@ function resetHealth(){
   hearts = 3;
 }
 
-export{HUD,tookDamage,changeInventorySelected,addToInventory,clearInventory,getItemSelected,clearItem, setDeathScreen, resetHealth}
+export{
+  HUD,
+  tookDamage,
+  changeInventorySelected,
+  addToInventory,
+  clearInventory,
+  getItemSelected,
+  clearItem, 
+  setDeathScreen, 
+  resetHealth
+}

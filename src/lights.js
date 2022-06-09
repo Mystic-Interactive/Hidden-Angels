@@ -1,5 +1,3 @@
-//Class that will handle the creation of lights
-
 //point light creator that will be used to make all lights
 function pointLightCreator(colour,intensity,distance,decay,bias){
   const pointLight = new THREE.PointLight(colour,intensity,distance,decay);
@@ -53,4 +51,9 @@ function torch(colour, intensity, distance, decay, bias, position){
   return pLight;
 }
 
-export { pointLightCreator, moonCreator, addSphereMoon,torch}
+export { 
+  pointLightCreator, 
+  moonCreator, 
+  addSphereMoon,
+  torch
+}

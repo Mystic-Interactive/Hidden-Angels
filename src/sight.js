@@ -1,7 +1,6 @@
 import * as CANNON from "../lib/cannon-es.js"
 import { angleBetween } from "./misc.js"
 
-
 /**
  * 
  * @param {*} me 
@@ -13,6 +12,7 @@ import { angleBetween } from "./misc.js"
  * will determine if an entity has vision of another
  * 
  */
+
 export const can_see = (me, other, max_distance, angle) => {
     const my_pos = me.body.position
     const other_pos = other.body.position
@@ -30,7 +30,5 @@ export const can_see = (me, other, max_distance, angle) => {
     
     // todo: if dont hit the other object return false
 
-
     return true
-    
 }
