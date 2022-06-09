@@ -276,7 +276,7 @@ var init = function(){
           var small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 3.2), path, player, true)
           monsters.push(small_monster)
 
-          small_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-9, 0, 4.6), path, player, true)
+          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-9, 0, 4.6), path, player, true)
           monsters.push(small_monster)
 
           //Nest sack 2
@@ -351,7 +351,7 @@ function update(){ //Game Logic
       t+=1;
     }
     HUD();
-    console.log(monsters.length)
+    //console.log(monsters.length)
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
     if(curr_lvl==4 || lvl == null){
