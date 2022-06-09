@@ -5,12 +5,12 @@ import { Pathfinding } from '../lib/Pathfinding.js'
 export default class NormalMonster extends Monster {
 
 
-    constructor(scene, world, position, path, player, paused) {
+    constructor(scene, world, GLTFLoader, position, path, player, paused) {
         //translate = [translate_x,-0.9+translate_y,-4+translate_z]
-        super(scene, world, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
+        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
         let navmesh;
-        const loader = new THREE.GLTFLoader();
-        loader.load('../res/meshes/FirstFloor_nav.glb', ({ scene }) => {
+        const loader2 = new THREE.GLTFLoader();
+        loader2.load('../res/meshes/FirstFloor_nav.glb', ({ scene }) => {
             scene.traverse((node) => {
                 if (node.name == "NavMesh") {
                     node.position.set(0, -0.9, -4);
