@@ -76,6 +76,12 @@ export default class Monster extends THREE.Group {
         this.being_looked_at = bool
     }
 
+    // seesPlayer(){
+    //     let raycaster = new THREE.Raycaster(this.body.position,this.getWorldDirection,);
+    //     if()
+    //     return false;
+    // }
+
     changePath() {//changes path using the navmesh
         let pos = new THREE.Vector3(0,0,0);
         pos.copy(this.body.position);
@@ -87,8 +93,6 @@ export default class Monster extends THREE.Group {
 
         this.path = path
         this.path_index = 0
-        console.log(path);
-        console.log(this.ZONE)
     }
 
     update( delta ){

@@ -10,25 +10,22 @@ export default class NormalMonster extends Monster {
         super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb", 1)
         let navmesh;
         const loader2 = new THREE.GLTFLoader();
+        //load navigation mesh
         loader2.load('../res/meshes/FirstFloor_nav.glb', ({ scene }) => {            
             scene.traverse((node) => {
-                if (node.name == "NavMesh") {
-                 //   node.position.set(0, -0.9, -4);
+                if (node.name == "NavMesh") { //navmesh is found
                     this.navmesh = node;
                     this.setUpPathfinding();
-                    this.scene.add(node);
                 }
-
             }, undefined, (e) => {
                 console.error(e);
             });
         });
     }
 
-    setUpPathfinding() {// initialise navmesh to be used
+    setUpPathfinding() {// create Pathfinding instance and setup the zones to be used
         this.pathfinding = new Pathfinding();
         this.ZONE = 'firstfloor'
-        console.log(Pathfinding.createZone(this.navmesh.geometry));
         this.pathfinding.setZoneData(this.ZONE, Pathfinding.createZone(this.navmesh.geometry));
     }
 
