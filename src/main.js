@@ -316,7 +316,7 @@ function update(){ //Game Logic
     HUD();
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
-    if(curr_lvl==4){
+    if(curr_lvl==4 || lvl == null){
       //Rotates and moves the moon
       speed+=0.001
       moonLight.position.y = 20*(Math.sin(speed))+50;
