@@ -110,7 +110,7 @@ var init = function(){
   loadingScene();
   getLoader(gltfLoader);
   //Setting up the moon. The moon contains a point light, a mesh and a texture
-  moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
+  moonLight = moonCreator(0xFFFFFF,0.3,10000,1,-0.0045);
   scene.add(moonLight);
   moonSphere = addSphereMoon(2);
   scene.add(moonSphere);
@@ -187,7 +187,6 @@ var init = function(){
     }
     else if(e.code=='Digit3'|| e.code =="Numpad3"){//change to 3rd item in inventory
       console.log("Pressed 3")
-      console.log(player.position)
       changeInventorySelected(3);
     }
     else if(e.code=='Digit4'|| e.code =="Numpad4"){//change to 4th item in inventory
@@ -351,19 +350,25 @@ function update(){ //Game Logic
       t+=1;
     }
     HUD();
-    console.log(player.position)
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
     if(curr_lvl==4 || lvl == null){
       //Rotates and moves the moon
       speed+=0.001
-      moonLight.position.y = 20*(Math.sin(speed))+50;
+      if(curr_lvl==4){
+        moonLight.position.y = 20*(Math.sin(speed))+10;
+        moonSphere.position.y = 20*(Math.sin(speed))+10;
+      }
+      else{
+        moonLight.position.y = 20*(Math.sin(speed))+20;
+        moonSphere.position.y = 20*(Math.sin(speed))+20;
+      }
+      
       moonLight.position.z = 10*(Math.cos(speed));
-      moonSphere.position.y = 20*(Math.sin(speed))+50;
       moonSphere.position.z = 10*(Math.cos(speed));
-      moonSphere.rotation.x+=0.005;
-      moonSphere.rotation.y+=0.005;
-      moonSphere.rotation.z+=0.005;
+      moonSphere.rotation.x+=0.001;
+      moonSphere.rotation.y+=0.001;
+      moonSphere.rotation.z+=0.001;
       
       //Rotates the skybox
       skybox.rotation.x+=0.0005;
