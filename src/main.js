@@ -18,6 +18,7 @@ import {
 import {
   PointerLockControls
 } from './PointerLockControls.js'
+
 import {
   HUD,
   changeInventorySelected,
@@ -533,7 +534,7 @@ function createMenu(){ //Creating the pause menu
   sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteNextMaterial = new THREE.SpriteMaterial({
-    map: new THREE.TextureLoader().load("../res/textures/pause_menu/next_level.jpg")
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/NextLevel.jpg")
   });
 
   spriteNext = new THREE.Sprite(spriteNextMaterial);

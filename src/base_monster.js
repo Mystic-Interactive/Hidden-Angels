@@ -5,7 +5,7 @@ import { can_see } from './sight.js'
 import { Pathfinding } from '../lib/Pathfinding.js'
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source,level){
+    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage,level){
         super()
         this.loader = GLTFLoader
         this.scene = scene
@@ -15,7 +15,7 @@ export default class Monster extends THREE.Group {
         // offsetting the path based on the monsters position
         // alows defining a path in object coordinates.
         for (var i = 0; i < path.length; i++){
-            path[i].add(path[i], this.start_pos)
+            path[i].addVectors(path[i], this.start_pos)
         }
         this.hitting = false
         this.patrol = path
@@ -147,7 +147,8 @@ export default class Monster extends THREE.Group {
                     // only chase when the player is visible to the monster
                     if (this.looking_at_player()){
                         this.changePath(this.enemy.body.position);
-                    } else { // return to patrol path
+                    } 
+                    else { // return to patrol path
                         this.changePath(this.patrol[this.path_index])
                         const p = this.patrol[this.path_index]
                         const b = this.body.position
