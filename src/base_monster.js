@@ -14,7 +14,7 @@ export default class Monster extends THREE.Group {
         // offsetting the path based on the monsters position
         // alows defining a path in object coordinates.
         for (var i = 0; i < path.length; i++){
-            path[i].add(path[i], this.start_pos)
+            path[i].addVectors(path[i], this.start_pos)
         }
         this.hitting = false
         this.patrol = path
@@ -109,7 +109,8 @@ export default class Monster extends THREE.Group {
                     if (this.looking_at_player()){
                         this.changePath(this.enemy.body.position);
                         console.log("i see you")
-                    } else { // return to patrol path
+                    } 
+                    else { // return to patrol path
                         console.log("i cant see you")
                         this.changePath(this.patrol[this.path_index])
                         const p = this.patrol[this.path_index]

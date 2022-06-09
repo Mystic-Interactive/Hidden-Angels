@@ -27,14 +27,9 @@ function addSphereMoon(radius){
 
   const sphereGeo = new THREE.SphereGeometry(radius);
   const sphereMaterial = new THREE.MeshLambertMaterial ({ //Adding a special material to make the moon look more realistic
-    color: 0xffffff ,
-    map: texture ,
-    displacementMap: displacementMap,
-    displacementScale: 1,
-    bumpMap: displacementMap,
-    bumpScale: 1,
-    reflectivity:1, 
-    shininess :1,
+    color: 0xffffff,
+    map: texture,
+    reflectivity:1,
     emissive:0xffffff,
     emissiveMap: texture
   }); 
