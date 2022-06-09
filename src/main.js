@@ -2,11 +2,10 @@ import { sky } from './sky.js';
 import { Ground } from './ground.js';
 import * as CANNON from '../lib/cannon-es.js'
 import Player from '../src/player.js'
-import { pointLightCreator, moonCreator, addSphereMoon,torch } from './lights.js';
+import {moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
 import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor, getLoader} from './house_collision.js'
-import { Reflector } from '../lib/Reflector.js'
 import SmallMonster from './small_monster.js';
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
 import LargeMonster from './large_monster.js';
@@ -24,7 +23,6 @@ const timestep = 1/60
 var delta = 0
 var time = new Date().getTime()
 var speed = 0
-var t = 43000;
 var selected = 0;
 
 // HUD control variables
@@ -339,16 +337,6 @@ function update(){ //Game Logic
     ground.update()
     detectObject(player)
     UI(lvl)
-    //Showing that we can decrease the visible hearts on the fly
-    const d = new Date();
-
-    if(d.getMinutes()==t){
-      selected+=2;
-      tookDamage(3);
-      changeInventorySelected(selected)
-      HUD();
-      t+=1;
-    }
     HUD();
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
