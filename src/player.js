@@ -30,7 +30,7 @@ export default class Player extends THREE.Group {
             this.define()
         })
 
-        this.max_velocity = 5
+        this.max_velocity = 10
         //(backward = -1)
         //(forward  =  1)
         this.direction = 0 

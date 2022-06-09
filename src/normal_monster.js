@@ -7,16 +7,11 @@ export default class NormalMonster extends Monster {
 
     constructor(scene, world, GLTFLoader, position, path, player, paused) {
         //translate = [translate_x,-0.9+translate_y,-4+translate_z]
-        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
+        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb", 1)
         let navmesh;
         const loader2 = new THREE.GLTFLoader();
         loader2.load('../res/meshes/FirstFloor_nav.glb', ({ scene }) => {            
             scene.traverse((node) => {
-<<<<<<< HEAD
-                console.log("im a node")
-=======
-
->>>>>>> a00ed6f34f241e6965232372f0aedaab8423e7d7
                 if (node.name == "NavMesh") {
                  //   node.position.set(0, -0.9, -4);
                     this.navmesh = node;

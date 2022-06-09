@@ -24,7 +24,7 @@ const timestep = 1/60
 var delta = 0
 var time = new Date().getTime()
 var speed = 0
-var t = 43;
+var t = 43000;
 var selected = 0;
 
 // HUD control variables

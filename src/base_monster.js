@@ -2,15 +2,13 @@ import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
 import { tookDamage } from './overlay.js'
-
-
+import { can_see } from './sight.js'
 
 export default class Monster extends THREE.Group {
 
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
         this.loader = GLTFLoader
-        console.log(this.loader)
         this.scene = scene
         this.world = world
         this.start_pos = position
@@ -86,6 +84,9 @@ export default class Monster extends THREE.Group {
         pos2.copy(this.enemy.body.position);
         pos2.y = 0; 
         const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
+
+        this.path = path
+        this.path_index = 0
         console.log(path);
         console.log(this.ZONE)
     }
