@@ -10,7 +10,6 @@ export default class Monster extends THREE.Group {
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
         this.loader = GLTFLoader
-        console.log(this.loader)
         this.scene = scene
         this.world = world
         this.start_pos = position
@@ -78,6 +77,12 @@ export default class Monster extends THREE.Group {
         this.being_looked_at = bool
     }
 
+    // seesPlayer(){
+    //     let raycaster = new THREE.Raycaster(this.body.position,this.getWorldDirection,);
+    //     if()
+    //     return false;
+    // }
+
     changePath() {//changes path using the navmesh
         let pos = new THREE.Vector3(0,0,0);
         pos.copy(this.body.position);
@@ -86,7 +91,6 @@ export default class Monster extends THREE.Group {
         pos2.copy(this.enemy.body.position);
         pos2.y = 0; 
         const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
-        console.log(path);
     }
 
     update( delta ){
