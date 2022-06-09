@@ -80,6 +80,7 @@ export default class Monster extends THREE.Group {
     changePath() {//changes path using the navmesh
         var groupID = this.pathfinding.getClosestNode(this.body.position,this.ZONE,0);
         console.log(groupID.id);
+        console.log('position:'+this.enemy.position)
         const path = this.pathfinding.findPath(this.body.position, this.enemy.position, this.ZONE, 0);
         console.log(path);
     }
