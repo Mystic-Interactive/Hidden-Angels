@@ -513,7 +513,7 @@ function addSounds(){
   audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
     backgroundsound.setBuffer(buffer);
     backgroundsound.setLoop(true);
-    backgroundsound.setVolume(0.1);
+    backgroundsound.setVolume(0.3);
     backgroundsound.play();
   })
 
