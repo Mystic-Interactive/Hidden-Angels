@@ -7,10 +7,6 @@
         <link rel='stylesheet' href="aboutPage.css"></link>
     </head>
     <body onload="init()">
-        <script src="../lib/three.js"></script>
-        <script src="../lib/GLTFLoader.js"></script>
-        <script type="module" src="../src/aboutGame.js"></script>
-
         <h1>About the Game</h1>
         <img src="./images/background.jpg" class="image1">
         <h2>Description</h2>
@@ -25,33 +21,26 @@
         </p>
 
         <h2>Controls</h2>
-        <div class="controls-1">
-            <div style="width:50%">
-                <canvas class="playerControls" id="player">
-                    HTML5 not supported by browser
-                </canvas>
-            </div>
+        <div class="Description">
+            <h3>Mouse:</h3>
+            <p>
+                The mouse used to control the camera's rotation. <br>
+                This enables a first person perspective, 
+                however a third person perspective is also available.
+            </p>
 
-            <div class="controlsText">
-                <h3>Mouse:</h3>
-                <p>
-                    The mouse used to control the camera's rotation. <br>
-                    This enables a first person perspective, 
-                    however a third person perspective is also available.
-                </p>
-
-                <h3>Keyboard:</h3>
-                <p>
-                    Move Forward: W <br>
-                    Move Left: A <br>
-                    Move Backwards: S <br>
-                    Move Right: D <br>
-                    Jump: Space Bar <br>
-                    Crouch: Shift
-                    First Person to Third Person(or vice versa): 
-                </p>
-            </div>
+            <h3>Keyboard:</h3>
+            <p>
+                Move Forward: W <br>
+                Move Left: A <br>
+                Move Backwards: S <br>
+                Move Right: D <br>
+                Jump: Space Bar <br>
+                Crouch: Shift
+                First Person to Third Person(or vice versa): 
+            </p>
         </div>
+
 
         <h2>Monsters</h2>
         <div>
@@ -114,8 +103,8 @@
         <h2>Level Design</h2>
         <p class="Description">
             There are 4 Levels to the game: <br>
-            Level 1: Second Floor <br>
-            Level 2: First Floor <br>
+            Level 1: First Floor <br>
+            Level 2: Second Floor <br>
             Level 3: Basement <br>
             Level 4: Hedge Maze
             <br><br>
@@ -131,7 +120,7 @@
         
         <div style="text-align:center;">
             <div>
-                <h3>Level 1 - Second Floor</h3>
+                <h3>Level 1 - First Floor</h3>
                 <h4>Map Layout</h4>
                 <img = src="./images/Level 2 - Layout.jpg" class="design"></img>
                 <h4>Mesh Layout</h4>
@@ -143,39 +132,36 @@
             </div>
 
             <div>
-                <h3>Level 2 - First Floor</h3>
+                <h3>Level 2 - Second Floor</h3>
                 <h4>Map Layout</h4>
-                <img = src="./images/Level 2 - Layout.jpg" class="design"></img>
+                <img = src="./images/Level 1 - Layout.jpg" class="design"></img>
                 <h4>Mesh Layout</h4>
-                <img = src="./images/Level 2 - Meshes.jpg" class="design"></img>
+                <img = src="./images/Level 1 - Meshes.jpg" class="design"></img>
                 <h4>Level Progression</h4>
-                <img = src="./images/Level 2 - Progression.jpg" class="design"></img>
+                <img = src="./images/Level 1 - Progression.jpg" class="design"></img>
                 <h4>Monster Placement and Patrols</h4>
-                <img = src="./images/Level 2 - Monsters.jpg" class="design"></img>
+                <img = src="./images/Level 1 - Monsters.jpg" class="design"></img>
             </div>
 
             <div>
                 <h3>Level 3 - Basement</h3>
                 <h4>Map Layout</h4>
-                <img = src="./images/Level 2 - Layout.jpg" class="design"></img>
-                <h4>Mesh Layout</h4>
-                <img = src="./images/Level 2 - Meshes.jpg" class="design"></img>
+                <img = src="./images/Level 3 - Layout.jpg" class="design"></img>
                 <h4>Level Progression</h4>
-                <img = src="./images/Level 2 - Progression.jpg" class="design"></img>
+                <img = src="./images/Level 3 - Progression.jpg" class="design"></img>
                 <h4>Monster Placement and Patrols</h4>
-                <img = src="./images/Level 2 - Monsters.jpg" class="design"></img>
+                <img = src="./images/Level 3 - Monsters.jpg" class="design"></img>
             </div>
 
             <div>
                 <h3>Level 4 - Garden Maze</h3>
                 <h4>Map Layout</h4>
-                <img = src="./images/Level 2 - Layout.jpg" class="design"></img>
-                <h4>Mesh Layout</h4>
-                <img = src="./images/Level 2 - Meshes.jpg" class="design"></img>
+                <img = src="./images/Level 4 - Layout.jpg" class="design"></img>
                 <h4>Level Progression</h4>
-                <img = src="./images/Level 2 - Progression.jpg" class="design"></img>
+                <img = src="./images/Level 4 - Progression.jpg" class="design"></img>
                 <h4>Monster Placement and Patrols</h4>
-                <img = src="./images/Level 2 - Monsters.jpg" class="design"></img>
+                <p class="Description">NOTE: Monster will track the player</p>
+                <img = src="./images/Level 4 - Monsters.jpg" class="design"></img>
             </div>
         </div>
         <h2>References</h2>
@@ -202,8 +188,6 @@
             <br>
             <a href="https://skfb.ly/6XVzr">Fridge Mesh</a>
             <br>
-            <a href="https://www.cgtrader.com/products/dusty-old-booshelf">Bookshelf Mesh</a>
-            <br>
             <a href="https://skfb.ly/o9JLn">Stove Mesh</a>
             <br>
             <a href="https://skfb.ly/HrAA">Bath Mesh</a>
@@ -213,15 +197,67 @@
             <a href="https://skfb.ly/6vVoY">Single Bed Mesh</a>
             <br>
             <a href="https://skfb.ly/6VxSt">Double Bed Mesh</a>
+            <br>
+            <a href="https://www.turbosquid.com/3d-models/elisa-white-sp12-3d-model-1847809">Chandelier Mesh</a>
+            <br>
+            <a href="https://www.turbosquid.com/3d-models/3d-arabesque-sp4-1654165">Bedroom Light Mesh</a>
+            <br>
+            <a href="https://www.turbosquid.com/3d-models/armando-ap1-gold-3d-1655208">Wall Light Mesh</a>
         </div>
 
         <div class="references">
             <h3>Textures</h3>
             <p class="Description">
-                Texture for the house were found on PolyHaven, specifically:
+                Texture were mostly found on PolyHaven with few textures found elsewhere. 
+                Unfortunately it was difficult to obtain the necessary information for all textures.<br> 
+                Some specific textures are:
             </p>
             <br>
-
+            <a href="https://polyhaven.com/a/castle_brick_07">Brick Texture</a>
+            <br>
+            <a href="https://polyhaven.com/a/rough_plaster_brick_02">Plaster 1 Texture</a>
+            <br>
+            <a href="https://polyhaven.com/a/rough_plaster_broken">Plaster 2 Texture</a>
+            <br>
+            <a href="https://polyhaven.com/a/dirty_concrete">Concrete Texture</a>
+            <br>
+            <a href="https://www.texturecan.com/details/260/">Bookshelf Texture</a>
+            <br>
+            <a href="https://www.poliigon.com/texture/wood-planks-028/2271">Wood 1 Texture (Floor)</a>
+            <br>
+            <a href="https://www.poliigon.com/texture/wood-planks-worn-33/1801">Wood 2 Texture (Accessories)</a>
+            <br>
+            <a href="https://polyhaven.com/a/wood_peeling_paint_weathered">Wood 3 Texture (Furniture)</a>
+            <br>
+            <a href="https://polyhaven.com/a/wood_cabinet_worn_long">Wood 4 Texture (Furniture)</a>
         </div>
+
+        <div class="references">
+            <h3>Sounds</h3>
+            <a href="https://opengameart.org/content/loading-screen-loop">Background Music</a>
+            <br>
+            <a href="https://opengameart.org/content/inventory-sound-effects">Item Pick Up Sound</a>
+            <br>
+            <a href="https://pixabay.com/sound-effects/search/ouch/">Hurt Sound (ouch.mp3)</a>
+        </div>
+
+        <div class="references">
+            <h3>Research</h3>
+            <p class="Description">
+                Throughout the project, several features needed to be thoroughly researched so we were able to
+                replicate them with the desired effect as well as to understand what was taking place logically.
+                <br>
+                We achieved this through multiple means such as youtube videos, the Three.js documentation and
+                even github repositories with in depth explanations in the comments. 
+            </p>
+            <br>
+            <a href="https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_skinning_blending.html">Animations</a>
+            <br>
+            <a href="https://youtu.be/TPKWohwHrbo">Physics in Cannon.js</a>
+            <br>
+            <a href="https://threejs.org/docs/">Three.js Documentation</a>
+        </div>
+
+        <br><br>
     </body>
 </html>

@@ -4,6 +4,7 @@ import Monster from './base_monster.js'
 import { Pathfinding } from '../lib/Pathfinding.js'
 export default class NormalMonster extends Monster {
 
+
     constructor(scene, world, position, path, player, paused) {
         //translate = [translate_x,-0.9+translate_y,-4+translate_z]
         super(scene, world, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb")
@@ -22,6 +23,7 @@ export default class NormalMonster extends Monster {
                 console.error(e);
             });
         });
+
 
     }
 

@@ -1,0 +1,63 @@
+body{
+    margin: 0;
+    background-color: black;
+}
+
+.mainCanvas{
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 98%;
+    height: 98%;
+    margin: auto;
+}
+
+.progress-bar-container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(21, 21, 24);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+#progress-bar{
+    width: 30%;
+    margin-left: 5%;
+    align-items: center;
+}
+
+progress::-moz-progress-bar{
+    background: gainsboro;
+}
+
+progress::-moz-progress-value{
+    background: rgb(240, 194, 109);
+}
+
+progress::-webkit-progress-bar{
+    background: gainsboro;
+}
+
+progress::-webkit-progress-value{
+    background:rgb(240, 194, 109);
+}
+
+progress{
+    color: rgb(240, 194, 109);
+    background: gainsboro;
+}
+
+label{
+    color: white;
+    font-size: 2rem;
+}

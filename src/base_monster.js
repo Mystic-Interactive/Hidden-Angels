@@ -1,4 +1,3 @@
-
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import { angleBetween } from './misc.js'
@@ -8,8 +7,9 @@ import { tookDamage } from './overlay.js'
 
 export default class Monster extends THREE.Group {
 
-    constructor(scene, world, position, path, player, paused, mesh_source){
+    constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage){
         super()
+        this.loader = GLTFLoader
         this.scene = scene
         this.world = world
         this.start_pos = position
@@ -26,11 +26,11 @@ export default class Monster extends THREE.Group {
         this.pathfinding = null;
         this.ZONE = null;
         this.init(mesh_source)
+        this.damage = damage
     }
     
     init(source){
-        const loader = new THREE.GLTFLoader()
-        loader.load(source, (gltf) => {
+        this.loader.load(source, (gltf) => {
             this.gltf = gltf
             this.define()
         })
@@ -85,17 +85,17 @@ export default class Monster extends THREE.Group {
     }
 
     update( delta ){
-        if(!this.loaded) return
+        if(!this.loaded) return;
         
         try{
-            let time = delta%10;
+            let time = delta%30;
             this.play_direction = 1 
             this.desired_action = "walk"
             if(this.being_looked_at != true){
                 if(this.position.distanceTo(this.enemy.position) < 2){
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     if(!this.hitting && !this.paused && time == 0) {
-                        tookDamage(0.5)
+                        tookDamage(this.damage)
                     }
                     this.desired_action = "basic_attack"
                 } else { 

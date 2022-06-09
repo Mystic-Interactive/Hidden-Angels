@@ -29,7 +29,7 @@ export default class PlayerController{ //handles user's keyboard inputs - used t
                 case "d"        : this.right       = true; break
                 case " "        : this.jump        = true; break
                 case "shift"    : this.crouch      = true; break
-                case "tab"      : this.fps         = !this.fps; break
+                case "q"      : this.fps         = !this.fps; break
             }
         })
 

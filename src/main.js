@@ -5,7 +5,7 @@ import Player from '../src/player.js'
 import { pointLightCreator, moonCreator, addSphereMoon,torch } from './lights.js';
 import {PointerLockControls} from './PointerLockControls.js'
 import {HUD, tookDamage,changeInventorySelected,clearInventory,setDeathScreen, resetHealth} from './overlay.js'
-import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor} from './house_collision.js'
+import {makeFirstFloor,makeSecondFloor,makeBasement,makeFourthFloor,removeFloor, getLoader} from './house_collision.js'
 import { Reflector } from '../lib/Reflector.js'
 import SmallMonster from './small_monster.js';
 import {detectObject,UI, removeAllDynamics, initialiseDynamics} from './house_dynamic.js'
@@ -13,17 +13,18 @@ import LargeMonster from './large_monster.js';
 import NormalMonster from './normal_monster.js';
 
 // variables to set up scene with camera
-var  camera;
+var camera;
 var scene;
 var renderer;
 var world;
+var gltfLoader;
 
 // control variables to time actions correctly
 const timestep = 1/60
 var delta = 0
 var time = new Date().getTime()
 var speed = 0
-var t = 41;
+var t = 43;
 var selected = 0;
 
 // HUD control variables
@@ -35,15 +36,14 @@ var lvl2_uuid = "";
 var lvl3_uuid = "";
 var lvl4_uuid = "";
 var next_uuid = "";
+var finish_uuid = "";
 var death_uuid = "";
 var goToNext = false;
-var deathScreen = false;
 var restart = false;
-
 var sceneHUD;
 var cameraHUD;
 var mousePos;
-var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext;
+var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext,spriteFinish;
 
 // items added to scene
 var player;
@@ -54,15 +54,24 @@ var moonSphere;
 var torchLight;
 var skybox;
 
+
+//sounds that will be added to the scene
+var listener;
+var audioLoader;
+var backgroundsound;
+var hitSound;
+var pickupSound ;
+
+
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
   let world_canvas = document.getElementById('MainWorld');
   var hud_canvas = document.getElementById('myCanvas');
   const progressBarContainer = document.querySelector('.progress-bar-container');
-  world_canvas.width = window.innerWidth - 20;
-  world_canvas.height = window.innerHeight - 20;
-  hud_canvas.width = window.innerWidth;
-  hud_canvas.height = window.innerHeight;
+  world_canvas.width = 0.98*window.innerWidth;
+  world_canvas.height = 0.98*window.innerHeight;
+  hud_canvas.width = 0.98*window.innerWidth;
+  hud_canvas.height = 0.98*window.innerHeight;
   progressBarContainer.style.display = 'none'; //hide loading screen
 
 
@@ -74,20 +83,22 @@ var init = function(){
 	
   camera = new THREE.PerspectiveCamera(
     95, // field of view (fov)
-    window.innerWidth/window.innerHeight, // browser aspect ratio
+    (0.98*window.innerWidth)/(0.98*window.innerHeight), // browser aspect ratio
     0.1, // near clipping plane
     1000 // far clipping plane
   );
+
+  listener = new THREE.AudioListener();
+  camera.add(listener);
   
   renderer = new THREE.WebGLRenderer({
     maxLights: 8,
     canvas: world_canvas,
   });
 
-  renderer.setSize(window.innerWidth, window.innerHeight,);
+  renderer.setSize(0.98*window.innerWidth, 0.98*window.innerHeight,);
   renderer.shadowMap.enabled = true;
   renderer.autoClear = false;
-  
   document.body.appendChild(renderer.domElement);
 
   mousePos = new THREE.Vector2();
@@ -95,7 +106,10 @@ var init = function(){
   //Create and add ground mesh to scene
   ground = new Ground(scene, world)
   
-  //Setting up the moon. The moon contains a directional light, a mesh and a texture
+  //Create the loading screen
+  loadingScene();
+  getLoader(gltfLoader);
+  //Setting up the moon. The moon contains a point light, a mesh and a texture
   moonLight = moonCreator(0xFFFFFF,0.8,10000,1,-0.0045);
   scene.add(moonLight);
   moonSphere = addSphereMoon(2);
@@ -116,14 +130,15 @@ var init = function(){
   
   //const monster = new Monster(scene, world,new THREE.Vector3(1, 0, 10), player)
 
-  player = new Player(scene, world, camera, initial_position, monsters); //Create and add player to scene and physics world
+  player = new Player(scene, world, camera, gltfLoader, initial_position, monsters); //Create and add player to scene and physics world
 
   //var monster_v2 = new monster_ai(scene,player);
 
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
-  light.intensity = 1; //dim light for atmosphere
+  light.intensity = 0.4; //dim light for atmosphere
   scene.add(light)
+
 
   //const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
  // monsters.push(smol_boi)
@@ -133,24 +148,26 @@ var init = function(){
   //const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
  // monsters.push(big_boi)
 
+
   const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
 	  PointerLock.lock();
 	});
 
   createMenu()//create menu screen overlay (level selection)
+  addSounds()
   
   //Create and add spotlight tos scene (acts as player torch)
   torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
-  initialiseDynamics(scene, sceneHUD, world, spriteNext)
-  setDeathScreen(spriteDeath,sceneHUD)
+  initialiseDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound, gltfLoader)
+  setDeathScreen(spriteDeath,sceneHUD, hitSound)
 
   window.addEventListener('resize', () => {
-    hud_canvas.width = window.innerWidth;
-    hud_canvas.height = window.innerHeight;
-    renderer.setSize(0.98*window.innerWidth,window.innerHeight);
+    hud_canvas.width = 0.98*window.innerWidth;
+    hud_canvas.height = 0.98*window.innerHeight;
+    renderer.setSize(0.98*window.innerWidth, 0.98*window.innerHeight);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
   })
@@ -200,6 +217,7 @@ var init = function(){
     mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
   })
 
+   //Click listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
     console.log("clicked")
     console.log("Level: ",lvl)
@@ -246,6 +264,7 @@ var init = function(){
         lvlChange(curr_lvl);
         curr_lvl=4;
         makeFourthFloor(scene,world);
+        player.body.position.set(-11.5,1,12)
       }  
     }
 
@@ -269,6 +288,7 @@ function update(){ //Game Logic
   rayCasterHUD.setFromCamera(mousePos,cameraHUD);
   const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
+  //Only update the game state if the menu is not brought up
   if(!paused){
     
     monsters.forEach(monster => {
@@ -282,8 +302,7 @@ function update(){ //Game Logic
     player.update(delta)
     ground.update()
     detectObject(player)
-    UI()
-
+    UI(lvl)
     //Showing that we can decrease the visible hearts on the fly
     const d = new Date();
 
@@ -312,10 +331,15 @@ function update(){ //Game Logic
       skybox.rotation.x+=0.0005;
       skybox.rotation.y+=0.0005;
       skybox.rotation.z+=0.0005;
+
+      scene.add(moonLight)
+      scene.add(moonSphere)
+      scene.remove(torchLight)
     }
     else{
-      moonLight.position.set(0,10,0);
-      moonSphere.position.set(0,10,0);
+      scene.remove(moonLight)
+      scene.remove(moonSphere)
+      scene.add(torchLight)
     }
 
     world.step(timestep)
@@ -323,7 +347,7 @@ function update(){ //Game Logic
     torchLight.position.set(player.position.x,player.position.y,player.position.z)
       
     if(intersectsHUD.length>0){
-      if(intersectsHUD[0].object.uuid === next_uuid){
+      if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
         console.log("Next level Highlighted")
         goToNext = true;
       }
@@ -363,7 +387,7 @@ function update(){ //Game Logic
 
 function render(){// Draw scene
   renderer.render(scene, camera);
-
+  //Only render the pause menu sprites when the game is paused
   if(paused){
     sceneHUD.add(sprite);
     sceneHUD.add(sprite2);
@@ -380,12 +404,12 @@ function render(){// Draw scene
   renderer.render(sceneHUD, cameraHUD); 
 };
 
+//Function that will be called upon a level change to remove the objects that are currently in the scene
 function lvlChange(curr_lvl){
   removeFloor(scene,world,curr_lvl)
   removeAllDynamics(scene,world);
   clearInventory();
   resetHealth();
-  player.body.position.set(0,1,-1);
 }
 
 function getNextLevel(){
@@ -414,7 +438,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite = new THREE.Sprite(spriteMaterial);
-  sprite.position.set(-window.innerWidth / 4, window.innerHeight / 4, 0);
+  sprite.position.set(-window.innerWidth / 4, window.innerHeight / 6, 0);
   sprite.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial2 = new THREE.SpriteMaterial({
@@ -422,7 +446,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite2 = new THREE.Sprite(spriteMaterial2);
-  sprite2.position.set(window.innerWidth / 4, window.innerHeight / 4, 0);
+  sprite2.position.set(window.innerWidth / 4, window.innerHeight / 6, 0);
   sprite2.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial3 = new THREE.SpriteMaterial({
@@ -430,7 +454,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite3 = new THREE.Sprite(spriteMaterial3);
-  sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 4, 0);
+  sprite3.position.set(-window.innerWidth / 4, -window.innerHeight / 6, 0);
   sprite3.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteMaterial4 = new THREE.SpriteMaterial({
@@ -438,7 +462,7 @@ function createMenu(){ //Creating the pause menu
   });
 
   sprite4 = new THREE.Sprite(spriteMaterial4);
-  sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 4, 0);
+  sprite4.position.set(window.innerWidth / 4, -window.innerHeight / 6, 0);
   sprite4.scale.set(window.innerHeight/1.75,window.innerWidth/10,1);
 
   var spriteNextMaterial = new THREE.SpriteMaterial({
@@ -448,6 +472,16 @@ function createMenu(){ //Creating the pause menu
   spriteNext = new THREE.Sprite(spriteNextMaterial);
   spriteNext.position.set(0,0,0);
   spriteNext.scale.set(window.innerHeight,window.innerWidth/5,1);
+
+   //Sprite for finishing the game
+   var spriteFinishMaterial = new THREE.SpriteMaterial({
+    map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameWon.jpg")
+  });
+          
+  spriteFinish = new THREE.Sprite(spriteFinishMaterial);
+  spriteFinish.position.set(0,0,0);
+  spriteFinish.scale.set(window.innerHeight,window.innerWidth/5,1);
+
     
   var spriteDeathMaterial = new THREE.SpriteMaterial({
     map: new THREE.TextureLoader().load("../res/textures/pause_menu/GameOver.jpg")
@@ -463,12 +497,68 @@ function createMenu(){ //Creating the pause menu
   lvl3_uuid = sprite3.uuid;
   lvl4_uuid = sprite4.uuid;
   next_uuid = spriteNext.uuid;
+  finish_uuid = spriteFinish.uuid;
   death_uuid = spriteDeath.uuid;
 
   sceneHUD.add(sprite);
   sceneHUD.add(sprite2);
   sceneHUD.add(sprite3);
   sceneHUD.add(sprite4);
+}
+
+//function that will initialise all the sounds in the game
+function addSounds(){
+  audioLoader = new THREE.AudioLoader();
+  backgroundsound = new THREE.Audio(listener);
+  hitSound = new THREE.Audio(listener);
+  pickupSound = new THREE.Audio(listener);
+
+  audioLoader.load('../res/sound_effects/ambient_noise.wav',function(buffer){
+    backgroundsound.setBuffer(buffer);
+    backgroundsound.setLoop(true);
+    backgroundsound.setVolume(0.3);
+    backgroundsound.play();
+  })
+
+  audioLoader.load('../res/sound_effects/pick_up_item.wav',function(buffer){
+    pickupSound.setBuffer(buffer);
+    pickupSound.setVolume(0.2);
+  })
+
+  audioLoader.load('../res/sound_effects/hurt.mp3',function(buffer){
+    hitSound.setBuffer(buffer);
+    hitSound.setVolume(0.2);
+  })
+}
+
+function loadingScene(){
+  //Loading manager that will be used to manage the loading screen
+  var loadingManager = new THREE.LoadingManager();
+  const progressBar = document.getElementById('progress-bar')
+  const progressBarContainer = document.querySelector('.progress-bar-container')
+  gltfLoader = new THREE.GLTFLoader(loadingManager);
+
+  // Method to do things when we starting loading 
+  loadingManager.onStart = function(url,item,total){
+      progressBarContainer.style.display = 'block';
+      progressBarContainer.style.position = 'absolute';
+      console.log(`Started loading: ${url}`)
+  }
+
+  // Method called when the loading is under progress
+  loadingManager.onProgress = function(url,loaded,total){
+      progressBar.value = (loaded/total)*100;
+  }
+
+  // Method called called when the loading of the assest has finished
+  loadingManager.onLoad = function(){
+      progressBarContainer.style.display = 'none';
+  }
+
+  // Method called when there is an error
+  loadingManager.onError = function(url){
+      console.error(`Problem loading ${url}`)
+  }
 }
 
 function GameLoop(){ //Run game loop(update -> render -> repeat)
