@@ -63,7 +63,7 @@ export default class NormalMonster extends Monster {
         this.body.linearDamping = 0
         this.scene.add(this)
         this.world.addBody(this.body)
-        this.loaded = true
+        this.loaded = true        
     }
 
 }
