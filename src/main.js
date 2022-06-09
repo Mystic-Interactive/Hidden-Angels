@@ -54,7 +54,6 @@ var moonSphere;
 var torchLight;
 var skybox;
 
-
 // Initialization of game (world, level, HUD, etc.)
 var init = function(){
   let world_canvas = document.getElementById('MainWorld');
@@ -128,7 +127,6 @@ var init = function(){
 
   //const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
  // monsters.push(smol_boi)
-
   const normal_monster = new NormalMonster(scene, world,new THREE.Vector3(2, 0, 2), path, player, true)
   monsters.push(normal_monster)
 
@@ -272,6 +270,7 @@ function update(){ //Game Logic
   const intersectsHUD = rayCasterHUD.intersectObjects(sceneHUD.children);
 
   if(!paused){
+    
     monsters.forEach(monster => {
       try{
         monster.update(delta);
@@ -282,7 +281,6 @@ function update(){ //Game Logic
     time = new_time
     player.update(delta)
     ground.update()
-
     detectObject(player)
     UI()
 

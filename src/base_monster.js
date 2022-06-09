@@ -23,6 +23,8 @@ export default class Monster extends THREE.Group {
         this.loaded = false
         this.enemy = player
         this.paused = paused
+        this.pathfinding = null;
+        this.ZONE = null;
         this.init(mesh_source)
     }
     
@@ -64,11 +66,22 @@ export default class Monster extends THREE.Group {
         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
         if (diff  <= 0.5){
             this.path_index = (this.path_index + 1) % this.path.length
-        }
+        }  
+        this.body.velocity = curr_direction.scale(3)
+        this.position.copy(this.body.position)
+        this.translateY(-this.body.boundingRadius)
+
     }
 
     set_looked_at(bool){
         this.being_looked_at = bool
+    }
+
+    changePath() {//changes path using the navmesh
+        var groupID = this.pathfinding.getClosestNode(this.body.position,this.ZONE,0);
+        console.log(groupID.id);
+        const path = this.pathfinding.findPath(this.body.position, this.enemy.position, this.ZONE, 0);
+        console.log(path);
     }
 
     update( delta ){
@@ -86,6 +99,10 @@ export default class Monster extends THREE.Group {
                     }
                     this.desired_action = "basic_attack"
                 } else { 
+                    if (this.path != null){
+                        this.changePath();
+                    }
+                    
                     this.hitting = false;
                     this.paused = false;
                     this.updateTransform(delta)
@@ -99,18 +116,6 @@ export default class Monster extends THREE.Group {
         }catch(e){
             console.error(e.stack)
         }
-        this.player.update();
-        if(this.player.watching){
-            //player is looking at monster so monster should not do anything
-        }
-        else{
-            //if monster sees player, go to player
-
-
-            //else follow set path
-            
-        }
-
     }
 
 }
