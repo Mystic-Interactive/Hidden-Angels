@@ -81,7 +81,7 @@ var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext,spriteFinish;
 
 // items added to scene
 var player;
-var monsters = []
+var monsters = [] // passed by reference to the player
 var ground;
 var moonLight;
 var moonSphere;
@@ -472,7 +472,9 @@ function lvlChange(curr_lvl){
   for(var i=0;i<monsters.length;i++){
     monsters[i].destroy()
   }
-  monsters = []
+  for(var i = 0; i < monsters.length; i++){
+    monsters.pop()
+  }
   resetHealth();
 }
 
