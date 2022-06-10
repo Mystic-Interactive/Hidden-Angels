@@ -140,8 +140,6 @@ export default class Monster extends THREE.Group {
         this.path = path;
     }
         this.path_prev = path;
-        console.log(path);
-
     }
 
     looking_at_player(){
@@ -159,7 +157,6 @@ export default class Monster extends THREE.Group {
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     
                     if(!this.paused && this.attack_duration > this.max_attack_duration) {
-                        console.log(this.attack_duration)
                         tookDamage(this.damage)
                         this.attack_duration = 0
                     }
@@ -172,11 +169,9 @@ export default class Monster extends THREE.Group {
                     this.attack_duration = 0
                     // only chase when the player is visible to the monster or on specific levels
                     if (this.looking_at_player() || (this.zoneName == 'level3') | (this.zoneName == 'level4')){
-                        console.log("chasing player")
                         this.changePath(this.enemy.body.position);
                     } 
                     else { // return to patrol path 
-                        console.log("patrolling")
                         this.changePath(this.patrol[this.path_index])
                         const p = this.patrol[this.path_index]
                         const b = this.body.position
@@ -185,7 +180,6 @@ export default class Monster extends THREE.Group {
                         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
                         if (diff  <= 0.5){
                             this.path_index = (this.path_index + 1) % this.patrol.length
-                            console.log(this.patrol[this.path_index])
                         }  
 
                     }
