@@ -3,6 +3,8 @@ import { angleBetween } from './misc.js'
 import { tookDamage } from './overlay.js'
 import { can_see } from './sight.js'
 import { Pathfinding } from '../lib/Pathfinding.js'
+
+// defines the bea
 export default class Monster extends THREE.Group {
 
     constructor(scene, world, GLTFLoader, position, path, player, paused, mesh_source, damage,level){
@@ -166,7 +168,6 @@ export default class Monster extends THREE.Group {
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     
                     if(!this.paused && this.attack_duration > this.max_attack_duration) {
-                        console.log(this.attack_duration)
                         tookDamage(this.damage)
                         this.attack_duration = 0
                     }
@@ -190,7 +191,6 @@ export default class Monster extends THREE.Group {
                         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
                         if (diff  <= 0.5){
                             this.path_index = (this.path_index + 1) % this.patrol.length
-                            console.log(this.patrol[this.path_index])
                         }  
 
                     }
