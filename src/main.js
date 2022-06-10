@@ -169,7 +169,7 @@ var init = function(){
 
   // create and add ambient light to scene
   const light = new THREE.AmbientLight();
-  light.intensity = 0.2; //dim light for atmosphere
+  light.intensity = 0.1; //dim light for atmosphere
   scene.add(light)
 
 
@@ -254,17 +254,17 @@ var init = function(){
         makeFirstFloor(scene,world);
         player.body.position.set(0,0,-13)
         var path1 = [
-          new THREE.Vector3(-0.76, 0, -2.95), 
-          new THREE.Vector3(7.68, 0,-7.5),
-          new THREE.Vector3(7.18, 0, 3),
-          new THREE.Vector3(-0.68, 0, 3.74)
+          new THREE.Vector3(-0.76-8, 0, -2.95-2), 
+          new THREE.Vector3(7.68-8, 0,-7.5-2),
+          new THREE.Vector3(7.18-8, 0, 3-2),
+          new THREE.Vector3(-0.68-8, 0, 3.74-2)
         ]
 
         //Adding monsters for floor 1
-        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,curr_lvl)
+        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path1, player, true,curr_lvl)
         monsters.push(normal_monster)
 
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path, player, true,curr_lvl)
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path1, player, true,curr_lvl)
         monsters.push(large_monster)
       }
     }

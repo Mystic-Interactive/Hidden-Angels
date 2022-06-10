@@ -68,7 +68,7 @@ export default class Monster extends THREE.Group {
                     if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3')|(zoneName == 'level4') ){
                         // node.position.set(0,0,-4);
                         if(zoneName == 'level1'){
-                            node.position.set(-3.5,0,10);
+                            node.position.set(-3.5,0,11);
                         }
                         else if(zoneName == 'level2'){
                             
