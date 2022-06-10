@@ -11,7 +11,7 @@ export default class Monster extends THREE.Group {
         this.scene = scene
         this.world = world
         this.start_pos = position
-        
+        this.prev_path = null;
         // offsetting the path based on the monsters position
         // alows defining a path in object coordinates.
         for (var i = 0; i < path.length; i++){
@@ -70,16 +70,11 @@ export default class Monster extends THREE.Group {
 
                 if (node.name == "NavMesh") { //navmesh is found
                     if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3') ){
-                        node.position.set(0,-0.83,-4);
-                        // if(zoneName == 'level2'){
-                        //     this.scene.add(node);
-                        // }
+                        node.position.set(0,0,-4);
                     }
                     else{
-                        node.position.set(0,-1,0);
                         node.scale.set(1,2,1);
                     }
-                    
                     this.navmesh = node;
                     this.setUpPathfinding(zoneName);
                 }
@@ -138,8 +133,13 @@ export default class Monster extends THREE.Group {
         let pos2 = new THREE.Vector3(0,0,0);
         pos2.copy(target);
         pos2.y = 0; 
-        const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
-        this.path = path
+        var path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
+        if( (this.path_prev != null)&&(this.path_prev == path)){
+
+        }else{
+        this.path = path;
+    }
+        this.path_prev = path;
     }
 
     looking_at_player(){
@@ -157,7 +157,6 @@ export default class Monster extends THREE.Group {
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     
                     if(!this.paused && this.attack_duration > this.max_attack_duration) {
-                        console.log(this.attack_duration)
                         tookDamage(this.damage)
                         this.attack_duration = 0
                     }

@@ -255,10 +255,10 @@ var init = function(){
         player.body.position.set(0,1,-13)
 
         //Adding monsters for floor 1
-        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,lvl)
+        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,curr_lvl)
         monsters.push(normal_monster)
 
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path, player, true,lvl)
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path, player, true,curr_lvl)
         monsters.push(large_monster)
       }
     }
@@ -271,10 +271,17 @@ var init = function(){
         player.body.position.set(-10.5,1,-1)
 
         //Adding monsters for floor 2
-        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -3.8), path, player, true,lvl)
+        var path1 = [
+          new THREE.Vector3(-6.37, 0, -6.76), 
+          new THREE.Vector3(1.34, 0,-3.55)
+        ]
+        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -3.8), path, player, true,curr_lvl)
         monsters.push(normal_monster)
-
-        normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 1.5), path, player, true,lvl)
+        var path2 = [
+          new THREE.Vector3(-2.987, 0, 3.07), 
+          new THREE.Vector3(8.91, 0,-3.88)
+        ]
+        normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 1.5), path, player, true,curr_lvl)
         monsters.push(normal_monster)
       }
       
@@ -288,17 +295,17 @@ var init = function(){
 
         //Adding monsters for basement
           //Nest sack 1
-          var small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 3.2), path, player, true,lvl)
+          var small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 3.2), path, player, true,curr_lvl)
           monsters.push(small_monster)
 
-          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-9, 0, 4.6), path, player, true,lvl)
+          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(-9, 0, 4.6), path, player, true,curr_lvl)
           monsters.push(small_monster)
 
           //Nest sack 2
-          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(9, 0, -13), path, player, true,lvl)
+          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(9, 0, -13), path, player, true,curr_lvl)
           monsters.push(small_monster)
 
-          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -11), path, player, true,lvl)
+          small_monster = new SmallMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -11), path, player, true,curr_lvl)
           monsters.push(small_monster)
 
       }
@@ -311,10 +318,10 @@ var init = function(){
         player.body.position.set(-11.5,1,12)
 
         //Adding monsters to level 4
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-10, 0, 0), path, player, true,lvl)
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-10, 0, 0), path, player, true,curr_lvl)
         monsters.push(large_monster)
 
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(13, 0, -5), path, player, true,lvl)
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(13, 0, -5), path, player, true,curr_lvl)
         monsters.push(large_monster)
       }  
     }
