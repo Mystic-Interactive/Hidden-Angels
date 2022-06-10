@@ -263,7 +263,7 @@ var init = function(){
         lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
-        player.body.position.set(0,1,-13)
+        player.body.position.set(0,0,-13)
         var path1 = [
           new THREE.Vector3(-0.76, 0, -2.95), 
           new THREE.Vector3(7.68, 0,-7.5),
@@ -486,10 +486,19 @@ function lvlChange(curr_lvl){
   removeFloor(scene,world,curr_lvl)
   removeAllDynamics(scene,world);
   clearInventory();
-
+  const to_delete = []
   for(var i=0;i<monsters.length;i++){
+    to_delete.push(monsters[i].body)
     monsters[i].destroy()
   }
+
+  console.log(world.bodies)
+  to_delete.forEach(body => {
+    world.bodies = world.bodies.filter(item => {
+      return item !== body
+    })
+  })
+
   for(var i = 0; i < monsters.length; i++){
     monsters.pop()
   }

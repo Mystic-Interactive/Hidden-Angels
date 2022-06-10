@@ -127,7 +127,6 @@ export default class Player extends THREE.Group {
 
     updateTransform(delta) {
         const state = this.current_state
-        
         const controls = this.player_controls
         if(contains("jump", state.action)){
             this.body.applyForce(new CANNON.Vec3(0, 10000, 0))

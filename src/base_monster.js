@@ -186,7 +186,7 @@ export default class Monster extends THREE.Group {
     destroy(){ //method used to remove a monster from memory
         const index = this.world.bodies.indexOf(this.body)
         this.scene.remove(this.skeleton)
-        this.world.bodies.splice(index, 1)
+        //this.world.bodies.remove(this.body)
         this.scene.remove(this)
     }
 }
