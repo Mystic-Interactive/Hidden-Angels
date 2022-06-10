@@ -7,7 +7,7 @@ export default class NormalMonster extends Monster {
 
     constructor(scene, world, GLTFLoader, position, path, player, paused,level) {
         //translate = [translate_x,-0.9+translate_y,-4+translate_z]
-        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb", level)
+        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb",1, level)
         this.damage = 1
         this.vision_limit = 10
     }

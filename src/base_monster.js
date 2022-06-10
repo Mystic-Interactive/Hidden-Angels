@@ -132,18 +132,19 @@ export default class Monster extends THREE.Group {
         if(!this.loaded) return;
         
         try{
-            console.log(this.enemy.body.position);
             let time = delta%30;
             this.play_direction = 1 
             this.desired_action = "walk"
             if(this.being_looked_at != true){// if the player is not looking at monster
-                if(this.position.distanceTo(this.enemy.position) < 2){ //attack if the player is close to the monster
+                if(this.position.distanceTo(this.enemy.position) < 1.5){ //attack if the player is close to the monster
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
                     if(!this.hitting && !this.paused && time == 0) {
                         tookDamage(this.damage)
                     }
                     this.desired_action = "basic_attack"
-                } else { 
+                } else { if(  (this.zoneName == 'level3') | (this.zoneName == 'level4')  ){
+                    this.changePath(this.enemy.body.position);
+                }
                     // only chase when the player is visible to the monster
                     if (this.looking_at_player()){
                         this.changePath(this.enemy.body.position);

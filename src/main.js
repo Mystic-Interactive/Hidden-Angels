@@ -171,16 +171,12 @@ var init = function(){
   scene.add(light)
 
 
-  //const smol_boi = new SmallMonster(scene, world,new THREE.Vector3(-2, 0, -2), path, player, true);
- // monsters.push(smol_boi)
+
   const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true)
   monsters.push(normal_monster)
 
-  //const big_boi = new LargeMonster(scene, world, new THREE.Vector3(-2, 0, 2), path, player, true)
- // monsters.push(big_boi)
-
-
-  const PointerLock = new PointerLockControls(camera,document.body); //Mouse controls to control camera and player rotation 
+  //Mouse controls to control camera and player rotation 
+  const PointerLock = new PointerLockControls(camera,document.body); 
   hud_canvas.addEventListener('click', function (){ //activate controls by clicking on screen
 	  PointerLock.lock();
 	});
