@@ -155,12 +155,7 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 1, 0); //Initial player position for opening sandbox exploration
 
-  var path = [
-    new THREE.Vector3(2, 0, 2), 
-    new THREE.Vector3(2, 0, -2),
-    new THREE.Vector3(-2, 0, -2),
-    new THREE.Vector3(-2, 0, 2)
-  ]
+
   
 
   player = new Player(scene, world, camera, gltfLoader, initial_position, monsters); //Create and add player to scene and physics world
@@ -170,9 +165,15 @@ var init = function(){
   light.intensity = 0.2; //dim light for atmosphere
   scene.add(light)
 
+  var path = [
+    new THREE.Vector3(-0.76, 0, -2.95), 
+    new THREE.Vector3(7.68, 0,-7.5),
+    new THREE.Vector3(7.18, 0, 3),
+    new THREE.Vector3(-0.68, 0, 3.74)
+  ]
 
 
-  const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true)
+  const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true,1)
   monsters.push(normal_monster)
 
   //Mouse controls to control camera and player rotation 
@@ -263,10 +264,20 @@ var init = function(){
         curr_lvl=1;
         makeFirstFloor(scene,world);
         player.body.position.set(0,1,-13)
+        var path1 = [
+          new THREE.Vector3(-0.76, 0, -2.95), 
+          new THREE.Vector3(7.68, 0,-7.5),
+          new THREE.Vector3(7.18, 0, 3),
+          new THREE.Vector3(-0.68, 0, 3.74)
+        ]
 
         //Adding monsters for floor 1
         var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,lvl)
         monsters.push(normal_monster)
+        var path2 = [
+          new THREE.Vector3(-7.88, 0, -2.87), 
+          new THREE.Vector3(-8.84, 0,3.876)
+        ]
 
         var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path, player, true,lvl)
         monsters.push(large_monster)
@@ -281,9 +292,16 @@ var init = function(){
         player.body.position.set(-10.5,1,-1)
 
         //Adding monsters for floor 2
+        var path1 = [
+          new THREE.Vector3(-6.37, 0, -6.76), 
+          new THREE.Vector3(1.34, 0,-3.55)
+        ]
         var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -3.8), path, player, true,lvl)
         monsters.push(normal_monster)
-
+        var path2 = [
+          new THREE.Vector3(-2.987, 0, 3.07), 
+          new THREE.Vector3(8.91, 0,-3.88)
+        ]
         normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 1.5), path, player, true,lvl)
         monsters.push(normal_monster)
       }
