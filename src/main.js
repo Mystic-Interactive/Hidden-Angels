@@ -254,17 +254,22 @@ var init = function(){
         makeFirstFloor(scene,world);
         player.body.position.set(0,0,-13)
         var path1 = [
-          new THREE.Vector3(-0.76-8, 0, -2.95-2), 
-          new THREE.Vector3(7.68-8, 0,-7.5-2),
-          new THREE.Vector3(7.18-8, 0, 3-2),
-          new THREE.Vector3(-0.68-8, 0, 3.74-2)
-        ]
+          new THREE.Vector3(-7.88 -8, 0, -2.87 -2), 
+          new THREE.Vector3(-8.84 - 8, 0,3.876 -2),
 
+        ]
         //Adding monsters for floor 1
         var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path1, player, true,curr_lvl)
         monsters.push(normal_monster)
 
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path1, player, true,curr_lvl)
+        var path2 = [
+          new THREE.Vector3(-0.76 +11, 0, -2.95 -2), 
+          new THREE.Vector3(7.68 +11, 0,-7.5 -2),
+          new THREE.Vector3(7.18 + 11, 0, 3 -2),
+          new THREE.Vector3(-0.68 + 11, 0, 3.74 - 2)
+        ]
+
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path2, player, true,curr_lvl)
         monsters.push(large_monster)
       }
     }
@@ -278,16 +283,16 @@ var init = function(){
 
         //Adding monsters for floor 2
         var path1 = [
-          new THREE.Vector3(-6.37, 0, -6.76), 
-          new THREE.Vector3(1.34, 0,-3.55)
+          new THREE.Vector3(-6.37 -11, 0, -6.76 +3.8), 
+          new THREE.Vector3(1.34 -11, 0,-3.55 + 3.8)
         ]
-        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -3.8), path, player, true,curr_lvl)
+        var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(11, 0, -3.8), path1, player, true,curr_lvl)
         monsters.push(normal_monster)
         var path2 = [
-          new THREE.Vector3(-2.987, 0, 3.07), 
-          new THREE.Vector3(8.91, 0,-3.88)
+          new THREE.Vector3(-2.987 + 11, 0, 3.07 -1.5), 
+          new THREE.Vector3(8.91 + 11, 0,-3.88 -1.5)
         ]
-        normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 1.5), path, player, true,curr_lvl)
+        normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 1.5), path2, player, true,curr_lvl)
         monsters.push(normal_monster)
       }
       
