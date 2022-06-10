@@ -31,6 +31,8 @@ export default class Monster extends THREE.Group {
         this.vision_limit = 0
         this.angle = Math.PI * 2
         this.processNavMesh(level);
+        this.max_attack_duration = 2000
+        this.attack_duration = 0
     }
     
     //choose pathfinding navmesh and load navmesh for monster
@@ -132,24 +134,29 @@ export default class Monster extends THREE.Group {
         if(!this.loaded) return;
         
         try{
-            let time = delta%30;
             this.play_direction = 1 
             this.desired_action = "walk"
             if(this.being_looked_at != true){// if the player is not looking at monster
                 if(this.position.distanceTo(this.enemy.position) < 1.5){ //attack if the player is close to the monster
                     this.body.velocity = new CANNON.Vec3(0, 0, 0)
-                    if(!this.hitting && !this.paused && time == 0) {
+                    
+                    if(!this.paused && this.attack_duration > this.max_attack_duration) {
+                        console.log(this.attack_duration)
                         tookDamage(this.damage)
+                        this.attack_duration = 0
                     }
+
+                    this.attack_duration += delta
                     this.desired_action = "basic_attack"
-                } else { if(  (this.zoneName == 'level3') | (this.zoneName == 'level4')  ){
-                    this.changePath(this.enemy.body.position);
-                }
-                    // only chase when the player is visible to the monster
-                    if (this.looking_at_player()){
+
+                } else { 
+
+                    this.attack_duration = 0
+                    // only chase when the player is visible to the monster or on specific levels
+                    if (this.looking_at_player() || (this.zoneName == 'level3') | (this.zoneName == 'level4')){
                         this.changePath(this.enemy.body.position);
                     } 
-                    else { // return to patrol path
+                    else { // return to patrol path 
                         this.changePath(this.patrol[this.path_index])
                         const p = this.patrol[this.path_index]
                         const b = this.body.position
@@ -162,8 +169,6 @@ export default class Monster extends THREE.Group {
                         }  
 
                     }
-                    
-                    this.hitting = false;
                     this.paused = false;
                     this.updateTransform(delta)
                 }
