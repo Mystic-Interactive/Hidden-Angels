@@ -384,12 +384,10 @@ function HUD(){
 
 //Decreases the amount of hearts to draw on the screen
 function tookDamage(damageTaken){
-  console.log(hearts)
   graphics.save();
   hearts-=damageTaken;
   if(hearts<1){
     sceneHUD.add(spriteDeath)
-    console.log("You have died");
   }
   graphics.save();
   graphics.setTransform(1, 0, 0, 1, 0, 0);
