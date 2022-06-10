@@ -71,6 +71,9 @@ export default class Monster extends THREE.Group {
                 if (node.name == "NavMesh") { //navmesh is found
                     if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3') ){
                         node.position.set(0,0,-4);
+                        if(zoneName == 'level1'){
+                            this.scene.add(node);
+                        }
                     }
                     else{
                         node.scale.set(1,2,1);
@@ -133,7 +136,8 @@ export default class Monster extends THREE.Group {
         let pos2 = new THREE.Vector3(0,0,0);
         pos2.copy(target);
         pos2.y = 0; 
-        var path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
+        var groupID = this.pathfinding.getGroup(this.ZONE,pos);
+        var path = this.pathfinding.findPath(pos, pos2, this.ZONE, groupID);
         if( (this.path_prev != null)&&(this.path_prev == path)){
 
         }else{
