@@ -59,11 +59,11 @@ export default class Monster extends THREE.Group {
         }
         const loader = new THREE.GLTFLoader();
         //load navigation mesh
-        loader.load('../res/meshes/Navigation/Level1_nav.glb', ({ scene }) => {            
+        loader.load(mesh, ({ scene }) => {            
             scene.traverse((node) => {
                 if (node.name == "NavMesh") { //navmesh is found
                     this.navmesh = node;
-                    this.setUpPathfinding();
+                    this.setUpPathfinding(zoneName);
                 }
             }, undefined, (e) => {
                 console.error(e);
