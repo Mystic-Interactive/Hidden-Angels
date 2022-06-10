@@ -27,7 +27,7 @@ export default class Monster extends THREE.Group {
         this.pathfinding = null;
         this.ZONE = null;
         this.init(mesh_source)
-        this.damage = 0 //damage will be set in each individual monster
+        this.damage = damage //damage will be set in each individual monster
         this.vision_limit = 0
         this.angle = Math.PI * 2
         this.processNavMesh(level);
