@@ -44,5 +44,6 @@ export default class SmallMonster extends Monster {
         this.scene.add(this)
         this.world.addBody(this.body)
         this.loaded = true
+        this.vision_limit = 10
     }
 }

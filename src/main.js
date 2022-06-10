@@ -187,7 +187,7 @@ var init = function(){
   addSounds()
   
   //Create and add spotlight tos scene (acts as player torch)
-  torchLight = torch(0xFFFFFF, 1, 5 , 1, -0.004, [0, 0, 0]);
+  torchLight = torch(0xFFFFFF, 1, 15 , 1, -0.004, [0, 0, 0]);
   scene.add(torchLight);
 
   initializeDynamics(scene, sceneHUD, world, spriteNext, spriteFinish, pickupSound, gltfLoader)
@@ -405,7 +405,7 @@ function update(){ //Game Logic
 
     world.step(timestep)
 
-    torchLight.position.set(player.position.x,player.position.y,player.position.z)
+    torchLight.position.set(player.position.x,player.position.y+.5,player.position.z)
       
     if(intersectsHUD.length>0){
       if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
