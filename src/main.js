@@ -252,7 +252,7 @@ var init = function(){
         lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
-        player.body.position.set(0,0,-13)
+        player.body.position.set(0,1,-13)
         var path1 = [
           new THREE.Vector3(-7.88 -8, 0, -2.87 -2), 
           new THREE.Vector3(-8.84 - 8, 0,3.876 -2),
@@ -379,12 +379,12 @@ function update(){ //Game Logic
       //Rotates and moves the moon
       speed+=0.001
       if(curr_lvl==4){
-        moonLight.position.y = 20*(Math.sin(speed))+10;
-        moonSphere.position.y = 20*(Math.sin(speed))+10;
+        moonLight.position.y = Math.abs(20*(Math.sin(speed)))+10;
+        moonSphere.position.y = Math.abs(20*(Math.sin(speed)))+10;
       }
       else{
-        moonLight.position.y = 20*(Math.sin(speed))+20;
-        moonSphere.position.y = 20*(Math.sin(speed))+20;
+        moonLight.position.y = Math.abs(20*(Math.sin(speed)))+20;
+        moonSphere.position.y = Math.abs(20*(Math.sin(speed)))+20;
       }
       
       moonLight.position.z = 10*(Math.cos(speed));
