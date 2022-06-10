@@ -110,7 +110,7 @@ export default class Monster extends THREE.Group {
         const facing = new CANNON.Vec3(Math.sin(this.rotation.y), 0, Math.cos(this.rotation.y)) // direction currently facing
         
         // face the correct direction
-        const angle = Math.round(angleBetween(desired, facing))
+        const angle = Math.round(angleBetween(desired, facing))  - 2 * Math.PI/3  
         this.rotation.y += delta * angle///500
         if (angle != 0) return;
         const curr_direction = desired
