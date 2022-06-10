@@ -66,17 +66,7 @@ function initializeDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audio
 }
 
 //Makes collision boxes for interactable bodies
-function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
-    const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
-    const boxMat = new THREE.MeshBasicMaterial({
-       color: 0xffffff,
-       wireframe:true
-    });
-    const box = new THREE.Mesh(boxGeo,boxMat);
-    box.position.set(boxPos[0],boxPos[1],boxPos[2]);
-    box.rotation.set(rotationArr[0],rotationArr[1],rotationArr[2])
-    scene.add(box);
-  
+function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){  
     const boxBody = new CANNON.Body({
         shape: new CANNON.Box(new CANNON.Vec3(boxGeoSize[0]/2,boxGeoSize[1]/2,boxGeoSize[2]/2)),
         type: CANNON.Body.STATIC,
@@ -84,8 +74,8 @@ function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
   
     world.addBody(boxBody);
 
-    boxBody.position.copy(box.position); //Copy position
-    boxBody.quaternion.copy(box.quaternion); //Copy orientation
+    boxBody.position.set(boxPos[0],boxPos[1],boxPos[2]); //Copy position
+    boxBody.quaternion.setFromEuler(rotationArr[0],rotationArr[1],rotationArr[2]); //Copy orientation
     
     collisions.push(boxBody);
     return boxBody;

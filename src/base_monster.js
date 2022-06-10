@@ -17,6 +17,7 @@ export default class Monster extends THREE.Group {
         for (var i = 0; i < path.length; i++){
             path[i].addVectors(path[i], this.start_pos)
         }
+        
         this.hitting = false
         this.patrol = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)

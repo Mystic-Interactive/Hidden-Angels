@@ -20,7 +20,7 @@ export default class NormalMonster extends Monster {
         this.updateMaterials(model)
 
         this.skeleton = new THREE.SkeletonHelper(model)
-        this.skeleton.visible = true;
+        this.skeleton.visible = false;
         this.scene.add(this.skeleton)
 
         const animations = this.gltf.animations;

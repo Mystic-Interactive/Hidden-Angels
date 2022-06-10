@@ -6,34 +6,6 @@ import  {makeDynamicObject,setGoalPosition}  from '../src/house_dynamic.js'
 var collisions = []
 var objects = []
 
-// //Loading manager that will be used to manage the loading screen
-// const loadingManager = new THREE.LoadingManager();
-// const progressBar = document.getElementById('progress-bar')
-// const progressBarContainer = document.querySelector('.progress-bar-container')
-// const gltfLoader = new THREE.GLTFLoader(loadingManager);
-
-// // Method to do things when we starting loading 
-// loadingManager.onStart = function(url,item,total){
-//     progressBarContainer.style.display = 'block';
-//     progressBarContainer.style.position = 'absolute';
-//     console.log(`Started loading: ${url}`)
-// }
-
-// // Method called when the loading is under progress
-// loadingManager.onProgress = function(url,loaded,total){
-//     progressBar.value = (loaded/total)*100;
-// }
-
-// // Method called called when the loading of the assest has finished
-// loadingManager.onLoad = function(){
-//     progressBarContainer.style.display = 'none';
-// }
-
-// // Method called when there is an error
-// loadingManager.onError = function(url){
-//     console.error(`Problem loading ${url}`)
-// }
-
 var gltfLoader;
 
 function getLoader(loader){
@@ -262,6 +234,7 @@ function makeBasement(scene,world){
             makeCollisionCube(scene,world,[0.01,2,19],[12.25,2,-4],[0,0,0]); //left wall
             makeCollisionCube(scene,world,[24,2,0.1],[0,2,-13.95],[0,0,0]); //back wall 
             makeCollisionCube(scene,world,[24,2,0.1],[0,2,6],[0,0,0]); //front wall
+            makeCollisionCube(scene,world,[23,0.1,19.75],[0,5.5,-4],[0,0,0]); //roof
 
         //pillars
             makeCollisionCube(scene,world,[1.2,5,1.2],[-7,0,1.9],[0,0,0]); //pillar 1
@@ -474,7 +447,6 @@ function makeObject(scene,path,scale,translate,rotation,material){
         scene.add(obj);
         objects.push(obj)
     }, (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
     }, (error) => {
         console.log(error);
     });
@@ -482,16 +454,6 @@ function makeObject(scene,path,scale,translate,rotation,material){
 
 //Make collision method that will add a collision box at boxPos
 function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
-    const boxGeo = new THREE.BoxGeometry(boxGeoSize[0],boxGeoSize[1],boxGeoSize[2]);
-    const boxMat = new THREE.MeshBasicMaterial({
-       color: 0xffffff,
-       wireframe:true
-    });
-
-    const box = new THREE.Mesh(boxGeo,boxMat);
-    box.position.set(boxPos[0],boxPos[1],boxPos[2]);
-    box.rotation.set(rotationArr[0],rotationArr[1],rotationArr[2])
-    scene.add(box);
   
     const boxBody = new CANNON.Body({
         shape: new CANNON.Box(new CANNON.Vec3(boxGeoSize[0]/2,boxGeoSize[1]/2,boxGeoSize[2]/2)),
@@ -499,11 +461,11 @@ function makeCollisionCube(scene,world,boxGeoSize,boxPos,rotationArr){
     });
   
     world.addBody(boxBody);
-    objects.push(box)
+
     collisions.push(boxBody)
 
-    boxBody.position.copy(box.position); //Copy position
-    boxBody.quaternion.copy(box.quaternion); //Copy orientation
+    boxBody.position.set(boxPos[0],boxPos[1],boxPos[2]);
+    boxBody.quaternion.setFromEuler(rotationArr[0],rotationArr[1],rotationArr[2])
 }
 
 //Will be used when making the stairs
