@@ -234,6 +234,7 @@ function makeBasement(scene,world){
             makeCollisionCube(scene,world,[0.01,2,19],[12.25,2,-4],[0,0,0]); //left wall
             makeCollisionCube(scene,world,[24,2,0.1],[0,2,-13.95],[0,0,0]); //back wall 
             makeCollisionCube(scene,world,[24,2,0.1],[0,2,6],[0,0,0]); //front wall
+            makeCollisionCube(scene,world,[23,0.1,19.75],[0,5.5,-4],[0,0,0]); //roof
 
         //pillars
             makeCollisionCube(scene,world,[1.2,5,1.2],[-7,0,1.9],[0,0,0]); //pillar 1

@@ -66,8 +66,7 @@ function initializeDynamics(scene_, HUD_,world_,spriteNext_,spriteFinish_, audio
 }
 
 //Makes collision boxes for interactable bodies
-function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
-  
+function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){  
     const boxBody = new CANNON.Body({
         shape: new CANNON.Box(new CANNON.Vec3(boxGeoSize[0]/2,boxGeoSize[1]/2,boxGeoSize[2]/2)),
         type: CANNON.Body.STATIC,
@@ -75,9 +74,8 @@ function makeDynamicCollision(boxGeoSize,boxPos,rotationArr){
   
     world.addBody(boxBody);
 
-    boxBody.position.set(boxPos[0],boxPos[1],boxPos[0]); //Copy position
-    boxBody.quaternion.setFromEuler(rotationArr[0],rotationArr[1],rotationArr[2]) //rotation
-
+    boxBody.position.set(boxPos[0],boxPos[1],boxPos[2]); //Copy position
+    boxBody.quaternion.setFromEuler(rotationArr[0],rotationArr[1],rotationArr[2]); //Copy orientation
     
     collisions.push(boxBody);
     return boxBody;
@@ -170,6 +168,7 @@ function makeDynamicObject(path,scale,translate,rotation,object_num){
             obj_positions[13] = [obj.position, object_num,true]
         }
     }, (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
     }, (error) => {
         console.log(error);
     });
