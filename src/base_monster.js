@@ -65,10 +65,19 @@ export default class Monster extends THREE.Group {
         loader.load(mesh, ({ scene }) => {            
             scene.traverse((node) => {
                 if (node.name == "NavMesh") { //navmesh is found
-                    if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3') ){
-                        node.position.set(0,0,-4);
+                    if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3')|(zoneName == 'level4') ){
+                        // node.position.set(0,0,-4);
                         if(zoneName == 'level1'){
-                            this.scene.add(node);
+                            node.position.set(-3.5,0,10);
+                        }
+                        else if(zoneName == 'level2'){
+                            
+                            node.position.set(1,0,21);
+                            node.rotation.set(Math.PI/2,Math.PI,0)
+                            node.scale.set(1,1,2)
+                        }
+                        else if(zoneName == 'level3'){
+                            node.position.set(0,0,20)
                         }
                     }
                     else{
