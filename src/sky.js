@@ -26,4 +26,6 @@ function sky(){// function to make skybox
     return skybox;
 }
 
-export { sky }
+export { 
+    sky 
+}

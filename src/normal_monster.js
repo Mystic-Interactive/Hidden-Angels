@@ -1,35 +1,15 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from './animationManager.js'
 import Monster from './base_monster.js'
-import { Pathfinding } from '../lib/Pathfinding.js'
+
 export default class NormalMonster extends Monster {
 
 
-    constructor(scene, world, GLTFLoader, position, path, player, paused) {
+    constructor(scene, world, GLTFLoader, position, path, player, paused,level) {
         //translate = [translate_x,-0.9+translate_y,-4+translate_z]
-        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb", 1)
-        let navmesh;
-        const loader = new THREE.GLTFLoader();
-        //load navigation mesh
-        loader.load('../res/meshes/FirstFloor_nav.glb', ({ scene }) => {            
-            scene.traverse((node) => {
-                if (node.name == "NavMesh") { //navmesh is found
-                    this.navmesh = node;
-                    this.setUpPathfinding();
-                }
-            }, undefined, (e) => {
-                console.error(e);
-            });
-        });
-
+        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/BasicMonster.glb",1, level)
         this.damage = 1
         this.vision_limit = 10
-    }
-
-    setUpPathfinding() {// create Pathfinding instance and setup the zones to be used
-        this.pathfinding = new Pathfinding();
-        this.ZONE = 'firstfloor'
-        this.pathfinding.setZoneData(this.ZONE, Pathfinding.createZone(this.navmesh.geometry));
     }
 
     define() {

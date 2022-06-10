@@ -6,7 +6,7 @@ import Monster from './base_monster.js'
 export default class LargeMonster extends Monster {
 
     constructor(scene, world, GLTFLoader, position, path, player, paused){
-        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/LargeMonster.glb", 1.5)
+        super(scene, world, GLTFLoader, position, path, player, paused, "../res/meshes/Characters/LargeMonster.glb", 1.5,level)
     }
 
     define(){

@@ -1,7 +1,9 @@
 import * as CANNON from '../lib/cannon-es.js'
 import AnimationManager from "./animationManager.js"
 import PlayerController from "./playerControls.js"
-import { can_see } from './sight.js'
+import { 
+    can_see 
+} from './sight.js'
 
 const contains = (item, list) => {
     return(list.indexOf(item) > -1)

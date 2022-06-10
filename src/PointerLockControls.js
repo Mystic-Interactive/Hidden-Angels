@@ -1,4 +1,4 @@
-//pointerlockcontrols from three.js examples github with some small edits 
+//pointerLockControls from three.js examples github with some small edits 
 //file is from https://github.com/mrdoob/three.js/blob/dev/examples/jsm/controls/PointerLockControls.js
 
 const _euler = new THREE.Euler( 0, 0, 0, 'YXZ' );
@@ -16,13 +16,13 @@ class PointerLockControls extends THREE.EventDispatcher {
 		super();
 
 		if ( domElement === undefined ) {
-
 			console.warn( 'THREE.PointerLockControls: The second parameter "domElement" is now mandatory.' );
 			domElement = document.body;
-
 		}
+
 		this.domElement = domElement;
 		this.isLocked = false;
+		
 		// Set to constraint the pitch of the camera
 		// Range is 0 to Math.PI radians
 		this.minPolarAngle = 60 *Math.PI/180; // radians
@@ -44,7 +44,6 @@ class PointerLockControls extends THREE.EventDispatcher {
       
 			camera.quaternion.setFromEuler( _euler );
 			scope.dispatchEvent( _changeEvent );
-
 		}
 
 		function onPointerlockChange() {
@@ -88,28 +87,19 @@ class PointerLockControls extends THREE.EventDispatcher {
 		};
 
 		this.dispose = function () {
-
 			this.disconnect();
-
 		};
 
 		this.getObject = function () { // retaining this method for backward compatibility
-
 			return camera;
-
 		};
 
 		this.getDirection = function () {
-
 			const direction = new THREE.Vector3( 0, 0, - 1 );
-
 			return function ( v ) {
-
 				return v.copy( direction ).applyQuaternion( camera.quaternion );
-
 			};
-
-		}();
+		};
 
 
 		this.lock = function () {
@@ -117,15 +107,11 @@ class PointerLockControls extends THREE.EventDispatcher {
 		};
 
 		this.unlock = function () {
-
 			scope.domElement.ownerDocument.exitPointerLock();
-
 		};
 
 		this.connect();
-
 	}
-
 }
 
 export { PointerLockControls };
