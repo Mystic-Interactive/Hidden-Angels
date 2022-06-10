@@ -184,6 +184,7 @@ export default class Monster extends THREE.Group {
                         const diff = Math.sqrt(Math.pow(p.x - b.x, 2) + Math.pow(p.y - b.y, 2) + Math.pow(p.z - b.z, 2))
                         if (diff  <= 0.5){
                             this.path_index = (this.path_index + 1) % this.patrol.length
+                            // console.log(this.patrol[this.path_index])
                         }  
 
                     }
@@ -204,7 +205,6 @@ export default class Monster extends THREE.Group {
     destroy(){ //method used to remove a monster from memory
         const index = this.world.bodies.indexOf(this.body)
         this.scene.remove(this.skeleton)
-        this.world.bodies.splice(index, 1)
         this.scene.remove(this)
     }
 }

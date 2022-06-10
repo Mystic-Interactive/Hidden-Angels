@@ -24,7 +24,8 @@ import {
   changeInventorySelected,
   clearInventory,
   setDeathScreen, 
-  resetHealth
+  resetHealth,
+  tookDamage
 } from './overlay.js'
 
 import {
@@ -60,6 +61,7 @@ var delta = 0
 var time = new Date().getTime()
 var speed = 0
 var selected = 0;
+var tookdamage = false;
 
 // HUD control variables
 var paused = false;
@@ -81,7 +83,7 @@ var sprite, sprite2, sprite3, sprite4, spriteDeath, spriteNext,spriteFinish;
 
 // items added to scene
 var player;
-var monsters = [] // passed by reference to the player
+var monsters = []
 var ground;
 var moonLight;
 var moonSphere;
@@ -155,7 +157,12 @@ var init = function(){
 
   const initial_position = new CANNON.Vec3(0, 1, 0); //Initial player position for opening sandbox exploration
 
-
+  var path = [
+    new THREE.Vector3(2, 0, 2), 
+    new THREE.Vector3(2, 0, -2),
+    new THREE.Vector3(-2, 0, -2),
+    new THREE.Vector3(-2, 0, 2)
+  ]
   
 
   player = new Player(scene, world, camera, gltfLoader, initial_position, monsters); //Create and add player to scene and physics world
@@ -165,15 +172,9 @@ var init = function(){
   light.intensity = 0.2; //dim light for atmosphere
   scene.add(light)
 
-  var path = [
-    new THREE.Vector3(-0.76, 0, -2.95), 
-    new THREE.Vector3(7.68, 0,-7.5),
-    new THREE.Vector3(7.18, 0, 3),
-    new THREE.Vector3(-0.68, 0, 3.74)
-  ]
 
 
-  const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true,1)
+  const normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(2, 0, 2), path, player, true)
   monsters.push(normal_monster)
 
   //Mouse controls to control camera and player rotation 
@@ -206,35 +207,27 @@ var init = function(){
       PointerLock.unlock();
     }
     else if(e.code=='Digit1'|| e.code =="Numpad1"){//change to 1st item in inventory
-      console.log("Pressed 1")
       changeInventorySelected(1);
     }
     else if(e.code=='Digit2'|| e.code =="Numpad2"){//change to 2nd item in inventory
-      console.log("Pressed 2")
       changeInventorySelected(2);
     }
     else if(e.code=='Digit3'|| e.code =="Numpad3"){//change to 3rd item in inventory
-      console.log("Pressed 3")
       changeInventorySelected(3);
     }
     else if(e.code=='Digit4'|| e.code =="Numpad4"){//change to 4th item in inventory
-      console.log("Pressed 4")
       changeInventorySelected(4);
     }
     else if(e.code=='Digit5'|| e.code =="Numpad5"){//change to 5th item in inventory
-      console.log("Pressed 5")
       changeInventorySelected(5);
     }
     else if(e.code=='Digit6'|| e.code =="Numpad6"){//change to 6th item in inventory
-      console.log("Pressed 6")
       changeInventorySelected(6);
     }
     else if(e.code=='Digit7'|| e.code =="Numpad7"){//change to 7th item in inventory
-      console.log("Pressed 7")
       changeInventorySelected(7);
     }
     else if (e.code=='Digit8'|| e.code =="Numpad8"){//change to 8th item in inventory
-      console.log("Pressed 8")
       changeInventorySelected(8);
     }
   })
@@ -246,38 +239,24 @@ var init = function(){
 
   //Click listener to move user to next level if they have selected it
   window.addEventListener('mousedown',(e)=>{
-    console.log("clicked")
-    console.log("Level: ",lvl)
     paused=false;
 
     if(goToNext){
-      console.log("Current level: ",curr_lvl)
       lvl = getNextLevel();
-      console.log(lvl);
+
       goToNext = false;
     }
 
     if(lvl==1){
-      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=1 || restart){
         lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
         player.body.position.set(0,1,-13)
-        var path1 = [
-          new THREE.Vector3(-0.76, 0, -2.95), 
-          new THREE.Vector3(7.68, 0,-7.5),
-          new THREE.Vector3(7.18, 0, 3),
-          new THREE.Vector3(-0.68, 0, 3.74)
-        ]
 
         //Adding monsters for floor 1
         var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,curr_lvl)
         monsters.push(normal_monster)
-        var path2 = [
-          new THREE.Vector3(-7.88, 0, -2.87), 
-          new THREE.Vector3(-8.84, 0,3.876)
-        ]
 
         var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path, player, true,curr_lvl)
         monsters.push(large_monster)
@@ -308,7 +287,6 @@ var init = function(){
       
     }
     else if(lvl==3){
-      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=3 || restart){
         lvlChange(curr_lvl);
         curr_lvl=3;
@@ -333,7 +311,6 @@ var init = function(){
       }
     }
     else if(lvl==4){
-      console.log("Current level: ",curr_lvl)
       if(curr_lvl!=4 || restart){
         lvlChange(curr_lvl);
         curr_lvl=4;
@@ -385,6 +362,7 @@ function update(){ //Game Logic
     UI(lvl)
     HUD();
 
+
     //Move the moon and skybox only when you can see them to reduce the computation needed
     if(curr_lvl==4 || lvl == null){
       //Rotates and moves the moon
@@ -425,11 +403,9 @@ function update(){ //Game Logic
       
     if(intersectsHUD.length>0){
       if(intersectsHUD[0].object.uuid === next_uuid || intersectsHUD[0].object.uuid === finish_uuid){
-        console.log("Next level Highlighted")
         goToNext = true;
       }
       else if(intersectsHUD[0].object.uuid === death_uuid){
-        console.log("DeathSelected");
         restart = true;
       }
     }
@@ -440,23 +416,18 @@ function update(){ //Game Logic
   }
   else{
     if(intersectsHUD.length==0){
-      console.log("Nothing selected")
       lvl = null;
     }
     else if(intersectsHUD[0].object.uuid === lvl1_uuid){
-      console.log("Level 1 Highlighted")
       lvl = 1;
     }
     else if(intersectsHUD[0].object.uuid === lvl2_uuid){
-      console.log("Level 2 Highlighted")
       lvl = 2;
     }
     else if(intersectsHUD[0].object.uuid === lvl3_uuid){
-      console.log("Level 3 Highlighted")
       lvl = 3;
     }
     else if(intersectsHUD[0].object.uuid === lvl4_uuid){
-      console.log("Level 4 Highlighted")
       lvl = 4;
     }
   }
@@ -490,9 +461,7 @@ function lvlChange(curr_lvl){
   for(var i=0;i<monsters.length;i++){
     monsters[i].destroy()
   }
-  for(var i = 0; i < monsters.length; i++){
-    monsters.pop()
-  }
+  monsters = []
   resetHealth();
 }
 
