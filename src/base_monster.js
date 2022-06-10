@@ -17,7 +17,7 @@ export default class Monster extends THREE.Group {
         for (var i = 0; i < path.length; i++){
             path[i].addVectors(path[i], this.start_pos)
         }
-        
+
         this.hitting = false
         this.patrol = path
         this.prev_direction = new CANNON.Vec3(0, 0, 0)
@@ -65,6 +65,15 @@ export default class Monster extends THREE.Group {
         loader.load(mesh, ({ scene }) => {            
             scene.traverse((node) => {
                 if (node.name == "NavMesh") { //navmesh is found
+                    if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3') ){
+                        node.position.set(0,0,-4);
+                        if(zoneName == 'level1'){
+                            this.scene.add(node);
+                        }
+                    }
+                    else{
+                        node.scale.set(1,2,1);
+                    }
                     this.navmesh = node;
                     this.setUpPathfinding(zoneName);
                 }
@@ -123,8 +132,14 @@ export default class Monster extends THREE.Group {
         let pos2 = new THREE.Vector3(0,0,0);
         pos2.copy(target);
         pos2.y = 0; 
-        const path = this.pathfinding.findPath(pos, pos2, this.ZONE, 0);
-        this.path = path
+        var groupID = this.pathfinding.getGroup(this.ZONE,pos);
+        var path = this.pathfinding.findPath(pos, pos2, this.ZONE, groupID);
+        if( (this.path_prev != null)&&(this.path_prev == path)){
+
+        }else{
+        this.path = path;
+    }
+        this.path_prev = path;
     }
 
     looking_at_player(){
