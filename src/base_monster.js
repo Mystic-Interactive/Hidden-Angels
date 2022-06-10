@@ -61,7 +61,23 @@ export default class Monster extends THREE.Group {
         //load navigation mesh
         loader.load(mesh, ({ scene }) => {            
             scene.traverse((node) => {
+                //first floor = [0,-0.83,-4]
+                //second floor = [0,-0.83,-4]
+                // basement translation = [0,-0.83,-4]
+                //maze = scale = [1,2,1], translation = [0,-1,0]
+
                 if (node.name == "NavMesh") { //navmesh is found
+                    if((zoneName == 'level1') |(zoneName == 'level2') | (zoneName == 'level3') ){
+                        node.position.set(0,-0.83,-4);
+                        // if(zoneName == 'level2'){
+                        //     this.scene.add(node);
+                        // }
+                    }
+                    else{
+                        node.position.set(0,-1,0);
+                        node.scale.set(1,2,1);
+                    }
+                    
                     this.navmesh = node;
                     this.setUpPathfinding(zoneName);
                 }
