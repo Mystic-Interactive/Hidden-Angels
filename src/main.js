@@ -252,7 +252,6 @@ var init = function(){
         lvlChange(curr_lvl);
         curr_lvl=1;
         makeFirstFloor(scene,world);
-<<<<<<< HEAD
         player.body.position.set(0,0,-13)
         var path1 = [
           new THREE.Vector3(-0.76, 0, -2.95), 
@@ -260,9 +259,6 @@ var init = function(){
           new THREE.Vector3(7.18, 0, 3),
           new THREE.Vector3(-0.68, 0, 3.74)
         ]
-=======
-        player.body.position.set(0,1,-13)
->>>>>>> 34abeb62818536cb47c183589a5082aa2a6aa79a
 
         //Adding monsters for floor 1
         var normal_monster = new NormalMonster(scene, world, gltfLoader, new THREE.Vector3(8, 0, 2), path, player, true,curr_lvl)
@@ -472,7 +468,6 @@ function lvlChange(curr_lvl){
     to_delete.push(monsters[i].body)
     monsters[i].destroy()
   }
-<<<<<<< HEAD
 
   console.log(world.bodies)
   to_delete.forEach(body => {
@@ -484,9 +479,6 @@ function lvlChange(curr_lvl){
   for(var i = 0; i < monsters.length; i++){
     monsters.pop()
   }
-=======
-  monsters = []
->>>>>>> 34abeb62818536cb47c183589a5082aa2a6aa79a
   resetHealth();
 }
 
