@@ -109,7 +109,6 @@ export default class Player extends THREE.Group {
             //this.looking_at()
                 
             //loop through each monster and determine whether they are "visible" to the player
-            console.log(this.monsters.length)
             this.monsters.forEach(monster => {
                 monster.set_looked_at(this.looking_at(monster))
             });
