@@ -1,6 +1,4 @@
-# Hidden-Angels
-Repository for our 3rd year CGV assignment
-
+The original controls page was lost in merging.
 CONTROLS:
 W = move forward
 S = move backward
