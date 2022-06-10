@@ -34,7 +34,7 @@ export default class Monster extends THREE.Group {
         this.vision_limit = 0
         this.angle = Math.PI * 2
         this.processNavMesh(level);
-        this.max_attack_duration = 2000
+        this.max_attack_duration = 1500
         this.attack_duration = 0
     }
     

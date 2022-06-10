@@ -263,13 +263,15 @@ var init = function(){
         monsters.push(normal_monster)
 
         var path2 = [
-          new THREE.Vector3(-0.76 +11, 0, -2.95 -2), 
-          new THREE.Vector3(7.68 +11, 0,-7.5 -2),
-          new THREE.Vector3(7.18 + 11, 0, 3 -2),
-          new THREE.Vector3(-0.68 + 11, 0, 3.74 - 2)
+          new THREE.Vector3( 0, 0, 2), 
+          new THREE.Vector3(0, 0, 4),
+          new THREE.Vector3(2, 0, 4),
+          new THREE.Vector3(2, 0, 2)
+          //new THREE.Vector3(7.18 + 11, 0, 3 -2),
+          //new THREE.Vector3(-0.68 + 11, 0, 3.74 - 2)
         ]
 
-        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(-11, 0, 2), path2, player, true,curr_lvl)
+        var large_monster = new LargeMonster(scene, world, gltfLoader, new THREE.Vector3(0, 0, 2), path2, player, true,curr_lvl)
         monsters.push(large_monster)
       }
     }
