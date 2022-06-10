@@ -338,10 +338,6 @@ function update(){ //Game Logic
     detectObject(player)
     UI(lvl)
     HUD();
-<<<<<<< HEAD
-    //console.log(monsters.length)
-=======
->>>>>>> f0ee7d91c11c25392257c1930a42fd21af7ac000
 
     //Move the moon and skybox only when you can see them to reduce the computation needed
     if(curr_lvl==4 || lvl == null){
